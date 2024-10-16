@@ -18,9 +18,11 @@ The User will learn about the correlations between song streams, their genre and
 ex, if pop has 30% of all stream listens, are pop songs 30% of the billboard top 100?
 ## Views
 The website is one page with several views which the user can see by scrolling further down. Above the fold is the project description and title, along with the background element of the interactive record. Most of the project, including it's graphs and data, lie below the fold in an effort to give the site a more artistic visual feeling, letting the user feel like they're being drawn into the story of the data as it enters the screen.
-![Website wireframe](./DesignWireframe.png)
-![Mobile mockup for website](./MobileMockup.png)
-![Widescreen mockup for website](./WideMockup.jpg)
+
+<img src="./DesignWireframe.png"  width="360" height="640" alt="Website wireframe">
+<img src="./MobileMockup.png"  width="360" height="640" alt="Mobile mockup for website](./MobileMockup.png">
+<img src="./WideMockup.jpg"  width="640" height="360" alt="Widescreen mockup for website">
+
 
 ## Functionality
 
