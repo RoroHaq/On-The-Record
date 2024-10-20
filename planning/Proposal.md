@@ -9,6 +9,8 @@
 - `/api/get_genre/:genre?year=2017` This returns the genre Object with the data of that certain year, this examplke wants a genre from 2017
 - `/api/get_genre/:genre` This returns all the genre objects with the data from all years
 - `/api/billboard/?year=2017` return a list of songs and their genres that were on the billboard top 100 in a given year
+
+possibility:
 - `/api/songs/detail/:name` This returns the details of a song
 
 ## Visualization
