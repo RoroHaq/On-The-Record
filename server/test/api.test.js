@@ -22,8 +22,13 @@ describe("/api/genre/:genre and ?year=Num Testing", () =>{
 describe("/api/streams/top/:year Tests", () =>{
   it("Should check if the top years array has the genre data during 2016", async () =>{
     const response = await request(api).get("/api/streams/top/2016")
-    response.forEach(genre =>{
+    response.body().forEach(genre =>{
       expect(genre.year).to.equal(2016)
     })
+  })
+
+  it("Should check if the top years array has the genre data during 2016", async () =>{
+    const response = await request(api).get("/api/streams/top/2016")
+    expect(response.body()[0].rank).to.equal(1)
   })
 });
