@@ -29,6 +29,18 @@ const expect = chai.expect;
  *  NOTE: INDEXES WILL CHANGE LATER ON
  */
 describe("/api/genre/:genre and ?year=Num Testing", () =>{
+  it("Should Return a list of genre info through the years", async() =>{
+    const response = await request(api).get("/api/genre/Country")
+    const body = response.body;
+
+    expect(body.data.length).to.equal(11) //Represents the span between 2010-2021
+  });
+  it("Should Return an Error for an Invalid Genre", async() =>{
+    const response = await request(api).get("/api/genre/HocusPocus")
+    const body = response.body;
+
+    expect(body).to.deep.equal({error: "Invalid Genre"})
+  });
   it("Should return Country Object in 2017", async()=>{
     const response = await request(api).get("/api/genre/Country?year=2017")
     const body = response.body;
