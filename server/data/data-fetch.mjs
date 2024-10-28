@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 import neat from 'neat-csv'
-async function getFileData(){
+async function getBillBoardData(){
   try{
     let response = await fs.readFile('charts.csv')
     
@@ -12,9 +12,9 @@ async function getFileData(){
   }
 }
 
-async function filterData(){
+async function filterBillBoardData(){
   try{
-    let songs = await getFileData()
+    let songs = await getBillBoardData()
     const startDate = new Date('2010-01-01').toJSON().slice(0, 10);
     const endDate = new Date('2021-12-31').toJSON().slice(0, 10);
     let filtered = songs.filter(song => song.date >= startDate && song.date <= endDate)
@@ -25,5 +25,22 @@ async function filterData(){
   }
 }
 
-let data = await filterData()
-console.log(data[data.length-1])
+async function getSpotifyData() {
+  try{
+    let response = await fs.readFile('spotify_full_list.csv')
+    
+    const data = await neat(response)
+
+    return data
+  }catch(Error){
+    console.log(Error)
+  }
+}
+
+async function filterSpotifyData(){
+  try{
+
+  }catch(Error){
+    console.log(Error)
+  }
+}
