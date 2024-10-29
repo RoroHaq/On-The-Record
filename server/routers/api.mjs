@@ -2,13 +2,13 @@ import express from 'express';
 const app = express();
 const port = 3000;
 
-app.use(express.static('TODO path to client dist'));
+app.use(express.static('../../client/dist'));
 
 /**
  * Test to see if the server is online and receiving request
  * 
  * @route GET /api/alive
- * @returns {object} - A JSON object with the status of the server
+ * @returns {string} - A JSON message with the status of the server
  */
 app.get('/api/alive', (req, res) => {
   res.json({ alive: true });
