@@ -2,9 +2,12 @@ import * as chai from 'chai'
 import request from 'supertest'
 import api from '../routers/api.mjs'
 import sinon from 'sinon'
-import db from '../db/db.js'
+import { db } from '../db/db.js'
 
 let stubDbGetGenre = sinon.stub(db, "getGenre")
+let stubDbGetGenreByYear = sinon.stub(db, "getGenreByYear")
+let stubDbGetBillBoardSongs = sinon.stub(db, "getBillBoardSongs")
+let stubDbGetBillBoardsongsByYear = sinon.stub(db, "getBillBoardSongsByYear")
 
 const expect = chai.expect;
 
@@ -49,33 +52,42 @@ describe("/api/genre/:genre and ?year=Num Testing", () =>{
         TotalWeeklyPlacement : 110
       },
     ]})
-  })
+
+    stubDbGetGenreByYear.resolves({data: [
+      {
+        genre: "Country",
+        year: 2017,
+        totalStreams : 4500000,
+        TotalWeeklyPlacement : 150
+      },
+    ]})
+  });
+
   it("Should Return a list of genre info through the years", async() =>{
     const response = await request(api).get("/api/genre/Country")
     const body = response.body;
 
     expect(body.data.length).to.equal(2)
   });
+
   it("Should Return an Error for an Invalid Genre", async() =>{
     const response = await request(api).get("/api/genre/HocusPocus")
     const body = response.body;
 
     expect(body).to.deep.equal({error: "Invalid Genre"})
   });
+
   it("Should return Country Object in 2017", async()=>{
     const response = await request(api).get("/api/genre/Country?year=2017")
     const body = response.body;
 
     chai.assert.isObject(body, 'body is an object');
 
-    expect(body).to.deep.equal(
-      {data: [{
-        "genre" : "Country",
-        "year" : 2019,
-        "totalStreams" : 100000,
-        "totalBillBoardPlacements": 49
-      }]}
-  )
+    expect(body.data[0]).to.have.property('genre', 'Country');
+    expect(body.data[0]).to.have.property('year', 2017);
+    expect(body.data[0]).to.have.property('totalStreams', 4500000);
+    expect(body.data[0]).to.have.property('TotalWeeklyPlacement', 150);
+
     expect(response.statusCode).to.equal(200);
   });
 
@@ -90,6 +102,7 @@ describe("/api/genre/:genre and ?year=Num Testing", () =>{
 
   after(()=>{
     stubDbGetGenre.restore();
+    stubDbGetGenreByYear.restore();
   })
 });
 /**
@@ -151,17 +164,57 @@ describe("Test for /api/billboard/:year", () =>{
 });
 
 describe("Test for /api/billboard", () =>{
-  it("Top 100 will match the year its fetched from, which is 2016", async () =>{
-    const response = await request(api).get("/api/billboard")
-    const body = response.body
-    assert.isObject(body, "Body is an object")
-    expect(body.data[0].year).to.equal(2016) //Index will change when we know the proper location of the year
+  before(() =>{
+    stubDbGetBillBoardSongs.resolves({data:[
+      {
+        year: 2016,
+        songs: [
+          {
+            song: "Perfect",
+            artist: "Ed Sheeran",
+            genre: "Pop"
+          },
+          {
+            song: "GOOD 4 U",
+            artist: "Olivia Rodrigo",
+            genre: "Pop"
+          },
+        ]
+      }
+    ]})
   });
-  it("Filter through and match the top 1 song in 2017", async()=>{
+  it("Will Match Stub Number 1 song in 2016", async () =>{
     const response = await request(api).get("/api/billboard")
     const body = response.body
-    body.songs.filter((song) => song.year === 2017)
+
     assert.isObject(body, "Body is an object")
-    chai.assert.strictEqual(body.data[0].songs[0].song, "Perfect", 'Top 1 songs of 2017 matches')
+
+    expect(body.data[0]).to.have.property("year")
+    expect(body.data[0].year).to.equal(2016)
+    expect(body.data[0]).to.have.property("songs")
+    expect(body.data[0].songs).to.have.property("song", "Perfect");
+    expect(body.data[0].songs).to.have.property("artist", "Ed Sheeran");
+    expect(body.data[0].songs).to.have.property("genre", "Pop");
+
+    expect(response.status).to.equal(200)
+  });
+  it("Will Match Stub Number 2 Song in 2016", async()=>{
+    const response = await request(api).get("/api/billboard")
+    const body = response.body
+
+    assert.isObject(body, "Body is an object")
+
+    expect(body.data[0]).to.have.property("year")
+    expect(body.data[0].year).to.equal(2016)
+    expect(body.data[0]).to.have.property("songs")
+    expect(body.data[0].songs).to.have.property("song", "GOOD 4 U");
+    expect(body.data[0].songs).to.have.property("artist", "Olivia Rodrigo");
+    expect(body.data[0].songs).to.have.property("genre", "Pop");
+
+    expect(response.status).to.equal(200)
+  })
+  
+  after(() =>{
+    stubDbGetBillBoardSongs.restore()
   })
 })
