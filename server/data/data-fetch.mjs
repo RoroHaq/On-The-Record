@@ -39,7 +39,10 @@ async function getSpotifyData() {
 
 async function filterSpotifyData(){
   try{
-
+    let songs = await getSpotifyData()
+    const startDate = new Date('2010-01-01').getFullYear()+1
+    const endDate = new Date('2021-12-31').getFullYear()
+    
   }catch(Error){
     console.log(Error)
   }
