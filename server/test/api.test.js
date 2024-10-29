@@ -147,19 +147,48 @@ describe("/api/streams/top/:year Tests", () =>{
  * NOTE: INDEXES WILL CHANGE LATER ON
  */
 describe("Test for /api/billboard/:year", () =>{
-  it("Should return a list of songs of 2017's Billboard top 100", async () =>{
+  before(() =>{
+    stubDbGetBillBoardsongsByYear.resolves({data: [
+      {
+        year: 2017,
+        songs: [
+          {
+            song: "Shape of You",
+            artist: "Ed Sheeran",
+            genre: "Pop"
+          },
+          {
+            song: "Despacito",
+            artist: "Luis Fonzi",
+            genre: "Pop"
+          },
+        ]
+      }
+    ]})
+  });
+
+  it("Should return only songs of 2017", async () =>{
     const response = await request(api).get("/api/billboard/2017")
     const body = response.body
 
     assert.isObject(body, "Body is an object")
-    expect(body.data[0].songs.length).to.equal(100)
-  })
-  it("should match the number 1 song in 2017 top 100", async()=>{
+    expect(body.data.length).to.equal(1)
+    expect(response.status).to.equal(200)
+  });
+
+  it("should match the number 2 song in 2017 top 100", async()=>{
     const response = await request(api).get("/api/billboard/2017")
     const body = response.body
 
     assert.isObject(body, "Body is an object")
-    chai.assert.strictEqual(body.data[0].songs[0].song, "Perfect", 'Top 1 songs of 2017 matches')
+
+    expect(body.data[1]).to.have.property("year")
+    expect(body.data[1].year).to.equal(2017)
+    expect(body.data[1]).to.have.property("songs")
+    expect(body.data[1].songs).to.have.property("song", "Despacito");
+    expect(body.data[1].songs).to.have.property("artist", "Luis Fonzi");
+    expect(body.data[1].songs).to.have.property("genre", "Pop");
+
   })
 });
 
@@ -175,14 +204,15 @@ describe("Test for /api/billboard", () =>{
             genre: "Pop"
           },
           {
-            song: "GOOD 4 U",
-            artist: "Olivia Rodrigo",
+            song: "Love Yourself",
+            artist: "Justin Bieber",
             genre: "Pop"
           },
         ]
       }
     ]})
   });
+
   it("Will Match Stub Number 1 song in 2016", async () =>{
     const response = await request(api).get("/api/billboard")
     const body = response.body
@@ -198,18 +228,19 @@ describe("Test for /api/billboard", () =>{
 
     expect(response.status).to.equal(200)
   });
+
   it("Will Match Stub Number 2 Song in 2016", async()=>{
     const response = await request(api).get("/api/billboard")
     const body = response.body
 
     assert.isObject(body, "Body is an object")
 
-    expect(body.data[0]).to.have.property("year")
-    expect(body.data[0].year).to.equal(2016)
-    expect(body.data[0]).to.have.property("songs")
-    expect(body.data[0].songs).to.have.property("song", "GOOD 4 U");
-    expect(body.data[0].songs).to.have.property("artist", "Olivia Rodrigo");
-    expect(body.data[0].songs).to.have.property("genre", "Pop");
+    expect(body.data[1]).to.have.property("year")
+    expect(body.data[1].year).to.equal(2016)
+    expect(body.data[1]).to.have.property("songs")
+    expect(body.data[1].songs).to.have.property("song", "Love Yourself");
+    expect(body.data[1].songs).to.have.property("artist", "Justin Bieber");
+    expect(body.data[1].songs).to.have.property("genre", "Pop");
 
     expect(response.status).to.equal(200)
   })
