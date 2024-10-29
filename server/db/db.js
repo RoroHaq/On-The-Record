@@ -37,6 +37,9 @@ class DB{
   async readAll() {
     return await instance.collection.find().toArray();
   }
+  async getRandom(number) {
+    return await instance.collection.aggregate([{ $sample: { size: number } }]).toArray();
+  }
   async create(song) {
 
     return await instance.collection.insertOne(song);

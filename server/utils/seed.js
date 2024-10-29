@@ -1,14 +1,41 @@
 import {db} from '../db/db.js';
 
 const songs = [
-  {
-    _id:'song1',
+  
+  {_id:'song2',
     date:'2014-03-08',
     rank:'1',
     song:'Happy',
     artist:'Parrell Williams',
     weeks_on_board:'8'
-
+  },
+  {_id:'song3',
+    date:'2014-03-08',
+    rank:'1',
+    song:'Happy',
+    artist:'Parrell Williams',
+    weeks_on_board:'8'
+  },
+  {_id:'song4',
+    date:'2014-03-08',
+    rank:'1',
+    song:'Happy',
+    artist:'Parrell Williams',
+    weeks_on_board:'8'
+  },
+  {_id:'song5',
+    date:'2014-03-08',
+    rank:'1',
+    song:'Happy',
+    artist:'Parrell Williams',
+    weeks_on_board:'8'
+  },
+  {_id:'song6',
+    date:'2014-03-08',
+    rank:'1',
+    song:'Happy',
+    artist:'Parrell Williams',
+    weeks_on_board:'8'
   }
 ];
 (async () => {

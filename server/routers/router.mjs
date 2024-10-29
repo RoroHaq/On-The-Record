@@ -1,8 +1,9 @@
 import express from 'express';
-const app = express();
+import { db }  from '../db/db.js';
+const router = express.Router();
 const port = 3000;
 
-app.use(express.static('../../client/dist'));
+router.use(express.static('../../client/dist'));
 
 /**
  * Test to see if the server is online and receiving request
@@ -10,7 +11,7 @@ app.use(express.static('../../client/dist'));
  * @route GET /api/alive
  * @returns {string} - A JSON message with the status of the server
  */
-app.get('/api/alive', (req, res) => {
+router.get('/alive', (req, res) => {
   res.json({ alive: true });
 });
 
@@ -21,7 +22,7 @@ app.get('/api/alive', (req, res) => {
  * @returns {object} - return a JSON Object of the data of a specific genre
  *  or an error message if not found.
  */
-app.get('/api/genre/:genre', (req, res) => {
+router.get('/genre/:genre', (req, res) => {
   // TODO
 })
 
@@ -33,10 +34,21 @@ app.get('/api/genre/:genre', (req, res) => {
  * @returns {object} - return a JSON Object list of songs and their genres that were on the billboard top 100 for each year.
  *  or an error message if not found.
  */
-app.get('/api/billboard/', (req, res) => {
+router.get('/billboard/', (req, res) => {
   // TODO
 })
 
+router.get('/random/:number', async (req, res) => {
+  const quantity = parseInt(req.params.number);
+  try {
+    const songs = await db.getRandom(quantity);
+    res.json(songs);
+  } catch (error) {
+    console.dir(error);
+    res.status(500).json({ message: 'Failed to retrieve songs' });
+  }
+  res.json
+})
 /**
  * Get a ranked list genres based on how many streams songs under that genre released in a given year add up to.
  * 
@@ -46,9 +58,9 @@ app.get('/api/billboard/', (req, res) => {
  * streams songs under that genre released in a given year add up to.
  *  or an error message if not found.
  */
-app.get('/api/streams/top/:year', (req, res) => {
+router.get('/streams/top/:year', (req, res) => {
   // TODO 
   
 })
-
+export default router;
 
