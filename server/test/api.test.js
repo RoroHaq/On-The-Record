@@ -1,6 +1,11 @@
 import * as chai from 'chai'
 import request from 'supertest'
 import api from '../routers/api.mjs'
+import sinon from 'sinon'
+import db from '../db/db.js'
+
+let stubDbGetGenre = sinon.stub(db, "getGenre")
+
 const expect = chai.expect;
 
 /**
@@ -29,11 +34,27 @@ const expect = chai.expect;
  *  NOTE: INDEXES WILL CHANGE LATER ON
  */
 describe("/api/genre/:genre and ?year=Num Testing", () =>{
+  before(() =>{
+    stubDbGetGenre.resolves({data: [
+      {
+        genre: "Country",
+        year: "2010",
+        totalStreams : 450000,
+        TotalWeeklyPlacement : 120
+      },
+      {
+        genre: "Country",
+        year: "2011",
+        totalStreams : 400000,
+        TotalWeeklyPlacement : 110
+      },
+    ]})
+  })
   it("Should Return a list of genre info through the years", async() =>{
     const response = await request(api).get("/api/genre/Country")
     const body = response.body;
 
-    expect(body.data.length).to.equal(11) //Represents the span between 2010-2021
+    expect(body.data.length).to.equal(2)
   });
   it("Should Return an Error for an Invalid Genre", async() =>{
     const response = await request(api).get("/api/genre/HocusPocus")
@@ -66,6 +87,10 @@ describe("/api/genre/:genre and ?year=Num Testing", () =>{
     expect(body).to.deep.equal({error: "Invalid query Parameter"})
     expect(response.statusCode).to.equal(404);
   });
+
+  after(()=>{
+    stubDbGetGenre.restore();
+  })
 });
 /**
  * BillBoard top Object Example with 2015
