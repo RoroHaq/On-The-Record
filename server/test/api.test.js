@@ -1,6 +1,15 @@
 import * as chai from 'chai'
 import request from 'supertest'
 import api from '../routers/api.mjs'
+import sinon from 'sinon'
+import { db } from '../db/db.js'
+
+let stubDbGetGenre = sinon.stub(db, "getGenre")
+let stubDbGetGenreByYear = sinon.stub(db, "getGenreByYear")
+let stubDbGetBillBoardSongs = sinon.stub(db, "getBillBoardSongs")
+let stubDbGetBillBoardsongsByYear = sinon.stub(db, "getBillBoardSongsByYear")
+let stubDbGetTopGenresByYear = sinon.stub(db, "getTopGenresByYear")
+
 const expect = chai.expect;
 
 /**
@@ -29,32 +38,57 @@ const expect = chai.expect;
  *  NOTE: INDEXES WILL CHANGE LATER ON
  */
 describe("/api/genre/:genre and ?year=Num Testing", () =>{
+  before(() =>{
+    stubDbGetGenre.resolves({data: [
+      {
+        genre: "Country",
+        year: "2010",
+        totalStreams : 450000,
+        TotalWeeklyPlacement : 120
+      },
+      {
+        genre: "Country",
+        year: "2011",
+        totalStreams : 400000,
+        TotalWeeklyPlacement : 110
+      },
+    ]})
+
+    stubDbGetGenreByYear.resolves({data: [
+      {
+        genre: "Country",
+        year: 2017,
+        totalStreams : 4500000,
+        TotalWeeklyPlacement : 150
+      },
+    ]})
+  });
+
   it("Should Return a list of genre info through the years", async() =>{
     const response = await request(api).get("/api/genre/Country")
     const body = response.body;
 
-    expect(body.data.length).to.equal(11) //Represents the span between 2010-2021
+    expect(body.data.length).to.equal(2)
   });
+
   it("Should Return an Error for an Invalid Genre", async() =>{
     const response = await request(api).get("/api/genre/HocusPocus")
     const body = response.body;
 
     expect(body).to.deep.equal({error: "Invalid Genre"})
   });
+
   it("Should return Country Object in 2017", async()=>{
     const response = await request(api).get("/api/genre/Country?year=2017")
     const body = response.body;
 
     chai.assert.isObject(body, 'body is an object');
 
-    expect(body).to.deep.equal(
-      {data: [{
-        "genre" : "Country",
-        "year" : 2019,
-        "totalStreams" : 100000,
-        "totalBillBoardPlacements": 49
-      }]}
-  )
+    expect(body.data[0]).to.have.property('genre', 'Country');
+    expect(body.data[0]).to.have.property('year', 2017);
+    expect(body.data[0]).to.have.property('totalStreams', 4500000);
+    expect(body.data[0]).to.have.property('TotalWeeklyPlacement', 150);
+
     expect(response.statusCode).to.equal(200);
   });
 
@@ -66,11 +100,18 @@ describe("/api/genre/:genre and ?year=Num Testing", () =>{
     expect(body).to.deep.equal({error: "Invalid query Parameter"})
     expect(response.statusCode).to.equal(404);
   });
+
+  after(()=>{
+    stubDbGetGenre.restore();
+    stubDbGetGenreByYear.restore();
+  })
 });
 /**
  * BillBoard top Object Example with 2015
  * 
- * body = {data: [
+ * body = {data: {
+ *    year: 2015,
+ *    list: [
  *      {
  *        rank: 1,
  *        year: 2015
@@ -78,25 +119,45 @@ describe("/api/genre/:genre and ?year=Num Testing", () =>{
  *        totalStreams: 56000000
  *      },
  *    ...Objects
- * ]}
+ * ]}}
  * 
  * NOTE: INDEXES WILL CHANGE LATER ON
  */
 describe("/api/streams/top/:year Tests", () =>{
-  it("Should check if the top years array has the genre data during 2016", async () =>{
-    const response = await request(api).get("/api/streams/top/2016")
-    const body = response.body
-    body.data.forEach(result =>{
-      expect(result.year).to.equal(2016)
-    })
-    expect(response.statusCode).to.equal(200);
-  })
+  before(()=>{
+    stubDbGetTopGenresByYear.resolve({data : {
+      year: 2016,
+      list: [
+        {
+          rank : 1,
+          genre : "Rock",
+          totalStreams : 56000000
+        },
+        {
+          rank : 2,
+          genre : "Pop",
+          totalStreams : 50000000
+        },
+      ]
+    }})
+  });
 
-  it("Should check if the top years array has the genre data during 2016", async () =>{
+  it("Should cehck if the List is songs from 2016", async () =>{
     const response = await request(api).get("/api/streams/top/2016")
     const body = response.body
-    expect(body.data[0].rank).to.equal(1)
-    expect(body.data[0].year).to.equal(2016)
+    expect(body.data.year).to.equal(2016);
+    expect(response.statusCode).to.equal(200);
+  });
+
+  it("Should check stub Data Rank 1 Matches", async () =>{
+    const response = await request(api).get("/api/streams/top/2016")
+    const body = response.body
+    
+    expect(body.data.list[0]).to.have.property("rank", 1)
+    expect(body.data.list[0]).to.have.property("genre", "Rock")
+    expect(body.data.list[0]).to.have.property("totalStreams", 56000000)
+
+    expect(response.statusCode).to.equal(200)
   })
 });
 /**
@@ -109,34 +170,105 @@ describe("/api/streams/top/:year Tests", () =>{
  * NOTE: INDEXES WILL CHANGE LATER ON
  */
 describe("Test for /api/billboard/:year", () =>{
-  it("Should return a list of songs of 2017's Billboard top 100", async () =>{
+  before(() =>{
+    stubDbGetBillBoardsongsByYear.resolves({data: [
+      {
+        year: 2017,
+        songs: [
+          {
+            song: "Shape of You",
+            artist: "Ed Sheeran",
+            genre: "Pop"
+          },
+          {
+            song: "Despacito",
+            artist: "Luis Fonzi",
+            genre: "Pop"
+          },
+        ]
+      }
+    ]})
+  });
+
+  it("Should return only songs of 2017", async () =>{
     const response = await request(api).get("/api/billboard/2017")
     const body = response.body
 
     assert.isObject(body, "Body is an object")
-    expect(body.data[0].songs.length).to.equal(100)
-  })
-  it("should match the number 1 song in 2017 top 100", async()=>{
+    expect(body.data.length).to.equal(1)
+    expect(response.status).to.equal(200)
+  });
+
+  it("should match the number 2 song in 2017 top 100", async()=>{
     const response = await request(api).get("/api/billboard/2017")
     const body = response.body
 
     assert.isObject(body, "Body is an object")
-    chai.assert.strictEqual(body.data[0].songs[0].song, "Perfect", 'Top 1 songs of 2017 matches')
+
+    expect(body.data[1]).to.have.property("year")
+    expect(body.data[1].year).to.equal(2017)
+    expect(body.data[1]).to.have.property("songs")
+    expect(body.data[1].songs).to.have.property("song", "Despacito");
+    expect(body.data[1].songs).to.have.property("artist", "Luis Fonzi");
+    expect(body.data[1].songs).to.have.property("genre", "Pop");
+
   })
 });
 
 describe("Test for /api/billboard", () =>{
-  it("Top 100 will match the year its fetched from, which is 2016", async () =>{
-    const response = await request(api).get("/api/billboard")
-    const body = response.body
-    assert.isObject(body, "Body is an object")
-    expect(body.data[0].year).to.equal(2016) //Index will change when we know the proper location of the year
+  before(() =>{
+    stubDbGetBillBoardSongs.resolves({data:[
+      {
+        year: 2016,
+        songs: [
+          {
+            song: "Perfect",
+            artist: "Ed Sheeran",
+            genre: "Pop"
+          },
+          {
+            song: "Love Yourself",
+            artist: "Justin Bieber",
+            genre: "Pop"
+          },
+        ]
+      }
+    ]})
   });
-  it("Filter through and match the top 1 song in 2017", async()=>{
+
+  it("Will Match Stub Number 1 song in 2016", async () =>{
     const response = await request(api).get("/api/billboard")
     const body = response.body
-    body.songs.filter((song) => song.year === 2017)
+
     assert.isObject(body, "Body is an object")
-    chai.assert.strictEqual(body.data[0].songs[0].song, "Perfect", 'Top 1 songs of 2017 matches')
+
+    expect(body.data[0]).to.have.property("year")
+    expect(body.data[0].year).to.equal(2016)
+    expect(body.data[0]).to.have.property("songs")
+    expect(body.data[0].songs).to.have.property("song", "Perfect");
+    expect(body.data[0].songs).to.have.property("artist", "Ed Sheeran");
+    expect(body.data[0].songs).to.have.property("genre", "Pop");
+
+    expect(response.status).to.equal(200)
+  });
+
+  it("Will Match Stub Number 2 Song in 2016", async()=>{
+    const response = await request(api).get("/api/billboard")
+    const body = response.body
+
+    assert.isObject(body, "Body is an object")
+
+    expect(body.data[1]).to.have.property("year")
+    expect(body.data[1].year).to.equal(2016)
+    expect(body.data[1]).to.have.property("songs")
+    expect(body.data[1].songs).to.have.property("song", "Love Yourself");
+    expect(body.data[1].songs).to.have.property("artist", "Justin Bieber");
+    expect(body.data[1].songs).to.have.property("genre", "Pop");
+
+    expect(response.status).to.equal(200)
+  })
+  
+  after(() =>{
+    stubDbGetBillBoardSongs.restore()
   })
 })
