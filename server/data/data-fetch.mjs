@@ -33,6 +33,16 @@ async function getMappedBillBoardData(spotify_data){
       return song;
     }
 
+    const addTimeOnBoard = (song) => {
+      song.weeksOnBoard = songs.filter((s) => {
+        return s.artist === song.artist 
+          && s.title === song.title 
+          && s.year == song.year
+      }).length
+
+      return song
+    }
+
     const removeFeaturedArtist = (song) => {
       if (song.artist.indexOf(" Featuring") !== -1){
         song.artist = song.artist.substring(0, song.artist.indexOf(" Featuring"))
