@@ -60,10 +60,32 @@ async function getMappedBillBoardData(spotify_data){
       return song
     }
 
+    const removeSongsNotOnSpotify = (song) => {
+      if ( spotify_data.find(spotify_song => {
+        if (spotify_song.artist && spotify_song.title){
+          return spotify_song.artist.toLowerCase() === song.artist.toLowerCase()
+            && spotify_song.title.toLowerCase() === song.title.toLowerCase()
+        }
+      })){
+        return true;
+      }
+    }
+
+    const removeDuplicates = (song, index, array) => {
+      return array.findIndex(s =>
+          s.artist === song.artist &&
+          s.title === song.title &&
+          s.year === song.year
+        ) === index
+    }
+
     return songs
       .map(deriveNewFields)
       .map(removeFeaturedArtist)
       .map(removeUnneededFields)
+      .filter(removeSongsNotOnSpotify)
+      .map(addTimeOnBoard)
+      .filter(removeDuplicates)
   }catch (Error){
     console.log(Error)
   }
