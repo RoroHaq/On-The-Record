@@ -165,3 +165,16 @@ async function getMappedSpotifyData(){
     console.log(Error)
   }
 }
+
+function consolidateBillboardAndSpotify(spotify_data, billboard_data){
+  return billboard_data.map( billboard_song => {
+    const spotify_song_data = spotify_data.find(spotify_song => 
+      spotify_song.artist.toLowerCase() === billboard_song.artist.toLowerCase()
+        && spotify_song.title.toLowerCase() === billboard_song.title.toLowerCase())
+
+    billboard_song.streams = spotify_song_data.streams
+    billboard_song.genre = spotify_song_data.genre
+
+    return billboard_song
+  })
+}
