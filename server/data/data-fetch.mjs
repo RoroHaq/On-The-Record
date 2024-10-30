@@ -23,10 +23,46 @@ async function getFilteredBillBoardData(){
   }
 }
 
+async function getMappedBillBoardData(spotify_data){
+  try{
+    const songs = await getFilteredBillBoardData()
+
+    const deriveNewFields = (song) => {
+      song.title = song.song;
+      song.year = parseInt(song.date.slice(0,4));
+      return song;
+    }
+
+    const removeFeaturedArtist = (song) => {
+      if (song.artist.indexOf(" Featuring") !== -1){
+        song.artist = song.artist.substring(0, song.artist.indexOf(" Featuring"))
+      }
+      return song;
+    }
+
+    const removeUnneededFields = (song) => {
+      delete song.song
+      delete song.date
+      delete song.rank
+      delete song['last-week']
+      delete song['peak-rank']
+      delete song['weeks-on-board']
+      return song
+    }
+
+    return songs
+      .map(deriveNewFields)
+      .map(removeFeaturedArtist)
+      .map(removeUnneededFields)
+  }catch (Error){
+    console.log(Error)
+  }
+}
+
 async function getBaseSpotifyData() {
   try{
     const response = await fs.readFile('spotify_full_list.csv')
-    
+
     const data = await neat(response)
 
     return data
@@ -47,7 +83,6 @@ async function getFilteredSpotifyData(){
     console.log(Error)
   }
 }
-
 
 async function getMappedSpotifyData(){
   try{
@@ -88,7 +123,7 @@ async function getMappedSpotifyData(){
       return song
     }
 
-    return songs//.filter(song => song.Artist === 'Kendrick Lamar')
+    return songs
                 .map(deriveNewFields)
                 .map(removeUnneededFields)
                 .map(makeFieldsLowerCase)
