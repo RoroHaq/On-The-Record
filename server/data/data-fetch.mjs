@@ -1,5 +1,10 @@
 import fs from 'node:fs/promises'
 import neat from 'neat-csv'
+
+/**
+ * Reads charts.csv file to obtain billboard data
+ * @return array of the unfiltered billboard data
+ */
 async function getBaseBillBoardData(){
   try{
     const response = await fs.readFile('charts.csv')
@@ -12,6 +17,10 @@ async function getBaseBillBoardData(){
   }
 }
 
+/**
+ * Filters the billboard data
+ * @return billboard data that falls in the required date
+ */
 async function getFilteredBillBoardData(){
   try{
     const songs = await getBaseBillBoardData()
@@ -23,6 +32,12 @@ async function getFilteredBillBoardData(){
   }
 }
 
+/**
+ * Maps billboard data to format with only the fields needed for the program
+ * Additionally removes songs that weren't in the spotify database
+ * @param {spotify_data} spotify_data - Mapped spotify data
+ * @return mapped billboard data
+ */
 async function getMappedBillBoardData(spotify_data){
   try{
     const songs = await getFilteredBillBoardData()
@@ -60,6 +75,7 @@ async function getMappedBillBoardData(spotify_data){
       return song
     }
 
+    //This is done here so as to reduce the time it takes to derive weeks on billboard property
     const removeSongsNotOnSpotify = (song) => {
       if ( spotify_data.find(spotify_song => {
         if (spotify_song.artist && spotify_song.title){
@@ -91,6 +107,10 @@ async function getMappedBillBoardData(spotify_data){
   }
 }
 
+/**
+ * Reads spotify_full_list.csv file to obtain spotify streaming data
+ * @return array of the unfiltered spotify data
+ */
 async function getBaseSpotifyData() {
   try{
     const response = await fs.readFile('spotify_full_list.csv')
@@ -103,6 +123,10 @@ async function getBaseSpotifyData() {
   }
 }
 
+/**
+ * Filters the spotify data
+ * @return spotify data that falls in the required date
+ */
 async function getFilteredSpotifyData(){
   try{
     const songs = await getBaseSpotifyData()
@@ -116,6 +140,10 @@ async function getFilteredSpotifyData(){
   }
 }
 
+/**
+ * Maps spotify data to format with only the fields needed for the program
+ * @return mapped spotify data
+ */
 async function getMappedSpotifyData(){
   try{
     const songs = await getFilteredSpotifyData()
@@ -166,6 +194,13 @@ async function getMappedSpotifyData(){
   }
 }
 
+/**
+ * Merges spotify and billboard data into one object
+ * @param {spotify_data} spotify_data - Mapped spotify data
+ * @param {billboard_data} billboard_data - Mapped billboard data
+ * @return array of individual song data with genre, streams, year,
+ * weeksOnBoard, title, and artist fields
+ */
 function consolidateBillboardAndSpotify(spotify_data, billboard_data){
   return billboard_data.map( billboard_song => {
     const spotify_song_data = spotify_data.find(spotify_song => 
