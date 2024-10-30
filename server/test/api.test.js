@@ -8,6 +8,7 @@ let stubDbGetGenre = sinon.stub(db, "getGenre")
 let stubDbGetGenreByYear = sinon.stub(db, "getGenreByYear")
 let stubDbGetBillBoardSongs = sinon.stub(db, "getBillBoardSongs")
 let stubDbGetBillBoardsongsByYear = sinon.stub(db, "getBillBoardSongsByYear")
+let stubDbGetTopGenresByYear = sinon.stub(db, "getTopGenresByYear")
 
 const expect = chai.expect;
 
@@ -108,7 +109,9 @@ describe("/api/genre/:genre and ?year=Num Testing", () =>{
 /**
  * BillBoard top Object Example with 2015
  * 
- * body = {data: [
+ * body = {data: {
+ *    year: 2015,
+ *    list: [
  *      {
  *        rank: 1,
  *        year: 2015
@@ -116,25 +119,45 @@ describe("/api/genre/:genre and ?year=Num Testing", () =>{
  *        totalStreams: 56000000
  *      },
  *    ...Objects
- * ]}
+ * ]}}
  * 
  * NOTE: INDEXES WILL CHANGE LATER ON
  */
 describe("/api/streams/top/:year Tests", () =>{
-  it("Should check if the top years array has the genre data during 2016", async () =>{
-    const response = await request(api).get("/api/streams/top/2016")
-    const body = response.body
-    body.data.forEach(result =>{
-      expect(result.year).to.equal(2016)
-    })
-    expect(response.statusCode).to.equal(200);
-  })
+  before(()=>{
+    stubDbGetTopGenresByYear.resolve({data : {
+      year: 2016,
+      list: [
+        {
+          rank : 1,
+          genre : "Rock",
+          totalStreams : 56000000
+        },
+        {
+          rank : 2,
+          genre : "Pop",
+          totalStreams : 50000000
+        },
+      ]
+    }})
+  });
 
-  it("Should check if the top years array has the genre data during 2016", async () =>{
+  it("Should cehck if the List is songs from 2016", async () =>{
     const response = await request(api).get("/api/streams/top/2016")
     const body = response.body
-    expect(body.data[0].rank).to.equal(1)
-    expect(body.data[0].year).to.equal(2016)
+    expect(body.data.year).to.equal(2016);
+    expect(response.statusCode).to.equal(200);
+  });
+
+  it("Should check stub Data Rank 1 Matches", async () =>{
+    const response = await request(api).get("/api/streams/top/2016")
+    const body = response.body
+    
+    expect(body.data.list[0]).to.have.property("rank", 1)
+    expect(body.data.list[0]).to.have.property("genre", "Rock")
+    expect(body.data.list[0]).to.have.property("totalStreams", 56000000)
+
+    expect(response.statusCode).to.equal(200)
   })
 });
 /**
