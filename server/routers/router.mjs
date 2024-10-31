@@ -52,8 +52,21 @@ router.get('/genre/:genre', async (req, res) => {
  * @returns {object} - return a JSON Object list of songs and their genres that were on the billboard top 100 for each year.
  *  or an error message if not found.
  */
-router.get('/billboard/', (req, res) => {
-  // TODO
+router.get('/billboard/', async (req, res) => {
+  const year = req.query.year;
+  try{
+    const list = year 
+      ? await db.getBillBoardSongsByYear( year) 
+      : await db.getBillBoardSongs();
+    
+    if (list.length === 0) {
+      return res.status(404).json({ message: 'No data found' });
+    }
+    res.json(genres);
+  } catch (error){
+    console.dir(error);
+    res.status(500).json({message: 'Failed to retireve songs'});
+  }
 })
 
 router.get('/random/:number', async (req, res) => {
