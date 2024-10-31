@@ -47,7 +47,7 @@ const songs = [
 (async () => {
   try {
     // TODO replace cluster0 with your db name
-    await db.connect('cluster0', 'songs');
+    await db.connect('cluster520web2024', 'songs');
     const num = await db.createMany(songs);
     console.log(`Inserted ${num.insertedCount} songs`);
   } catch (e) {

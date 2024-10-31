@@ -1,6 +1,6 @@
 import * as chai from 'chai'
 import request from 'supertest'
-import api from '../routers/api.mjs'
+import api from '../app.js'
 import sinon from 'sinon'
 import { db } from '../db/db.js'
 
@@ -67,7 +67,7 @@ describe("/api/genre/:genre and ?year=Num Testing", () =>{
   it("Should Return a list of genre info through the years", async() =>{
     const response = await request(api).get("/api/genre/Country")
     const body = response.body;
-
+    console.log(body)
     expect(body.data.length).to.equal(2)
   });
 
@@ -194,7 +194,7 @@ describe("Test for /api/billboard/:year", () =>{
     const response = await request(api).get("/api/billboard/2017")
     const body = response.body
 
-    assert.isObject(body, "Body is an object")
+    chai.assert.isObject(body, "Body is an object")
     expect(body.data.length).to.equal(1)
     expect(response.status).to.equal(200)
   });
@@ -203,7 +203,7 @@ describe("Test for /api/billboard/:year", () =>{
     const response = await request(api).get("/api/billboard/2017")
     const body = response.body
 
-    assert.isObject(body, "Body is an object")
+    chai.assert.isObject(body, "Body is an object")
 
     expect(body.data[1]).to.have.property("year")
     expect(body.data[1].year).to.equal(2017)
