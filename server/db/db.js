@@ -42,7 +42,7 @@ class DB{
       //  Match only documents with the specified genre
       {  $match: { genre: { $regex: `^${genre}$`, $options: 'i' } } },
   
-      // Group by year and calculate totalStreams and TotalWeeklyPlacement
+      // group by year and calculate totalStreams and TotalWeeklyPlacement
       {
         $group: {
           _id: { year: "$year", genre: "$genre" },
@@ -51,7 +51,7 @@ class DB{
         }
       },
   
-      // Reshape the output document
+      // the number here means include it,1 is yes 0 is no
       {
         $project: {
           _id: 0,
@@ -62,8 +62,8 @@ class DB{
         }
       },
   
-      // Sort
-      { $sort: { year: 1 } }
+      // Sort, -1 here means descending
+      { $sort: { year: -1 } }
     ]).toArray();
   }
   async getGenreByYear(genre, year){
@@ -93,8 +93,64 @@ class DB{
   async getBillBoardSongsByYear(){
 
   }
-  async getTopGenresByYear(){
-
+  async getTopGenresByYear(year) {
+    return await instance.collection.aggregate([
+      { $match: { year: year } },
+      {
+        $group: {
+          _id: "$genre",
+          totalStreams: { $sum: { $toLong: "$stream" } }
+        }
+      },
+  
+      // sort streams in descending order
+      { $sort: { totalStreams: -1 } },
+  
+      // add rank 
+      {
+        $group: {
+          _id: null,
+          genres: {
+            $push: {
+              genre: "$_id",
+              totalStreams: "$totalStreams"
+            }
+          }
+        }
+      },
+  
+      // Unwind the genres array to rank them
+      { $unwind: "$genres" },
+      {
+        $group: {
+          _id: null,
+          list: {
+            $push: {
+              genre: "$genres.genre",
+              totalStreams: "$genres.totalStreams"
+            }
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          year: year,
+          list: {
+            $map: {
+              input: { $range: [0, { $size: "$list" }] }, 
+              as: "index",
+              in: {
+                rank: { $add: ["$$index", 1] }, 
+                genre: { $arrayElemAt: ["$list.genre", "$$index"] },
+                totalStreams: { $arrayElemAt: ["$list.totalStreams", "$$index"] } 
+              }
+            }
+          }
+        }
+      }
+     
+    ]).toArray();
   }
   async getRandom(number) {
     return await instance.collection.aggregate([{ $sample: { size: number } }]).toArray();

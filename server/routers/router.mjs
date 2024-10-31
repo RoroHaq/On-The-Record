@@ -23,12 +23,12 @@ router.get('/alive', (req, res) => {
  *  or an error message if not found.
  */
 router.get('/genre/:genre', async (req, res) => {
-  let genre = req.params.genre;
+  const genre = req.params.genre;
   genre = genre.trim().toLowerCase().replace(/_/g, '/'); 
   if (!genre) {
     return res.status(400).json({ message: 'Genre is required' });
   }
-  let year = req.query.year;
+  const year = req.query.year;
   try{
     const genres = year 
       ? await db.getGenreByYear(genre, year) 
@@ -76,9 +76,18 @@ router.get('/random/:number', async (req, res) => {
  * streams songs under that genre released in a given year add up to.
  *  or an error message if not found.
  */
-router.get('/streams/top/:year', (req, res) => {
-  // TODO 
-  
+router.get('/streams/top/:year', async (req, res) => {
+  const year = req.params.year;
+  try {
+    const list = await db.getTopGenresByYear(year);
+    if (list.length === 0) {
+      return res.status(404).json({ message: 'No data found for this year' });
+    }
+    res.json(list);
+  } catch( error){
+    console.dir(error);
+    res.status(500).json({message: `Failed to retireve genre of ${year}`});
+  }
 })
 export default router;
 

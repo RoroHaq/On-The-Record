@@ -25,6 +25,22 @@ const songs = [
     weeks_on_board:'11',
     stream:'764385899',
     genre:'Hip-Hop/Rap'
+  },
+  {_id:'song4',
+    artist:'Pharrel Williams',
+    title:'Happy',
+    year:'2017',
+    weeks_on_board:'11',
+    stream:'200000',
+    genre:'Pop'
+  },
+  {_id:'song5',
+    artist:'Johnny Cash',
+    title:'Chicken in Black',
+    year:'2017',
+    weeks_on_board:'11',
+    stream:'100000',
+    genre:'Country'
   }
  
 ];
