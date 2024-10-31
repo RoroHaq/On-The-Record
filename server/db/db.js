@@ -90,7 +90,7 @@ class DB{
   async getBillBoardSongs(){
     //TODO
   }
-  async getBillBoardSongsByYear(){
+  async getBillBoardSongsByYear(year){
     //TODO
   }
   async getTopGenresByYear(year) {

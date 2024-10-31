@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import { db } from './db/db.js'; // Import your db instance
+import { db } from './db/db.js'; 
 import router from './routers/router.mjs';
 
 const app = express(); 
