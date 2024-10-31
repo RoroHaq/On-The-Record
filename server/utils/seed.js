@@ -2,41 +2,31 @@ import {db} from '../db/db.js';
 
 const songs = [
   
-  {_id:'song2',
-    date:'2014-03-08',
-    rank:'1',
-    song:'Happy',
-    artist:'Parrell Williams',
-    weeks_on_board:'8'
+  {_id:'song1',
+    artist:'Kendrick Lamar',
+    title:'Humble',
+    year:'2017',
+    weeks_on_board:'37',
+    stream:'2295429735',
+    genre:'Hip-Hop/Rap'
   },
   {_id:'song3',
-    date:'2014-03-08',
-    rank:'1',
-    song:'Happy',
-    artist:'Parrell Williams',
-    weeks_on_board:'8'
+    artist:'Lil Pump',
+    title:'Gucci Gang',
+    year:'2017',
+    weeks_on_board:'1',
+    stream:'20000',
+    genre:'Hip-Hop/Rap'
   },
-  {_id:'song4',
-    date:'2014-03-08',
-    rank:'1',
-    song:'Happy',
-    artist:'Parrell Williams',
-    weeks_on_board:'8'
-  },
-  {_id:'song5',
-    date:'2014-03-08',
-    rank:'1',
-    song:'Happy',
-    artist:'Parrell Williams',
-    weeks_on_board:'8'
-  },
-  {_id:'song6',
-    date:'2014-03-08',
-    rank:'1',
-    song:'Happy',
-    artist:'Parrell Williams',
-    weeks_on_board:'8'
+  {_id:'song2',
+    artist:'Kendrick Lamar',
+    title:'Swimming Pools (Drank)',
+    year:'2013',
+    weeks_on_board:'11',
+    stream:'764385899',
+    genre:'Hip-Hop/Rap'
   }
+ 
 ];
 (async () => {
   try {

@@ -22,8 +22,26 @@ router.get('/alive', (req, res) => {
  * @returns {object} - return a JSON Object of the data of a specific genre
  *  or an error message if not found.
  */
-router.get('/genre/:genre', (req, res) => {
-  // TODO
+router.get('/genre/:genre', async (req, res) => {
+  let genre = req.params.genre;
+  genre = genre.trim().toLowerCase().replace(/_/g, '/'); 
+  if (!genre) {
+    return res.status(400).json({ message: 'Genre is required' });
+  }
+  let year = req.query.year;
+  try{
+    const genres = year 
+      ? await db.getGenreByYear(genre, year) 
+      : await db.getGenre(genre);
+    
+    if (genres.length === 0) {
+      return res.status(404).json({ message: 'No data found for the specified genre' });
+    }
+    res.json(genres);
+  } catch (error){
+    console.dir(error);
+    res.status(500).json({message: 'Failed to retireve genres'});
+  }
 })
 
 /**

@@ -37,6 +37,65 @@ class DB{
   async readAll() {
     return await instance.collection.find().toArray();
   }
+  async getGenre(genre){
+    return await instance.collection.aggregate([
+      //  Match only documents with the specified genre
+      {  $match: { genre: { $regex: `^${genre}$`, $options: 'i' } } },
+  
+      // Group by year and calculate totalStreams and TotalWeeklyPlacement
+      {
+        $group: {
+          _id: { year: "$year", genre: "$genre" },
+          totalStreams: { $sum: { $toLong: "$stream" } },
+          TotalWeeklyPlacement: { $sum: { $toInt: "$weeks_on_board" } }
+        }
+      },
+  
+      // Reshape the output document
+      {
+        $project: {
+          _id: 0,
+          genre: "$_id.genre",
+          year: "$_id.year",
+          totalStreams: 1,
+          TotalWeeklyPlacement: 1
+        }
+      },
+  
+      // Sort
+      { $sort: { year: 1 } }
+    ]).toArray();
+  }
+  async getGenreByYear(genre, year){
+    return await instance.collection.aggregate([
+      
+      {  $match: { genre: { $regex: `^${genre}$`, $options: 'i'}, year: year }   },
+      {
+        $group: {
+          _id: { year: "$year", genre: "$genre" },
+          totalStreams: { $sum: { $toLong: "$stream" } },
+          TotalWeeklyPlacement: { $sum: { $toInt: "$weeks_on_board" } }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          genre: "$_id.genre",
+          year: "$_id.year",
+          totalStreams: 1,
+          TotalWeeklyPlacement: 1
+        }
+      }]).toArray();
+  }
+  async getBillBoardSongs(){
+
+  }
+  async getBillBoardSongsByYear(){
+
+  }
+  async getTopGenresByYear(){
+
+  }
   async getRandom(number) {
     return await instance.collection.aggregate([{ $sample: { size: number } }]).toArray();
   }
