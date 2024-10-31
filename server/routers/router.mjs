@@ -62,7 +62,7 @@ router.get('/billboard/', async (req, res) => {
     if (list.length === 0) {
       return res.status(404).json({ message: 'No data found' });
     }
-    res.json(genres);
+    res.json(list);
   } catch (error){
     console.dir(error);
     res.status(500).json({message: 'Failed to retireve songs'});
