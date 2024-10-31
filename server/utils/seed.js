@@ -1,7 +1,7 @@
 import {db} from '../db/db.js';
 
 const songs = [
-  
+  //temporary data for testing
   {_id:'song1',
     artist:'Kendrick Lamar',
     title:'Humble',
