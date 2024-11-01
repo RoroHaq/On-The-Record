@@ -63,5 +63,5 @@ build-frontend:
 test-endpoints:
   stage: test
   script:
-    -cd server && npm run test
+    - cd server && npm run test
   allow_failure: false
