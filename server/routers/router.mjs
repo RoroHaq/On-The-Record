@@ -1,7 +1,7 @@
+/* eslint-disable no-console */
 import express from 'express';
 import { db }   from '../db/db.js';
 const router = express.Router();
-const port = 3000;
 
 router.use(express.static('../../client/dist'));
 
@@ -16,15 +16,15 @@ router.get('/alive', (req, res) => {
 });
 
 function validateGenre(req, res, next){
-  let genre = req.params.genre
+  let genre = req.params.genre;
   if (!genre) {
     return res.status(400).json({ message: 'Genre is required'});
   }
-  genre = genre.trim().toLowerCase().replace(/_/g, '/')
-  next()
+  genre = genre.trim().toLowerCase().replace(/_/g, '/');
+  next();
 }
 
-router.use('/genre/:genre', validateGenre)
+router.use('/genre/:genre', validateGenre);
 
 /**
  * Get the data of a specific genre
@@ -35,12 +35,12 @@ router.use('/genre/:genre', validateGenre)
  */
 router.get('/genre/:genre', async (req, res) => {
   try{
-    let genre = req.params.genre
+    let genre = req.params.genre;
     genre = genre.trim().toLowerCase().replace(/_/g, '/');
     const year = req.query.year;
     const genres = year 
-    ? await db.getGenreByYear(genre, year) 
-    : await db.getGenre(genre);
+      ? await db.getGenreByYear(genre, year) 
+      : await db.getGenre(genre);
 
     if (genres.length === 0) {
       return res.status(404).json({ message: 'No data found for the specified genre' });
@@ -50,14 +50,15 @@ router.get('/genre/:genre', async (req, res) => {
     console.dir(error);
     res.status(500).json({message: 'Failed to retireve genres'});
   }
-})
+});
 
 /**
  * Get the top 100 of the billboard for a single year
  * 
  * @route GET /api/billboard
  * @param {string} [req.query.year] - Optional query parameter to filter out the year 
- * @returns {object} - return a JSON Object list of songs and their genres that were on the billboard top 100 for each year.
+ * @returns {object} - return a JSON Object list of songs and their
+ * genres that were on the billboard top 100 for each year.
  *  or an error message if not found.
  */
 router.get('/billboard/', async (req, res) => {
@@ -75,7 +76,7 @@ router.get('/billboard/', async (req, res) => {
     console.dir(error);
     res.status(500).json({message: 'Failed to retireve songs'});
   }
-})
+});
 
 router.get('/random/:number', async (req, res) => {
   const quantity = parseInt(req.params.number);
@@ -86,10 +87,11 @@ router.get('/random/:number', async (req, res) => {
     console.dir(error);
     res.status(500).json({ message: 'Failed to retrieve songs' });
   }
-  res.json
-})
+  res.json;
+});
 /**
- * Get a ranked list genres based on how many streams songs under that genre released in a given year add up to.
+ * Get a ranked list genres based on how many streams songs under
+ * that genre released in a given year add up to.
  * 
  * @route GET /api/streams/top/:year
  * @param {string} req.params.year - The year to look for 
@@ -101,17 +103,17 @@ router.get('/streams/top/:year', async (req, res) => {
   const year = parseInt(req.params.year);
   try {
     const list = await db.getTopGenresByYear(year);
-    console.log(list)
+    console.log(list);
     //TODO fix the list object so that this parsing is no longer needed
-    let filteredList = list[0].list
+    const filteredList = list[0].list;
     if (filteredList.length === 0) {
       return res.status(404).json({ message: 'No data found for this year' });
     }
-    res.json({data : list})
+    res.json({data : list});
   } catch( error){
     console.dir(error);
     res.status(500).json({message: `Failed to retireve genre of ${year}`});
   }
-})
+});
 export default router;
 

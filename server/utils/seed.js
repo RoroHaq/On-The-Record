@@ -1,14 +1,15 @@
+/* eslint-disable no-console */
 import {db} from '../db/db.js';
-import * as fetch from '../data/data-fetch.mjs'
+import * as fetch from '../data/data-fetch.mjs';
 
 const songs = await (async () => {
-  const spotify_data = await fetch.getMappedSpotifyData();
-  const billboard_data = await fetch.getMappedBillBoardData(spotify_data);
-  const songs =  await fetch.consolidateBillboardAndSpotify(spotify_data, billboard_data)
+  const spotifyData = await fetch.getMappedSpotifyData();
+  const billboardData = await fetch.getMappedBillBoardData(spotifyData);
+  const songs =  await fetch.consolidateBillboardAndSpotify(spotifyData, billboardData);
 
   return songs.map( (song, index) => {
     song._id = index;
-    return song
+    return song;
   });
 })();
 

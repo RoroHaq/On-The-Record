@@ -1,23 +1,23 @@
-import 'dotenv/config'
+import 'dotenv/config';
 import { MongoClient, ServerApiVersion } from 'mongodb';
 
 const dbUrl = process.env.ATLAS_URI;
-let instance = null
+let instance = null;
 class DB{
   constructor(){
     //instance is the singleton, defined in outer scope
-      if (!instance){
-        instance = this;
-        this.mongoClient = new MongoClient(dbUrl, {
-          serverApi: {
-            version: ServerApiVersion.v1,
-            strict: true,
-            deprecationErrors: true,
-          }
-        })
-        this.db = null;
-        this.collection = null;
-      }
+    if (!instance){
+      instance = this;
+      this.mongoClient = new MongoClient(dbUrl, {
+        serverApi: {
+          version: ServerApiVersion.v1,
+          strict: true,
+          deprecationErrors: true,
+        }
+      });
+      this.db = null;
+      this.collection = null;
+    }
     return instance;
   }
   async connect(dbname, collName) {
@@ -27,6 +27,7 @@ class DB{
     await instance.mongoClient.connect();
     instance.db = await instance.mongoClient.db(dbname);
     await instance.mongoClient.db(dbname).command({ ping: 1 });
+    // eslint-disable-next-line no-console
     console.log('Successfully connected to MongoDB database ' + dbname);
     instance.collection = await instance.db.collection(collName);
   }
@@ -45,9 +46,9 @@ class DB{
       // group by year and calculate totalStreams and TotalWeeklyPlacement
       {
         $group: {
-          _id: { year: "$year", genre: "$genre" },
-          totalStreams: { $sum: { $toLong: "$streams" } },
-          TotalWeeklyPlacement: { $sum: { $toInt: "$weeksOnBoard" } }
+          _id: { year: '$year', genre: '$genre' },
+          totalStreams: { $sum: { $toLong: '$streams' } },
+          TotalWeeklyPlacement: { $sum: { $toInt: '$weeksOnBoard' } }
         }
       },
   
@@ -55,8 +56,8 @@ class DB{
       {
         $project: {
           _id: 0,
-          genre: "$_id.genre",
-          year: "$_id.year",
+          genre: '$_id.genre',
+          year: '$_id.year',
           totalStreams: 1,
           TotalWeeklyPlacement: 1
         }
@@ -72,25 +73,26 @@ class DB{
       {  $match: { genre: { $regex: `^${genre}$`, $options: 'i'}, year: year }   },
       {
         $group: {
-          _id: { year: "$year", genre: "$genre" },
-          totalStreams: { $sum: { $toLong: "$streams" } },
-          TotalWeeklyPlacement: { $sum: { $toInt: "$weeksOnBoard" } }
+          _id: { year: '$year', genre: '$genre' },
+          totalStreams: { $sum: { $toLong: '$streams' } },
+          TotalWeeklyPlacement: { $sum: { $toInt: '$weeksOnBoard' } }
         }
       },
       {
         $project: {
           _id: 0,
-          genre: "$_id.genre",
-          year: "$_id.year",
+          genre: '$_id.genre',
+          year: '$_id.year',
           totalStreams: 1,
           TotalWeeklyPlacement: 1
         }
-      }]).toArray();
+      }
+    ]).toArray();
   }
   async getBillBoardSongs(){
     //TODO
   }
-  async getBillBoardSongsByYear(year){
+  async getBillBoardSongsByYear(){
     //TODO
   }
   async getTopGenresByYear(year) {
@@ -98,8 +100,8 @@ class DB{
       { $match: { year: year } },
       {
         $group: {
-          _id: "$genre",
-          totalStreams: { $sum: { $toLong: "$streams" } }
+          _id: '$genre',
+          totalStreams: { $sum: { $toLong: '$streams' } }
         }
       },
   
@@ -112,22 +114,22 @@ class DB{
           _id: null,
           genres: {
             $push: {
-              genre: "$_id",
-              totalStreams: "$totalStreams"
+              genre: '$_id',
+              totalStreams: '$totalStreams'
             }
           }
         }
       },
   
       // Unwind the genres array to rank them
-      { $unwind: "$genres" },
+      { $unwind: '$genres' },
       {
         $group: {
           _id: null,
           list: {
             $push: {
-              genre: "$genres.genre",
-              totalStreams: "$genres.totalStreams"
+              genre: '$genres.genre',
+              totalStreams: '$genres.totalStreams'
             }
           }
         }
@@ -138,12 +140,12 @@ class DB{
           year: year,
           list: {
             $map: {
-              input: { $range: [0, { $size: "$list" }] }, 
-              as: "index",
+              input: { $range: [0, { $size: '$list' }] }, 
+              as: 'index',
               in: {
-                rank: { $add: ["$$index", 1] }, 
-                genre: { $arrayElemAt: ["$list.genre", "$$index"] },
-                totalStreams: { $arrayElemAt: ["$list.totalStreams", "$$index"] } 
+                rank: { $add: ['$$index', 1] }, 
+                genre: { $arrayElemAt: ['$list.genre', '$$index'] },
+                totalStreams: { $arrayElemAt: ['$list.totalStreams', '$$index'] } 
               }
             }
           }
@@ -160,7 +162,7 @@ class DB{
     return await instance.collection.insertOne(song);
   }
   async createMany(songs){
-    return await instance.collection.insertMany(songs)
+    return await instance.collection.insertMany(songs);
   }
   async open(dbname, collName) {
     try {
