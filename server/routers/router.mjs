@@ -23,7 +23,7 @@ router.get('/alive', (req, res) => {
  *  or an error message if not found.
  */
 router.get('/genre/:genre', async (req, res) => {
-  const genre = req.params.genre;
+  let genre = req.params.genre;
   genre = genre.trim().toLowerCase().replace(/_/g, '/'); 
   if (!genre) {
     return res.status(400).json({ message: 'Genre is required' });
@@ -90,9 +90,11 @@ router.get('/random/:number', async (req, res) => {
  *  or an error message if not found.
  */
 router.get('/streams/top/:year', async (req, res) => {
-  const year = req.params.year;
+  const year = parseInt(req.params.year);
   try {
-    const list = await db.getTopGenresByYear(year);
+    let list = await db.getTopGenresByYear(year);
+    //TODO fix the list object so that this parsing is no longer needed
+    list = list[0].list
     if (list.length === 0) {
       return res.status(404).json({ message: 'No data found for this year' });
     }

@@ -7,7 +7,7 @@ const app = express();
  
 const __dirname = import.meta.dirname;
 
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use('/api',router);
 app.use((req, res) => {
