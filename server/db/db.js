@@ -46,8 +46,8 @@ class DB{
       {
         $group: {
           _id: { year: "$year", genre: "$genre" },
-          totalStreams: { $sum: { $toLong: "$stream" } },
-          TotalWeeklyPlacement: { $sum: { $toInt: "$weeks_on_board" } }
+          totalStreams: { $sum: { $toLong: "$streams" } },
+          TotalWeeklyPlacement: { $sum: { $toInt: "$weeksOnBoard" } }
         }
       },
   
@@ -73,8 +73,8 @@ class DB{
       {
         $group: {
           _id: { year: "$year", genre: "$genre" },
-          totalStreams: { $sum: { $toLong: "$stream" } },
-          TotalWeeklyPlacement: { $sum: { $toInt: "$weeks_on_board" } }
+          totalStreams: { $sum: { $toLong: "$streams" } },
+          TotalWeeklyPlacement: { $sum: { $toInt: "$weeksOnBoard" } }
         }
       },
       {
@@ -99,7 +99,7 @@ class DB{
       {
         $group: {
           _id: "$genre",
-          totalStreams: { $sum: { $toLong: "$stream" } }
+          totalStreams: { $sum: { $toLong: "$streams" } }
         }
       },
   

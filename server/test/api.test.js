@@ -100,12 +100,12 @@ describe("/api/genre/:genre and ?year=Num Testing", () =>{
   })
 });
 
-describe("/api/genre/:genre Error Hnadling", () =>{
+describe("/api/genre/:genre Error Handling", () =>{
   before(() =>{
     stubDbGetGenre.rejects("No data found for the specified genre")
   })
 
-  it("Should Return an Error for an Invalid Genre", async () =>{
+  it("Should Return an Empty String Error for Invalid Genre", async () =>{
     const response = await request(app).get("/api/genre/HocusPocus")
     const body = response.body;
 
