@@ -100,13 +100,14 @@ router.get('/random/:number', async (req, res) => {
 router.get('/streams/top/:year', async (req, res) => {
   const year = parseInt(req.params.year);
   try {
-    let list = await db.getTopGenresByYear(year);
+    const list = await db.getTopGenresByYear(year);
+    console.log(list)
     //TODO fix the list object so that this parsing is no longer needed
-    list = list[0].list
-    if (list.length === 0) {
+    let filteredList = list[0].list
+    if (filteredList.length === 0) {
       return res.status(404).json({ message: 'No data found for this year' });
     }
-    res.json(list);
+    res.json({data : list})
   } catch( error){
     console.dir(error);
     res.status(500).json({message: `Failed to retireve genre of ${year}`});

@@ -136,38 +136,40 @@ describe("/api/genre/:genre Error Handling", () =>{
 
 describe("/api/streams/top/:year Tests", () =>{
   before(()=>{
-    stubDbGetTopGenresByYear.resolves({
-      year: 2016,
-      list: [
-        {
-          rank : 1,
-          genre : "Rock",
-          totalStreams : 56000000
-        },
-        {
-          rank : 2,
-          genre : "Pop",
-          totalStreams : 50000000
-        },
-      ]
-    })
+    stubDbGetTopGenresByYear.resolves([
+      {
+        year: 2017,
+        list: [
+          {
+            rank : 1,
+            year: 2017,
+            genre : "Rock",
+            totalStreams : 56000000
+          },
+          {
+            rank : 2,
+            year: 2017,
+            genre : "Pop",
+            totalStreams : 50000000
+          },
+        ]
+      }
+    ])
   });
 
-  it("Should cehck if the List is songs from 2016", async () =>{
-    const response = await request(app).get("/api/streams/top/2016")
+  it("Should check if the List is songs from 2017", async () =>{
+    const response = await request(app).get("/api/streams/top/2017")
     const body = response.body
-    console.log(body)
-    expect(body.data.year).to.equal(2016);
+    expect(body.data[0].year).to.equal(2017);
     expect(response.statusCode).to.equal(200);
   });
 
   it("Should check stub Data Rank 1 Matches", async () =>{
-    const response = await request(app).get("/api/streams/top/2016")
+    const response = await request(app).get("/api/streams/top/2017")
     const body = response.body
-    console.log(body)
-    expect(body.data.list[0]).to.have.property("rank", 1)
-    expect(body.data.list[0]).to.have.property("genre", "Rock")
-    expect(body.data.list[0]).to.have.property("totalStreams", 56000000)
+    expect(body.data[0].list[0]).to.have.property("rank", 1)
+    expect(body.data[0].list[0]).to.have.property("genre", "Rock")
+    expect(body.data[0].list[0]).to.have.property("totalStreams", 56000000)
 
     expect(response.statusCode).to.equal(200)
   })
@@ -176,6 +178,8 @@ describe("/api/streams/top/:year Tests", () =>{
     stubDbGetTopGenresByYear.restore()
   })
 });
+
+
 /**
  * Billdboard Object Example
  *  body = {data : [{year: 2017, songs: [ {song: Perfect, genre: Pop ...}] }, {year: 2018, songs: [...Object]}]}
