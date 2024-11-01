@@ -15,7 +15,6 @@ const songs = await (async () => {
 
 (async () => {
   try {
-    // TODO replace cluster0 with your db name
     await db.connect('OnTheRecordDB', 'songs');
     const num = await db.createMany(songs);
     console.log(`Inserted ${num.insertedCount} songs`);
