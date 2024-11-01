@@ -1,5 +1,5 @@
 import './App.css'
-import GenreTable from './components/GenreTable';
+import GenreTable from 'components/GenreTable';
 
 function App() {
   return (
