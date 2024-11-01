@@ -1,17 +1,5 @@
 
-You need to set a server-side test job, a client-side build job.
-Use the following two examples for inspiration:
-
-Note that in this pipeline, there is a build job that installs dependencies and shares node_modules as an artifact with the later test stage.
-
-See latest .gitlab-ci.yml on upstream Assignment2:main
-
-Note that this pipeline installs (npm ci) the client and server dependencies before every job (default before_script) and caches them per branch. This is an alternative approach to sharing node_modules as an artifact.
-
-
-
 image: node:22.8-bullseye-slim
-
 
 # Run these jobs only when commits are pushed to main and staging and on MR
 workflow:
@@ -38,7 +26,6 @@ default:
 
 
 
-
 lint-server:
   stage: lint 
   script:
@@ -57,9 +44,7 @@ stages:
   - lint
   - build
   - test
-#Do we deploy shit though?  - deploy
 
-#from A2, validate it
 build-frontend:
   stage: build
   script:
@@ -75,3 +60,8 @@ build-frontend:
     paths:
       - client/build
 
+test-endpoints:
+  stage: test
+  script:
+    -cd server && npm run test
+  allow_failure: false
