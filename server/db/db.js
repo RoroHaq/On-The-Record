@@ -8,13 +8,6 @@ class DB{
     //instance is the singleton, defined in outer scope
     if (!instance){
       instance = this;
-      this.mongoClient = new MongoClient(dbUrl, {
-        serverApi: {
-          version: ServerApiVersion.v1,
-          strict: true,
-          deprecationErrors: true,
-        }
-      });
       this.db = null;
       this.collection = null;
     }
@@ -24,6 +17,15 @@ class DB{
     if (instance.db){
       return;
     }
+    if(!this.mongoClient){
+      this.mongoClient = new MongoClient(dbUrl, {
+        serverApi: {
+          version: ServerApiVersion.v1,
+          strict: true,
+          deprecationErrors: true,
+        }
+      });
+    }  
     await instance.mongoClient.connect();
     instance.db = await instance.mongoClient.db(dbname);
     await instance.mongoClient.db(dbname).command({ ping: 1 });
