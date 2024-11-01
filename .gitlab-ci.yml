@@ -1,0 +1,67 @@
+
+image: node:22.8-bullseye-slim
+
+# Run these jobs only when commits are pushed to main and staging and on MR
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH 
+    - if: $CI_COMMIT_BRANCH == "staging"
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_TAG
+
+
+default:
+  cache:  # Cache modules in between jobs for the same branch if package-lock.json file changes
+    key: 
+      prefix: $CI_COMMIT_REF_NAME
+      files:
+        - server/package-lock.json
+        - client/package-lock.json
+    paths:
+      - server/.npm/
+      - client/.npm
+  # run this before every job; will hit the cache first
+  before_script:
+   - cd server && npm ci --cache .npm --prefer-offline && cd ../client && npm ci --cache .npm --prefer-offline && cd ..
+
+
+
+lint-server:
+  stage: lint 
+  script:
+    - cd server && ./node_modules/eslint/bin/eslint.js . 
+  allow_failure: false
+
+lint-client:
+  stage: lint 
+  script:
+    - cd client && ./node_modules/eslint/bin/eslint.js .
+  allow_failure: false
+
+# First the build jobs run, then the test jobs
+# (We can't test before our dependencies are installed, so test depends on build)
+stages:
+  - lint
+  - build
+  - test
+
+build-frontend:
+  stage: build
+  script:
+    - cd client && npm run build
+  only:
+    refs:
+      - main
+      - master
+      - staging
+  artifacts:
+    expire_in: 1 days
+    when: on_success
+    paths:
+      - client/build
+
+test-endpoints:
+  stage: test
+  script:
+    - cd server && npm run test
+  allow_failure: false

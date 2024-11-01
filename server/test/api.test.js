@@ -1,14 +1,15 @@
-import * as chai from 'chai'
-import request from 'supertest'
-import app from '../app.js'
-import sinon from 'sinon'
-import { db }  from '../db/db.js'
+/* eslint-disable no-undef */
+import * as chai from 'chai';
+import request from 'supertest';
+import app from '../app.js';
+import sinon from 'sinon';
+import { db }  from '../db/db.js';
 
-const stubDbGetGenre = sinon.stub(db, "getGenre")
-const stubDbGetGenreByYear = sinon.stub(db, "getGenreByYear")
-const stubDbGetBillBoardSongs = sinon.stub(db, "getBillBoardSongs")
-const stubDbGetBillBoardsongsByYear = sinon.stub(db, "getBillBoardSongsByYear")
-const stubDbGetTopGenresByYear = sinon.stub(db, "getTopGenresByYear")
+const stubDbGetGenre = sinon.stub(db, 'getGenre');
+const stubDbGetGenreByYear = sinon.stub(db, 'getGenreByYear');
+// const stubDbGetBillBoardSongs = sinon.stub(db, 'getBillBoardSongs');
+// const stubDbGetBillBoardsongsByYear = sinon.stub(db, 'getBillBoardSongsByYear');
+const stubDbGetTopGenresByYear = sinon.stub(db, 'getTopGenresByYear');
 
 const expect = chai.expect;
 
@@ -37,42 +38,42 @@ const expect = chai.expect;
  *    }
  *  NOTE: INDEXES WILL CHANGE LATER ON
  */
-describe("/api/genre/:genre and ?year=Num Testing", () =>{
+describe('/api/genre/:genre and ?year=Num Testing', () =>{
   before(() =>{
     stubDbGetGenre.resolves([
       {
-        genre: "Country",
-        year: "2010",
+        genre: 'Country',
+        year: '2010',
         totalStreams : 450000,
         TotalWeeklyPlacement : 120
       },
       {
-        genre: "Country",
-        year: "2011",
+        genre: 'Country',
+        year: '2011',
         totalStreams : 400000,
         TotalWeeklyPlacement : 110
       },
-    ])
+    ]);
 
     stubDbGetGenreByYear.resolves([
       {
-        genre: "Country",
+        genre: 'Country',
         year: 2017,
         totalStreams : 4500000,
         TotalWeeklyPlacement : 150
       },
-    ])
+    ]);
   });
 
-  it("Should Return a list of genre info through the years", async () =>{
-    const response = await request(app).get('/api/genre/Pop')
+  it('Should Return a list of genre info through the years', async () =>{
+    const response = await request(app).get('/api/genre/Pop');
    
     const body = response.body;
-    expect(body.data.length).to.equal(2)
+    expect(body.data.length).to.equal(2);
   });
 
-  it("Should return Country Object in 2017", async()=>{
-    const response = await request(app).get("/api/genre/Country?year=2017")
+  it('Should return Country Object in 2017', async()=>{
+    const response = await request(app).get('/api/genre/Country?year=2017');
     const body = response.body;
 
     chai.assert.isObject(body, 'body is an object');
@@ -85,35 +86,35 @@ describe("/api/genre/:genre and ?year=Num Testing", () =>{
     expect(response.statusCode).to.equal(200);
   });
 
-  it("Should return all genres if given invalid queryParam", async()=>{
-    const response = await request(app).get("/api/genre/country?number=2017")
+  it('Should return all genres if given invalid queryParam', async()=>{
+    const response = await request(app).get('/api/genre/country?number=2017');
     const body = response.body;
 
     chai.assert.isObject(body, 'body is an object');
-    expect(body.data.length).to.equal(2)
+    expect(body.data.length).to.equal(2);
     expect(response.statusCode).to.equal(200);
   });
 
   after(()=>{
     stubDbGetGenreByYear.restore();
-  })
+  });
 });
 
-describe("/api/genre/:genre Error Handling", () =>{
+describe('/api/genre/:genre Error Handling', () =>{
   before(() =>{
-    stubDbGetGenre.resolves("No data found for the specified genre")
-  })
+    stubDbGetGenre.resolves('No data found for the specified genre');
+  });
 
-  it("Should Return an Empty String Error for Invalid Genre", async () =>{
-    const response = await request(app).get("/api/genre/HocusPocus")
+  it('Should Return an Empty String Error for Invalid Genre', async () =>{
+    const response = await request(app).get('/api/genre/HocusPocus');
     const body = response.body;
 
-    expect({message: body.data}).to.deep.equal({message: 'No data found for the specified genre'})
+    expect({message: body.data}).to.deep.equal({message: 'No data found for the specified genre'});
   });
   after(async () =>{
     stubDbGetGenre.restore();
-  })
-})
+  });
+});
 /**
  * BillBoard top Object Example with 2015
  * 
@@ -134,7 +135,7 @@ describe("/api/genre/:genre Error Handling", () =>{
 
 
 
-describe("/api/streams/top/:year Tests", () =>{
+describe('/api/streams/top/:year Tests', () =>{
   before(()=>{
     stubDbGetTopGenresByYear.resolves([
       {
@@ -143,46 +144,48 @@ describe("/api/streams/top/:year Tests", () =>{
           {
             rank : 1,
             year: 2017,
-            genre : "Rock",
+            genre : 'Rock',
             totalStreams : 56000000
           },
           {
             rank : 2,
             year: 2017,
-            genre : "Pop",
+            genre : 'Pop',
             totalStreams : 50000000
           },
         ]
       }
-    ])
+    ]);
   });
 
-  it("Should check if the List is songs from 2017", async () =>{
-    const response = await request(app).get("/api/streams/top/2017")
-    const body = response.body
+  it('Should check if the List is songs from 2017', async () =>{
+    const response = await request(app).get('/api/streams/top/2017');
+    const body = response.body;
     expect(body.data[0].year).to.equal(2017);
     expect(response.statusCode).to.equal(200);
   });
 
-  it("Should check stub Data Rank 1 Matches", async () =>{
-    const response = await request(app).get("/api/streams/top/2017")
-    const body = response.body
-    expect(body.data[0].list[0]).to.have.property("rank", 1)
-    expect(body.data[0].list[0]).to.have.property("genre", "Rock")
-    expect(body.data[0].list[0]).to.have.property("totalStreams", 56000000)
+  it('Should check stub Data Rank 1 Matches', async () =>{
+    const response = await request(app).get('/api/streams/top/2017');
+    const body = response.body;
+    expect(body.data[0].list[0]).to.have.property('rank', 1);
+    expect(body.data[0].list[0]).to.have.property('genre', 'Rock');
+    expect(body.data[0].list[0]).to.have.property('totalStreams', 56000000);
 
-    expect(response.statusCode).to.equal(200)
-  })
+    expect(response.statusCode).to.equal(200);
+  });
 
   after(()=>{
-    stubDbGetTopGenresByYear.restore()
-  })
+    stubDbGetTopGenresByYear.restore();
+  });
 });
 
 
 /**
  * Billdboard Object Example
- *  body = {data : [{year: 2017, songs: [ {song: Perfect, genre: Pop ...}] }, {year: 2018, songs: [...Object]}]}
+ *  body = {data : [{year: 2017,
+ *          songs: [ {song: Perfect, genre: Pop ...}] }, 
+ *          {year: 2018, songs: [...Object]}]}
  * 
  * Getting specific Year ex 2017
  *  body = {data: [{year: 2017, songs: [ {song: Perfect, genre: Pop ...}] ]}
