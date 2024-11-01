@@ -1,5 +1,5 @@
 import express from 'express';
-import { db }  from '../db/db.js';
+import { db }   from '../db/db.js';
 const router = express.Router();
 const port = 3000;
 
@@ -15,6 +15,17 @@ router.get('/alive', (req, res) => {
   res.json({ alive: true });
 });
 
+function validateGenre(req, res, next){
+  let genre = req.params.genre
+  if (!genre) {
+    return res.status(400).json({ message: 'Genre is required'});
+  }
+  genre = genre.trim().toLowerCase().replace(/_/g, '/')
+  next()
+}
+
+router.use('/genre/:genre', validateGenre)
+
 /**
  * Get the data of a specific genre
  * @route GET /api/genre/:genre
@@ -23,21 +34,18 @@ router.get('/alive', (req, res) => {
  *  or an error message if not found.
  */
 router.get('/genre/:genre', async (req, res) => {
-  const genre = req.params.genre;
-  genre = genre.trim().toLowerCase().replace(/_/g, '/'); 
-  if (!genre) {
-    return res.status(400).json({ message: 'Genre is required' });
-  }
-  const year = req.query.year;
   try{
+    let genre = req.params.genre
+    genre = genre.trim().toLowerCase().replace(/_/g, '/');
+    const year = req.query.year;
     const genres = year 
-      ? await db.getGenreByYear(genre, year) 
-      : await db.getGenre(genre);
-    
+    ? await db.getGenreByYear(genre, year) 
+    : await db.getGenre(genre);
+
     if (genres.length === 0) {
       return res.status(404).json({ message: 'No data found for the specified genre' });
     }
-    res.json(genres);
+    res.json({data: genres});
   } catch (error){
     console.dir(error);
     res.status(500).json({message: 'Failed to retireve genres'});
@@ -62,7 +70,7 @@ router.get('/billboard/', async (req, res) => {
     if (list.length === 0) {
       return res.status(404).json({ message: 'No data found' });
     }
-    res.json(list);
+    res.json({data: list});
   } catch (error){
     console.dir(error);
     res.status(500).json({message: 'Failed to retireve songs'});

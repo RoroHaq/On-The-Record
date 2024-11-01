@@ -7,7 +7,7 @@ import neat from 'neat-csv'
  */
 async function getBaseBillBoardData(){
   try{
-    const response = await fs.readFile('charts.csv')
+    const response = await fs.readFile('../data/charts.csv')
     
     const data = await neat(response)
 
@@ -113,7 +113,7 @@ async function getMappedBillBoardData(spotify_data){
  */
 async function getBaseSpotifyData() {
   try{
-    const response = await fs.readFile('spotify_full_list.csv')
+    const response = await fs.readFile('../data/spotify_full_list.csv')
 
     const data = await neat(response)
 
@@ -184,10 +184,10 @@ async function getMappedSpotifyData(){
     }
 
     return songs
-                .map(deriveNewFields)
-                .map(removeUnneededFields)
-                .map(makeFieldsLowerCase)
-                .map(roundYearField)
+      .map(deriveNewFields)
+      .map(removeUnneededFields)
+      .map(makeFieldsLowerCase)
+      .map(roundYearField)
 
   }catch(Error){
     console.log(Error)
@@ -213,3 +213,5 @@ function consolidateBillboardAndSpotify(spotify_data, billboard_data){
     return billboard_song
   })
 }
+
+export {getMappedBillBoardData, getMappedSpotifyData, consolidateBillboardAndSpotify}
