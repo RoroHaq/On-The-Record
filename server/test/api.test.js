@@ -162,7 +162,7 @@ describe("/api/streams/top/:year Tests", () =>{
   });
 
   it("Should check stub Data Rank 1 Matches", async () =>{
-    const response = await request(router).get("/streams/top/2016")
+    const response = await request(app).get("/streams/top/2016")
     const body = response.body
     
     expect(body.data.list[0]).to.have.property("rank", 1)
@@ -183,7 +183,7 @@ describe("/api/streams/top/:year Tests", () =>{
  */
 describe("Test for /api/billboard/:year", () =>{
   before(() =>{
-    stubDbGetBillBoardsongsByYear.resolves({data: [
+    stubDbGetBillBoardsongsByYear.resolves([
       {
         year: 2017,
         songs: [
@@ -199,11 +199,11 @@ describe("Test for /api/billboard/:year", () =>{
           },
         ]
       }
-    ]})
+    ])
   });
 
   it("Should return only songs of 2017", async () =>{
-    const response = await request(router).get("/billboard/2017")
+    const response = await request(app).get("/billboard/2017")
     const body = response.body
 
     chai.assert.isObject(body, "Body is an object")
@@ -212,7 +212,7 @@ describe("Test for /api/billboard/:year", () =>{
   });
 
   it("should match the number 2 song in 2017 top 100", async()=>{
-    const response = await request(router).get("/billboard/2017")
+    const response = await request(app).get("/billboard/2017")
     const body = response.body
 
     chai.assert.isObject(body, "Body is an object")
@@ -229,7 +229,7 @@ describe("Test for /api/billboard/:year", () =>{
 
 describe("Test for /api/billboard", () =>{
   before(() =>{
-    stubDbGetBillBoardSongs.resolves({data:[
+    stubDbGetBillBoardSongs.resolves([
       {
         year: 2016,
         songs: [
@@ -245,11 +245,11 @@ describe("Test for /api/billboard", () =>{
           },
         ]
       }
-    ]})
+    ])
   });
 
   it("Will Match Stub Number 1 song in 2016", async () =>{
-    const response = await request(router).get("/billboard")
+    const response = await request(app).get("/billboard")
     const body = response.body
 
     assert.isObject(body, "Body is an object")
@@ -265,7 +265,7 @@ describe("Test for /api/billboard", () =>{
   });
 
   it("Will Match Stub Number 2 Song in 2016", async()=>{
-    const response = await request(router).get("/billboard")
+    const response = await request(app).get("/billboard")
     const body = response.body
 
     assert.isObject(body, "Body is an object")
