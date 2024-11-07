@@ -4,7 +4,9 @@ import neat from 'neat-csv';
 
 /**
  * Reads charts.csv file to obtain billboard data
- * @return array of the unfiltered billboard data
+ * @async
+ * @return {Promise<Array<Object>>} A promise that resolves to 
+ * an array of unfiltered billboard data.
  */
 async function getBaseBillBoardData(){
   try{
@@ -19,8 +21,10 @@ async function getBaseBillBoardData(){
 }
 
 /**
- * Filters the billboard data
- * @return billboard data that falls in the required date
+ * Filters the billboard data based on a specified date range.
+ * @async
+ * @returns {Promise<Array<Object>>} A promise that resolves to an array 
+ * of filtered billboard data.
  */
 async function getFilteredBillBoardData(){
   try{
@@ -36,8 +40,10 @@ async function getFilteredBillBoardData(){
 /**
  * Maps billboard data to format with only the fields needed for the program
  * Additionally removes songs that weren't in the spotify database
+ * @async
  * @param {spotifyData} spotifyData - Mapped spotify data
- * @return mapped billboard data
+ * @returns {Promise<Array<Object>>} A promise that resolves to an array of mapped 
+ * and filtered billboard data.
  */
 async function getMappedBillBoardData(spotifyData){
   try{
@@ -110,7 +116,8 @@ async function getMappedBillBoardData(spotifyData){
 
 /**
  * Reads spotify_full_list.csv file to obtain spotify streaming data
- * @return array of the unfiltered spotify data
+ * @async
+ * @return  {Promise<Array<Object>>}array of the unfiltered spotify data
  */
 async function getBaseSpotifyData() {
   try{
@@ -125,8 +132,10 @@ async function getBaseSpotifyData() {
 }
 
 /**
- * Filters the spotify data
- * @return spotify data that falls in the required date
+ * Filters Spotify data based on a specified date range and ensures genre information is present.
+ * @async
+ * @return {Promise<Array<Object>>} A promise that resolves
+ *  to an array spotify songs that falls in the required date
  */
 async function getFilteredSpotifyData(){
   try{
@@ -142,8 +151,9 @@ async function getFilteredSpotifyData(){
 }
 
 /**
- * Maps spotify data to format with only the fields needed for the program
- * @return mapped spotify data
+ * Maps and processes Spotify data to include only fields required for the program.
+ * @async
+ * @return {Promise<Array<Object>>} A promise that resolves to an array of mapped spotify data
  */
 async function getMappedSpotifyData(){
   try{

@@ -13,6 +13,13 @@ class DB{
     }
     return instance;
   }
+  /**
+   * Connects to the MongoDB database
+   * @async
+   * @param {string} dbname - The name of the database to connect to.
+   * @param {string} collName - The name of the collection to use.
+   * @returns {Promise<void>} Resolves once connection is successful.
+   */
   async connect(dbname, collName) {
     if (instance.db){
       return;
@@ -33,13 +40,30 @@ class DB{
     console.log('Successfully connected to MongoDB database ' + dbname);
     instance.collection = await instance.db.collection(collName);
   }
+  /**
+   * Closes the MongoDB connection.
+   * @async
+   * @returns {Promise<void>} Resolves once the connection is closed.
+   */
   async close() {
     await instance.mongoClient.close();
     instance = null;
   }
+  /**
+   * Retrieves all songs from the db.
+   * @async
+   * @returns {Promise<Object[]>} Array of songs from the db.
+   */
   async readAll() {
     return await instance.collection.find().toArray();
   }
+  /**
+   * Retrieves genre data and aggregates total streams and weekly placements.
+   * @async
+   * @param {string} genre - The genre to match in the collection.
+   * @returns {Promise<Object[]>} Array of objects with genre, year, 
+   * total streams, and weekly placements.
+   */
   async getGenre(genre){
     return await instance.collection.aggregate([
       //  Match only documents with the specified genre
@@ -69,6 +93,14 @@ class DB{
       { $sort: { year: -1 } }
     ]).toArray();
   }
+  /**
+   * Retrieves genre data for a specific year, aggregating total streams and weekly placements.
+   * @async
+   * @param {string} genre - The genre to match in the collection.
+   * @param {number} year - The year to match in the collection.
+   * @returns {Promise<Object[]>} Array of objects with genre, year,
+   *  total streams, and weekly placements.
+   */
   async getGenreByYear(genre, year){
     return await instance.collection.aggregate([
       
@@ -97,6 +129,13 @@ class DB{
   async getBillBoardSongsByYear(){
     //TODO
   }
+  /**
+   * Retrieves the top genres for a specific year, ranked by total streams.
+   * @async
+   * @param {number} year - The year to retrieve the top genres for.
+   * @returns {Promise<Object[]>} Array of songs with rank, genre, and total streams.
+   */
+
   async getTopGenresByYear(year) {
     return await instance.collection.aggregate([
       { $match: { year: year } },
@@ -156,16 +195,41 @@ class DB{
      
     ]).toArray();
   }
+  /**
+   * Retrieves a random sample of songs from the collection.
+   * @async
+   * @param {number} number - The number of random songs to retrieve.
+   * @returns {Promise<Object[]>} Array of randomly selected songs.
+   */
   async getRandom(number) {
     return await instance.collection.aggregate([{ $sample: { size: number } }]).toArray();
   }
+  /**
+   * Inserts a single song into the collection.
+   * @async
+   * @param {Object} song - The song to insert.
+   * @returns {Promise<Object>} The result of the insertion operation.
+   */
   async create(song) {
 
     return await instance.collection.insertOne(song);
   }
+  /**
+   * Inserts multiple songs into the collection.
+   * @async
+   * @param {Object[]} songs - The songs to insert.
+   * @returns {Promise<Object>} The result of the bulk insertion operation.
+   */
   async createMany(songs){
     return await instance.collection.insertMany(songs);
   }
+  /**
+   * Opens a connection to the MongoDB database and closes it after completion.
+   * @async
+   * @param {string} dbname - The name of the database to connect to.
+   * @param {string} collName - The name of the collection to use.
+   * @returns {Promise<void>} Resolves once the connection is closed.
+   */
   async open(dbname, collName) {
     try {
       await instance.connect(dbname, collName);
