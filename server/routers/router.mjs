@@ -99,7 +99,7 @@ router.get('/genre/:genre', async (req, res) => {
   try{
     let genre = req.params.genre;
     genre = genre.trim().toLowerCase().replace(/_/g, '/');
-    const year = req.query.year;
+    const year = parseInt(req.query.year, 10);
     const genres = year 
       ? await db.getGenreByYear(genre, year) 
       : await db.getGenre(genre);
