@@ -91,11 +91,36 @@ class DB{
       }
     ]).toArray();
   }
+  //TODO, test this method
   async getBillBoardSongs(){
-    //TODO
+    return await instance.collection.aggregate([
+      { $sort: { year: -1, streams: -1 } }, 
+      { $group: {
+        _id: '$year', 
+        songs: { $push: { song: '$title', artist: '$artist', genre: '$genre' } } 
+      }
+      },
+      
+      { $project: {
+        _id: 0,
+        year: '$_id', 
+        songs: 1
+      }
+      }
+
+    ]);
   }
-  async getBillBoardSongsByYear(){
-    //TODO
+  //TODO, test this method
+  async getBillBoardSongsByYear(year){
+    const songs = await instance.collection.find({ year }).toArray();
+    return {
+      year: year,
+      songs: songs.map(song => ({
+        song: song.title,
+        artist: song.artist,
+        genre: song.genre,
+      }))
+    };
   }
   async getTopGenresByYear(year) {
     return await instance.collection.aggregate([
