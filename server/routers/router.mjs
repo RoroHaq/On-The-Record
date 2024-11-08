@@ -128,15 +128,16 @@ router.get('/genre/:genre', async (req, res) => {
  *     summary: Get Billboard top 100 songs
  *     description: Fetches top 100 songs from the Billboard chart for a specific year or all time.
  *     parameters:
- *       - in: query
+ *       - in: path
  *         name: year
  *         required: false
- *         description: Year to filter results by
+ *         description: Year to filter
  *         schema:
  *           type: string
+ *       - in: query
  *     responses:
  *       200:
- *         description: List of songs on the Billboard chart
+ *         description: List of songs on the billboard chart
  *         content:
  *           application/json:
  *             schema:
@@ -149,7 +150,8 @@ router.get('/genre/:genre', async (req, res) => {
  *       404:
  *         description: No data found
  *       500:
- *         description: Error retrieving songs
+ *         description: Failed to retrieve songs
+ 
  */
 router.get('/billboard/', async (req, res) => {
   const year = req.query.year;
