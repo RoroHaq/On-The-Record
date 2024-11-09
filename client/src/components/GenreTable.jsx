@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-
+import Credits from './Credits';
 /**
  * Fetches genre objects for specific year (2017 for now) and ranks their popularity on a table
  * @returns table ranking how much genres were streamed in 2017.
@@ -48,6 +48,10 @@ export default function GenreTable() {
           </tr>
         </tbody>
       </table>
+
+      <footer>
+        <Credits/>
+      </footer>
     </>
   );
 }
