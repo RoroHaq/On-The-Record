@@ -161,7 +161,7 @@ class DB{
     }));
   }
   async getTopGenresByYear(year) {
-    return await instance.collection.aggregate([
+    const result = await instance.collection.aggregate([
       { $match: { year: year } },
       {
         $group: {
@@ -202,7 +202,6 @@ class DB{
       {
         $project: {
           _id: 0,
-          year: year,
           list: {
             $map: {
               input: { $range: [0, { $size: '$list' }] }, 
@@ -218,6 +217,7 @@ class DB{
       }
      
     ]).toArray();
+    return result[0].list;
   }
   async getRandom(number) {
     return await instance.collection.aggregate([{ $sample: { size: number } }]).toArray();

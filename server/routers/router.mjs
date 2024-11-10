@@ -252,10 +252,7 @@ router.get('/streams/top/:year', async (req, res) => {
   const year = parseInt(req.params.year);
   try {
     const list = await db.getTopGenresByYear(year);
-    //TODO fix the list object so that this parsing is no longer needed
-    console.log(list[0].list);
-    const filteredList = list[0].list;
-    if (filteredList.length === 0) {
+    if (list.length === 0) {
       return res.status(404).json({ message: 'No data found for this year' });
     }
     res.json({data : list});
