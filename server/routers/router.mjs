@@ -123,7 +123,7 @@ router.get('/genre/:genre', async (req, res) => {
  * genres that were on the billboard top 100 for each year.
  *  or an error message if not found.
  * @swagger
- * /api/billboard:
+ * /api/billboard
  *   get:
  *     summary: Get Billboard top 100 songs
  *     description: Fetches top 100 songs from the Billboard chart for a specific year or all time.
