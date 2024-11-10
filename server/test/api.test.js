@@ -43,13 +43,13 @@ describe('/api/genre/:genre and ?year=Num Testing', () =>{
     stubDbGetGenre.resolves([
       {
         genre: 'Country',
-        year: '2010',
+        year: 2010,
         totalStreams : 450000,
         TotalWeeklyPlacement : 120
       },
       {
         genre: 'Country',
-        year: '2011',
+        year: 2011,
         totalStreams : 400000,
         TotalWeeklyPlacement : 110
       },
@@ -66,10 +66,30 @@ describe('/api/genre/:genre and ?year=Num Testing', () =>{
   });
 
   it('Should Return a list of genre info through the years', async () =>{
-    const response = await request(app).get('/api/genre/Pop');
+    const response = await request(app).get('/api/genre/Country');
    
     const body = response.body;
     expect(body.data.length).to.equal(2);
+  });
+
+  it('Should Return the list of genres and match the info from Country in 2010', async() =>{
+    const response = await request(app).get('/api/genre/Country');
+    const body = response.body;
+
+    expect(body.data[0]).to.have.property('genre', 'Country');
+    expect(body.data[0]).to.have.property('year', 2010);
+    expect(body.data[0]).to.have.property('totalStreams', 400000);
+    expect(body.data[0]).to.have.property('TotalWeeklyPlacement', 110);
+  });
+
+  it('Should Return the list of genres and match the info from Country in 2011', async() =>{
+    const response = await request(app).get('/api/genre/Country');
+    const body = response.body;
+
+    expect(body.data[0]).to.have.property('genre', 'Country');
+    expect(body.data[0]).to.have.property('year', 2011);
+    expect(body.data[0]).to.have.property('totalStreams', 450000);
+    expect(body.data[0]).to.have.property('TotalWeeklyPlacement', 120);
   });
 
   it('Should return Country Object in 2017', async()=>{
@@ -94,7 +114,7 @@ describe('/api/genre/:genre and ?year=Num Testing', () =>{
     expect(body.data.length).to.equal(2);
     expect(response.statusCode).to.equal(200);
   });
-
+ 
   after(()=>{
     stubDbGetGenreByYear.restore();
   });
