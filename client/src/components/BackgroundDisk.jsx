@@ -3,7 +3,8 @@ import { useScroll, useSpring, animated } from '@react-spring/web'
 import diskImage from '../assets/DiskFullRes.webp'
 
 /**
- * Displays background disk and allows it's scrolling implementation
+ * Displays background disk and allows it's scrolling implementation.
+ * The disk can also be used to navigate in the page by clicking or dragging it
  * @returns disk which spins in accordance with scroll
  */
 export default function BackgroundDisk() {
@@ -41,12 +42,11 @@ export default function BackgroundDisk() {
   const pageHeight = document.body.scrollHeight;
 
   const diskClickScroll = (e) => {
-    console.log(e)
     let ratio = e.clientY/window.innerHeight
+    //Rounds to bottom or top of page if close enough
     if (ratio < 0.1) { ratio = 0}
     if (ratio > 0.9) { ratio = 1}
     const deriveScrollToPos = ratio * pageHeight
-    console.log(deriveScrollToPos)
 
     window.scrollTo({ top: deriveScrollToPos, behavior: "smooth" });
   }
@@ -59,9 +59,10 @@ export default function BackgroundDisk() {
     }
   }
 
+  const totalDiskRotations = pageHeight/2500;
   const flipStyle = () => {
     setDiskStyle( {
-      transform: scrollYProgress.to(val => `rotate(${-val * 360 * 2}deg)`),
+      transform: scrollYProgress.to(val => `rotate(${-val * 360 * totalDiskRotations}deg)`),
       ...topDiskPop
     })
   }
