@@ -211,7 +211,6 @@ class DB{
    * @returns {Promise<Object>} The result of the insertion operation.
    */
   async create(song) {
-
     return await instance.collection.insertOne(song);
   }
   /**
