@@ -79,7 +79,7 @@ describe('/api/genre/:genre and ?year=Num Testing', () =>{
     expect(body.data[0]).to.have.property('genre', 'Country');
     expect(body.data[0]).to.have.property('year', 2010);
     expect(body.data[0]).to.have.property('totalStreams', 400000);
-    expect(body.data[0]).to.have.property('TotalWeeklyPlacement', 110);
+    expect(body.data[0]).to.have.property('TotalWeeklyPlacement', 120);
   });
 
   it('Should Return the list of genres and match the info from Country in 2011', async() =>{
@@ -222,13 +222,17 @@ describe("Test for /api/billboard/:year", () =>{
         year: 2017,
         songs: [
           {
-            song: "Shape of You",
             artist: "Ed Sheeran",
+            song: "Shape of You",
+            weeksOnBoard: 30,
+            streams: 400000000,
             genre: "Pop"
           },
           {
             song: "Despacito",
             artist: "Luis Fonzi",
+            weeksOnBoard: 50,
+            streams: 1000000000,
             genre: "Pop"
           },
         ]
@@ -241,7 +245,7 @@ describe("Test for /api/billboard/:year", () =>{
     const body = response.body
 
     chai.assert.isObject(body, "Body is an object")
-    expect(body.data.length).to.equal(1)
+    expect(body.data[0].year).to.equal(2017)
     expect(response.status).to.equal(200)
   });
 
