@@ -114,7 +114,6 @@ class DB{
       },
       
       { 
-        //also rename the _id if possible
         $project: {
           _id: 0,
           year:1,     
@@ -129,7 +128,7 @@ class DB{
     }));
   }
   async getBillBoardSongsByYear(year){
-    return await instance.collection.aggregate([
+    const result = await instance.collection.aggregate([
       { $match: { year: year }},
       { 
         $group: {
@@ -145,15 +144,21 @@ class DB{
           }
         }
       },
+      { 
+        $addFields: { year: '$_id' }  
+      },
       {
         $project: {
-          //rename the _id field to year for better clarification
-          _id: 1,
-          year: '$_id',
+          _id: 0,
+          year: 1,
           songs: 1
         }
       }
     ]).toArray();
+    return result.map(doc => ({
+      year: doc.year,
+      songs: doc.songs
+    }));
   }
   async getTopGenresByYear(year) {
     return await instance.collection.aggregate([
