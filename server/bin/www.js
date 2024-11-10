@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import app from '../app.js'
+import app from '../app.js';
 import { db } from '../db/db.js';
 const port = process.env.PORT || 3000;
 
