@@ -91,36 +91,69 @@ class DB{
       }
     ]).toArray();
   }
-  //TODO, test this method
   async getBillBoardSongs(){
-    return await instance.collection.aggregate([
-      { $sort: { year: -1, streams: -1 } }, 
+    const result = await instance.collection.aggregate([
       { $group: {
         _id: '$year', 
-        songs: { $push: { song: '$title', artist: '$artist', genre: '$genre' } } 
+        songs: {
+          $push: 
+          { 
+            artist: '$artist',
+            title: '$title',
+            weeksOnBoard: '$weeksOnBoard',
+            streams: '$streams',
+            genre: '$genre'
+          }
+        } 
       }
       },
+      { $sort: { _id: -1 } }, 
       
-      { $project: {
-        _id: 0,
-        year: '$_id', 
-        songs: 1
-      }
+      { 
+        $addFields: { year: '$_id' }  
+      },
+      
+      { 
+        //also rename the _id if possible
+        $project: {
+          _id: 0,
+          year:1,     
+          songs: 1       
+        }
       }
 
-    ]);
+    ]).toArray();
+    return result.map(doc => ({
+      year: doc.year,
+      songs: doc.songs
+    }));
   }
-  //TODO, test this method
   async getBillBoardSongsByYear(year){
-    const songs = await instance.collection.find({ year }).toArray();
-    return {
-      year: year,
-      songs: songs.map(song => ({
-        song: song.title,
-        artist: song.artist,
-        genre: song.genre,
-      }))
-    };
+    return await instance.collection.aggregate([
+      { $match: { year: year }},
+      { 
+        $group: {
+          _id: '$year',
+          songs: {
+            $push: {
+              artist: '$artist',
+              title: '$title',
+              weeksOnBoard: '$weeksOnBoard',
+              streams: '$streams',
+              genre: '$genre'
+            }
+          }
+        }
+      },
+      {
+        $project: {
+          //rename the _id field to year for better clarification
+          _id: 1,
+          year: '$_id',
+          songs: 1
+        }
+      }
+    ]).toArray();
   }
   async getTopGenresByYear(year) {
     return await instance.collection.aggregate([

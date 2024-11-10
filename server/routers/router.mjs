@@ -153,8 +153,8 @@ router.get('/genre/:genre', async (req, res) => {
  *         description: Failed to retrieve songs
  
  */
-router.get('/billboard/', async (req, res) => {
-  const year = req.query.year;
+router.get('/billboard', async (req, res) => {
+  const year = parseInt(req.query.year);
   try{
     const list = year 
       ? await db.getBillBoardSongsByYear( year) 
@@ -258,7 +258,7 @@ router.get('/streams/top/:year', async (req, res) => {
     if (filteredList.length === 0) {
       return res.status(404).json({ message: 'No data found for this year' });
     }
-    res.json({data : filteredList});
+    res.json({data : list});
   } catch( error){
     console.dir(error);
     res.status(500).json({message: `Failed to retrieve genre of ${year}`});
