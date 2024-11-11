@@ -168,9 +168,9 @@ describe('/api/streams/top/:year Tests', () =>{
   it('Should check stub Data Rank 1 Matches', async () =>{
     const response = await request(app).get('/api/streams/top/2017');
     const body = response.body;
-    expect(body.data[0].list[0]).to.have.property('rank', 1);
-    expect(body.data[0].list[0]).to.have.property('genre', 'Rock');
-    expect(body.data[0].list[0]).to.have.property('totalStreams', 56000000);
+    expect(body.data[0]).to.have.property('rank', 1);
+    expect(body.data[0]).to.have.property('genre', 'Rock');
+    expect(body.data[0]).to.have.property('totalStreams', 56000000);
 
     expect(response.statusCode).to.equal(200);
   });
