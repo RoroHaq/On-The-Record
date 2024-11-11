@@ -62,10 +62,6 @@ export default function GenreTable() {
           </tr>
         </tbody>
       </table>
-
-      <footer>
-        <Credits/>
-      </footer>
     </>
   );
 }

@@ -115,8 +115,6 @@ describe('/api/genre/:genre Error Handling', () =>{
     stubDbGetGenre.restore();
   });
 });
-
-
 /**
  * BillBoard top Object Example with 2015
  * 
