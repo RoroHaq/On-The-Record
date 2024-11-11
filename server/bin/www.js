@@ -8,12 +8,10 @@ const port = process.env.PORT || 3000;
     await db.connect('OnTheRecordDB', 'songs');
   } catch (e) {
     console.error('could not connect');
-    // eslint-disable-next-line no-console
     console.dir(e);
     process.exit();
   }
   app.listen(port, () => {
-    // eslint-disable-next-line no-console
     console.log(`Server listening on port ${port}!`);
   });
 })();
