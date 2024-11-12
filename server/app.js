@@ -9,9 +9,12 @@ const app = express();
 app.use(express.json());
 app.use('/api', router);
 app.use(express.static('../client/dist'));
-app.use((error, req, res, next) => {
-  console.log(error.message)
-  res.status(404).json({ message: error.message });
+app.use((err, req, res, next) => {
+  
+  const error = req.app.get('env') === 'development' ? err : {};
+  console.dir(err)
+  res.status(err.status || 500);
+  res.json({ error : error})
 });
 
 

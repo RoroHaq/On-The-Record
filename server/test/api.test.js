@@ -82,7 +82,7 @@ describe('/api/genre/:genre and ?year=Num Testing', () =>{
     expect(body.data[0]).to.have.property('genre', 'Country');
     expect(body.data[0]).to.have.property('year', 2010);
     expect(body.data[0]).to.have.property('totalStreams', 450000);
-    expect(body.data[0]).to.have.property('TotalWeeklyPlacement', 120);
+    expect(body.data[0]).to.have.property('totalWeeklyPlacement', 120);
   });
 
   it('Should Return the list of genres and match the info from Country in 2011', async() =>{
@@ -92,7 +92,7 @@ describe('/api/genre/:genre and ?year=Num Testing', () =>{
     expect(body.data[1]).to.have.property('genre', 'Country');
     expect(body.data[1]).to.have.property('year', 2011);
     expect(body.data[1]).to.have.property('totalStreams', 400000);
-    expect(body.data[1]).to.have.property('TotalWeeklyPlacement', 110);
+    expect(body.data[1]).to.have.property('totalWeeklyPlacement', 110);
   });
 
   it('Should return Country Object in 2017', async()=>{
@@ -117,16 +117,26 @@ describe('/api/genre/:genre and ?year=Num Testing', () =>{
     expect(body.data.length).to.equal(2);
     expect(response.statusCode).to.equal(200);
   });
+ 
+  // after(()=>{
+  //   stubDbGetGenre.restore();
+  //   stubDbGetGenreByYear.restore();
+  // });
+});
+
+describe('/api/genre/:genre Error Handling', () =>{
+  before(()=>{
+    stubDbGetGenre.resolves([]);
+    stubDbGetGenreByYear.resolves([]);
+  });
 
   it('Should Return an Empty String Error for Invalid Genre', async () =>{
     const response = await request(app).get('/api/genre/HocusPocus');
-    // const body = response.body;
-    // console.log(body)
-    return expect(response).to.be.rejectedWith(Error, "No data found for the specified genre")
-    //expect({message: body.data}).to.deep.equal({message: 'No data found for the specified genre'});
+    return expect(response.statusCode).to.equal(404)
   });
- 
+
   after(()=>{
+    stubDbGetGenre.restore();
     stubDbGetGenreByYear.restore();
   });
 });
