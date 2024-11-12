@@ -27,7 +27,9 @@ export default function GenreTable() {
   }
 
   return (
-    <>
+    <div style={{
+      position:'relative',
+      zIndex:1}}>
       <h1>
         Most streamed genres in {year}
       </h1>
@@ -61,6 +63,6 @@ export default function GenreTable() {
           </tr>
         </tbody>
       </table>
-    </>
+    </div>
   );
 }
