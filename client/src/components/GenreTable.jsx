@@ -9,24 +9,32 @@ import { useState, useEffect } from 'react';
 export default function GenreTable() {
 
   const [genreData, setGenreData] = useState( [] );
+  const [year, setYear] = useState( 2010 );
 
   useEffect( () => {    
     async function fetchMostStreamedGenre(year) {
-      const genres = await fetch(` http://localhost:3000/api/streams/top/${year}`);
-      return await genres.json();
-    }
-    
-    async function fetchMostStreamedGenre2017() {
-      const retirevedGenreData = await fetchMostStreamedGenre(2017);
-      setGenreData(retirevedGenreData);
+      const genres = await fetch(`/api/streams/top/${year}`);
+      const json = await genres.json();
+      setGenreData(json.data);
     }
 
-    fetchMostStreamedGenre2017();
-  }, []);
+    fetchMostStreamedGenre(year);
+  }, [year]);
+
+  const incrementYear = () => {
+    if (year == 2021){
+      setYear(2010)
+    } else{
+      setYear(year+1)
+    }
+  }
 
   return (
     <>
-      <h1>Most streamed genres in 2017</h1>
+      <h1>
+        Most streamed genres in {year}
+      </h1>
+      <button onClick={incrementYear} type="button">Next Year!</button>
       <h4>(based on wether or not the streamed songs of the genre in question hit the billboard top 100)</h4>
       <hr/>
       <table>
@@ -44,8 +52,14 @@ export default function GenreTable() {
             })}
           </tr>
           <tr>
-            {Array.from(genreData).map( g => {
-              return <th key={g.rank}> Streams: {g.totalStreams.toLocaleString()}</th>
+            {Array.from(genreData).map( (g, index) => {
+              let colour;
+              if (index % 2){
+                colour = 'turquoise';
+              } else{
+                colour = 'blue';
+              }
+              return <th key={g.rank}> Streams: <br/> <span style={{color: colour}}>{g.totalStreams.toLocaleString()}</span></th>
             })}
           </tr>
         </tbody>
