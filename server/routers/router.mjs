@@ -53,7 +53,57 @@ function validateGenre(req, res, next){
   next();
 }
 
+
+
 router.use('/genre/:genre', validateGenre);
+/**
+ * Retrieves all genres data and aggregates total streams and weekly placements for a single year.
+ * @route GET /api/genre/all/:year
+ * @param {int} req.params.year - The year to look for
+ * @returns {object} - return a JSON Object of the data of a specific year
+ *  or an error message if not found.
+ * @swagger
+ * /api/genre/all/{year}:
+ *   get:
+ *     summary: Get data for all genres in a year
+ *     description: Fetches data for all genres, filtered by year.
+ *     parameters:
+ *       - in: path
+ *         name: year
+ *         required: true
+ *         description: Year to search for
+ *         schema:
+ *           type: int
+ *     responses:
+ *       200:
+ *         description: Data for the all genres
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       404:
+ *         description: No data found for the year
+ *       500:
+ *         description: Failed to retrieve genres
+ */
+router.get('/genre/all/:year', async (req, res) => {
+  try{
+    const year = parseInt(req.params.year, 10);
+    const genres = await db.getAllGenreByYear(year);
+    if (genres.length === 0) {
+      return res.status(404).json({ message: `No data found for ${year}` });
+    }
+    res.json({data: genres});
+  } catch (error){
+    console.dir(error);
+    res.status(500).json({message: 'Failed to retrieve genres'});
+  }
+});
 
 /**
  * Get the data of a specific genre
@@ -116,6 +166,7 @@ router.get('/genre/:genre', async (req, res, next) => {
     // res.status(500).json({message: 'Failed to retrieve genres'});
   }
 });
+
 
 /**
  * Get the top 100 of the billboard for a single year
