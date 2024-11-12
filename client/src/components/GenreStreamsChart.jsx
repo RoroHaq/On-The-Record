@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, Tooltip, Legend, ArcElement} from "chart.js/auto";
 ChartJS.register(Tooltip, Legend, ArcElement);
-export default function GenreRatioChart(){
+export default function GenreStreamsChart(){
   const [year, setYear] = useState( 2010 );
   const [genreData, setGenreData] = useState( [] );
   const options = {
