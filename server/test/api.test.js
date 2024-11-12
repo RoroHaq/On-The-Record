@@ -45,13 +45,13 @@ describe('/api/genre/:genre and ?year=Num Testing', () =>{
         genre: 'Country',
         year: '2010',
         totalStreams : 450000,
-        TotalWeeklyPlacement : 120
+        totalWeeklyPlacement : 120
       },
       {
         genre: 'Country',
         year: '2011',
         totalStreams : 400000,
-        TotalWeeklyPlacement : 110
+        totalWeeklyPlacement : 110
       },
     ]);
 
@@ -60,7 +60,7 @@ describe('/api/genre/:genre and ?year=Num Testing', () =>{
         genre: 'Country',
         year: 2017,
         totalStreams : 4500000,
-        TotalWeeklyPlacement : 150
+        totalWeeklyPlacement : 150
       },
     ]);
   });
@@ -81,7 +81,7 @@ describe('/api/genre/:genre and ?year=Num Testing', () =>{
     expect(body.data[0]).to.have.property('genre', 'Country');
     expect(body.data[0]).to.have.property('year', 2017);
     expect(body.data[0]).to.have.property('totalStreams', 4500000);
-    expect(body.data[0]).to.have.property('TotalWeeklyPlacement', 150);
+    expect(body.data[0]).to.have.property('totalWeeklyPlacement', 150);
 
     expect(response.statusCode).to.equal(200);
   });
@@ -139,29 +139,22 @@ describe('/api/streams/top/:year Tests', () =>{
   before(()=>{
     stubDbGetTopGenresByYear.resolves([
       {
-        year: 2017,
-        list: [
-          {
-            rank : 1,
-            year: 2017,
-            genre : 'Rock',
-            totalStreams : 56000000
-          },
-          {
-            rank : 2,
-            year: 2017,
-            genre : 'Pop',
-            totalStreams : 50000000
-          },
-        ]
-      }
+        rank : 1,
+        genre : 'Rock',
+        totalStreams : 56000000
+      },
+      {
+        rank : 2,
+        genre : 'Pop',
+        totalStreams : 50000000
+      },
     ]);
   });
 
-  it('Should check if the List is songs from 2017', async () =>{
+  it('Should check if the List of songs from 2017 have 2 entries', async () =>{
     const response = await request(app).get('/api/streams/top/2017');
     const body = response.body;
-    expect(body.data[0].year).to.equal(2017);
+    expect(body.data.length).to.equal(2);
     expect(response.statusCode).to.equal(200);
   });
 
