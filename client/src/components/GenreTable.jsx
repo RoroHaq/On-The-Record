@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-
 /**
  * Fetches genre objects for specific year (2017 for now) and ranks their popularity on a table
  * @returns table ranking how much genres were streamed in 2017.
