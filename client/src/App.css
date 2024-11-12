@@ -46,7 +46,51 @@
   color: #888;
 }
 
+@font-face {
+	font-family: "caang";
+    src: url("./assets/caang.ttf");
+}
+
+#title-box {
+   position: relative;
+   z-index:1;
+   background-color: rgb(0, 0, 0, 0.8);
+   border-radius: 5em;
+   color:white;
+   font-family: 'caang';
+   padding: 5%;
+}
+
+#title-box h3 {
+    font-size: 4em;
+    margin: 0;
+}
+
+#title-box p {
+    font-size: 2em;
+    margin: 0;
+}
+
+@keyframes color-shift {
+    0%   {color: yellow;}
+    50%  {color: rgb(241, 126, 31);}
+    20%  {color: #d05353;}
+    75% {color: rgb(134, 224, 16);}
+    100%   {color: yellow;}
+  }
+
+.on-beat {
+    animation-name: color-shift;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+}
+
+.title {
+	font-family: 'caang';
+    font-size: 15em;
+    margin: 0;
+}
+
 body{
-    background-color: #d05353;
-    /* overflow-x: hidden */
+   background-color: #d05353;
 }
