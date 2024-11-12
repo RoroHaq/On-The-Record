@@ -154,7 +154,7 @@ router.get('/genre/:genre', async (req, res) => {
  
  */
 router.get('/billboard', async (req, res) => {
-  const year = parseInt(req.query.year);
+  const year = parseInt(req.query.year, 10);
   try{
     const list = year 
       ? await db.getBillBoardSongsByYear( year) 
