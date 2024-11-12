@@ -139,19 +139,15 @@ describe('/api/streams/top/:year Tests', () =>{
   before(()=>{
     stubDbGetTopGenresByYear.resolves([
       {
-        list: [
-          {
-            rank : 1,
-            genre : 'Rock',
-            totalStreams : 56000000
-          },
-          {
-            rank : 2,
-            genre : 'Pop',
-            totalStreams : 50000000
-          },
-        ]
-      }
+        rank : 1,
+        genre : 'Rock',
+        totalStreams : 56000000
+      },
+      {
+        rank : 2,
+        genre : 'Pop',
+        totalStreams : 50000000
+      },
     ]);
   });
 
