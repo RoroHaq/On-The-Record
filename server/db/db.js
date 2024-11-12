@@ -69,12 +69,12 @@ class DB{
       //  Match only documents with the specified genre
       {  $match: { genre: { $regex: `^${genre}$`, $options: 'i' } } },
   
-      // group by year and calculate totalStreams and TotalWeeklyPlacement
+      // group by year and calculate totalStreams and totalWeeklyPlacement
       {
         $group: {
           _id: { year: '$year', genre: '$genre' },
           totalStreams: { $sum: { $toLong: '$streams' } },
-          TotalWeeklyPlacement: { $sum: { $toInt: '$weeksOnBoard' } }
+          totalWeeklyPlacement: { $sum: { $toInt: '$weeksOnBoard' } }
         }
       },
   
@@ -85,7 +85,7 @@ class DB{
           genre: '$_id.genre',
           year: '$_id.year',
           totalStreams: 1,
-          TotalWeeklyPlacement: 1
+          totalWeeklyPlacement: 1
         }
       },
   
@@ -93,6 +93,35 @@ class DB{
       { $sort: { year: -1 } }
     ]).toArray();
   }
+  /**
+   * Retrieves all genres data and aggregates total streams and weekly placements for a single year.
+   * @async
+   * @param {int} year - The year to find.
+   * @returns {Promise<Object[]>} Array of objects with genre, totalWeeklyPlacement, 
+   * total streams.
+   */
+  async getAllGenreByYear(year){
+    return await instance.collection.aggregate([
+      { $match: {year: year}},
+      {
+        $group: {
+          _id: { genre: '$genre'},
+          totalStreams: { $sum: { $toLong: '$streams' } },
+          totalWeeklyPlacement: { $sum: { $toInt: '$weeksOnBoard' } }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          genre: '$_id.genre',
+          totalStreams: 1,
+          totalWeeklyPlacement: 1
+        }
+      },
+      { $sort: { totalStreams: -1 } }
+    ]).toArray();
+  }
+
   /**
    * Retrieves genre data for a specific year, aggregating total streams and weekly placements.
    * @async
@@ -109,7 +138,7 @@ class DB{
         $group: {
           _id: { year: '$year', genre: '$genre' },
           totalStreams: { $sum: { $toLong: '$streams' } },
-          TotalWeeklyPlacement: { $sum: { $toInt: '$weeksOnBoard' } }
+          totalWeeklyPlacement: { $sum: { $toInt: '$weeksOnBoard' } }
         }
       },
       {
@@ -118,7 +147,7 @@ class DB{
           genre: '$_id.genre',
           year: '$_id.year',
           totalStreams: 1,
-          TotalWeeklyPlacement: 1
+          totalWeeklyPlacement: 1
         }
       }
     ]).toArray();
