@@ -159,38 +159,31 @@ describe('/api/streams/top/:year Tests', () =>{
   before(()=>{
     stubDbGetTopGenresByYear.resolves([
       {
-        year: 2017,
-        list: [
-          {
-            rank : 1,
-            year: 2017,
-            genre : 'Rock',
-            totalStreams : 56000000
-          },
-          {
-            rank : 2,
-            year: 2017,
-            genre : 'Pop',
-            totalStreams : 50000000
-          },
-        ]
-      }
+        rank : 1,
+        genre : 'Rock',
+        totalStreams : 56000000
+      },
+      {
+        rank : 2,
+        genre : 'Pop',
+        totalStreams : 50000000
+      },
     ]);
   });
 
-  it('Should check if the List is songs from 2017', async () =>{
+  it('Should check if the List of songs from 2017 have 2 entries', async () =>{
     const response = await request(app).get('/api/streams/top/2017');
     const body = response.body;
-    expect(body.data[0].year).to.equal(2017);
+    expect(body.data.length).to.equal(2);
     expect(response.statusCode).to.equal(200);
   });
 
   it('Should check stub Data Rank 1 Matches', async () =>{
     const response = await request(app).get('/api/streams/top/2017');
     const body = response.body;
-    expect(body.data[0].list[0]).to.have.property('rank', 1);
-    expect(body.data[0].list[0]).to.have.property('genre', 'Rock');
-    expect(body.data[0].list[0]).to.have.property('totalStreams', 56000000);
+    expect(body.data[0]).to.have.property('rank', 1);
+    expect(body.data[0]).to.have.property('genre', 'Rock');
+    expect(body.data[0]).to.have.property('totalStreams', 56000000);
 
     expect(response.statusCode).to.equal(200);
   });

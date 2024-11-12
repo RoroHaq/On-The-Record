@@ -8,7 +8,8 @@ import neat from 'neat-csv';
  */
 async function getBaseBillBoardData(){
   try{
-    const response = await fs.readFile('../data/charts.csv');
+    //the route is for running the file from root node server/utils/seed.js
+    const response = await fs.readFile('server/data/charts.csv');
     
     const data = await neat(response);
 
@@ -114,7 +115,7 @@ async function getMappedBillBoardData(spotifyData){
  */
 async function getBaseSpotifyData() {
   try{
-    const response = await fs.readFile('../data/spotify_full_list.csv');
+    const response = await fs.readFile('server/data/spotify_full_list.csv');
 
     const data = await neat(response);
 
