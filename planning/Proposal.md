@@ -6,7 +6,7 @@ Our two chosen datasets are [Top Streamed Spotify songs 2010-2023](https://www.k
 
 ## API
 
-- `/api/genre/:year` This returns all the genre objects from a given year.
+- `/api/genre/all/:year` This returns all the genre objects from a given year.
 - `/api/genre/:genre` This returns all the genre objects of given genre with the data from all years.
 - `/api/genre/:genre?year="20XX"` This returns the genre object with the data of that certain year, this example wants a genre from 2017.
 - `/api/billboard/` return a list of songs and their genres that were on the billboard top 100 for each year.

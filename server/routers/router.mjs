@@ -52,7 +52,23 @@ function validateGenre(req, res, next){
   next();
 }
 
+
+
 router.use('/genre/:genre', validateGenre);
+
+router.get('/genre/all/:year', async (req, res) => {
+  try{
+    const year = parseInt(req.params.year, 10);
+    const genres = await db.getAllGenreByYear(year);
+    if (genres.length === 0) {
+      return res.status(404).json({ message: `No data found for ${year}` });
+    }
+    res.json({data: genres});
+  } catch (error){
+    console.dir(error);
+    res.status(500).json({message: 'Failed to retrieve genres'});
+  }
+});
 
 /**
  * Get the data of a specific genre
@@ -113,6 +129,7 @@ router.get('/genre/:genre', async (req, res) => {
     res.status(500).json({message: 'Failed to retrieve genres'});
   }
 });
+
 
 /**
  * Get the top 100 of the billboard for a single year

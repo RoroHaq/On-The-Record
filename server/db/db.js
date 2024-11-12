@@ -69,6 +69,27 @@ class DB{
       { $sort: { year: -1 } }
     ]).toArray();
   }
+  async getAllGenreByYear(year){
+    return await instance.collection.aggregate([
+      { $match: {year: year}},
+      {
+        $group: {
+          _id: { genre: '$genre'},
+          totalStreams: { $sum: { $toLong: '$streams' } },
+          TotalWeeklyPlacement: { $sum: { $toInt: '$weeksOnBoard' } }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          genre: '$_id.genre',
+          totalStreams: 1,
+          TotalWeeklyPlacement: 1
+        }
+      },
+      { $sort: { totalStreams: -1 } }
+    ]).toArray();
+  }
   async getGenreByYear(genre, year){
     return await instance.collection.aggregate([
       
