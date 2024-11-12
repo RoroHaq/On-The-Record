@@ -118,7 +118,7 @@ async function getMappedBillBoardData(spotifyData){
 /**
  * Reads spotify_full_list.csv file to obtain spotify streaming data
  * @async
- * @return  {Promise<Array<Object>>}array of the unfiltered spotify data
+ * @return  {Promise<Array<Object>>}array of the unfiltered Spotify data
  */
 async function getBaseSpotifyData() {
   try{
