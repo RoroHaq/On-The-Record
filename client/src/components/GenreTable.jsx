@@ -14,7 +14,7 @@ export default function GenreTable() {
       const json = await genres.json();
       setGenreData(json.data);
     }
-
+    
     fetchMostStreamedGenre(year);
   }, [year]);
 
