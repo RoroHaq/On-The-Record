@@ -3,6 +3,7 @@ import express from 'express';
 import { db }   from '../db/db.js';
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi  from 'swagger-ui-express';
+
 const router = express.Router();
 const options = {
   swaggerDefinition:{
@@ -95,7 +96,7 @@ router.use('/genre/:genre', validateGenre);
  *       500:
  *         description: Error retrieving data
  */
-router.get('/genre/:genre', async (req, res) => {
+router.get('/genre/:genre', async (req, res, next) => {
   try{
     let genre = req.params.genre;
     genre = genre.trim().toLowerCase().replace(/_/g, '/');
@@ -105,12 +106,14 @@ router.get('/genre/:genre', async (req, res) => {
       : await db.getGenre(genre);
 
     if (genres.length === 0) {
-      return res.status(404).json({ message: 'No data found for the specified genre' });
+      throw new Error('No data found for the specified genre')
+      // return res.status(404).json({ message: 'No data found for the specified genre' });
     }
     res.json({data: genres});
   } catch (error){
     console.dir(error);
-    res.status(500).json({message: 'Failed to retrieve genres'});
+    next(error)
+    // res.status(500).json({message: 'Failed to retrieve genres'});
   }
 });
 

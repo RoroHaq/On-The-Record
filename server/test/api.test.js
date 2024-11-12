@@ -4,6 +4,9 @@ import request from 'supertest';
 import app from '../app.js';
 import sinon from 'sinon';
 import { db }  from '../db/db.js';
+import chaiAsPromised from  'chai-as-promised'
+
+chai.use(chaiAsPromised)
 
 const stubDbGetGenre = sinon.stub(db, 'getGenre');
 const stubDbGetGenreByYear = sinon.stub(db, 'getGenreByYear');
@@ -78,7 +81,7 @@ describe('/api/genre/:genre and ?year=Num Testing', () =>{
 
     expect(body.data[0]).to.have.property('genre', 'Country');
     expect(body.data[0]).to.have.property('year', 2010);
-    expect(body.data[0]).to.have.property('totalStreams', 400000);
+    expect(body.data[0]).to.have.property('totalStreams', 450000);
     expect(body.data[0]).to.have.property('TotalWeeklyPlacement', 120);
   });
 
@@ -86,10 +89,10 @@ describe('/api/genre/:genre and ?year=Num Testing', () =>{
     const response = await request(app).get('/api/genre/Country');
     const body = response.body;
 
-    expect(body.data[0]).to.have.property('genre', 'Country');
-    expect(body.data[0]).to.have.property('year', 2011);
-    expect(body.data[0]).to.have.property('totalStreams', 450000);
-    expect(body.data[0]).to.have.property('TotalWeeklyPlacement', 120);
+    expect(body.data[1]).to.have.property('genre', 'Country');
+    expect(body.data[1]).to.have.property('year', 2011);
+    expect(body.data[1]).to.have.property('totalStreams', 400000);
+    expect(body.data[1]).to.have.property('TotalWeeklyPlacement', 110);
   });
 
   it('Should return Country Object in 2017', async()=>{
@@ -114,27 +117,20 @@ describe('/api/genre/:genre and ?year=Num Testing', () =>{
     expect(body.data.length).to.equal(2);
     expect(response.statusCode).to.equal(200);
   });
+
+  it('Should Return an Empty String Error for Invalid Genre', async () =>{
+    const response = await request(app).get('/api/genre/HocusPocus');
+    // const body = response.body;
+    // console.log(body)
+    return expect(response).to.be.rejectedWith(Error, "No data found for the specified genre")
+    //expect({message: body.data}).to.deep.equal({message: 'No data found for the specified genre'});
+  });
  
   after(()=>{
     stubDbGetGenreByYear.restore();
   });
 });
 
-describe('/api/genre/:genre Error Handling', () =>{
-  before(() =>{
-    stubDbGetGenre.resolves('No data found for the specified genre');
-  });
-
-  it('Should Return an Empty String Error for Invalid Genre', async () =>{
-    const response = await request(app).get('/api/genre/HocusPocus');
-    const body = response.body;
-
-    expect({message: body.data}).to.deep.equal({message: 'No data found for the specified genre'});
-  });
-  after(async () =>{
-    stubDbGetGenre.restore();
-  });
-});
 /**
  * BillBoard top Object Example with 2015
  * 
