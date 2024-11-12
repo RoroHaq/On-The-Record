@@ -17,6 +17,7 @@ const songs = await (async () => {
 (async () => {
   try {
     await db.connect('OnTheRecordDB', 'songs');
+    console.log('connected');
     const num = await db.createMany(songs);
     console.log(`Inserted ${num.insertedCount} songs`);
   } catch (e) {

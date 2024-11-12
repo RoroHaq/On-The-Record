@@ -124,10 +124,73 @@ class DB{
     ]).toArray();
   }
   async getBillBoardSongs(){
-    //TODO
+    const result = await instance.collection.aggregate([
+      { $group: {
+        _id: '$year', 
+        songs: {
+          $push: 
+          { 
+            artist: '$artist',
+            title: '$title',
+            weeksOnBoard: '$weeksOnBoard',
+            streams: '$streams',
+            genre: '$genre'
+          }
+        } 
+      }
+      },
+      { $sort: { _id: -1 } }, 
+      
+      { 
+        $addFields: { year: '$_id' }  
+      },
+      
+      { 
+        $project: {
+          _id: 0,
+          year:1,     
+          songs: 1       
+        }
+      }
+
+    ]).toArray();
+    return result.map(doc => ({
+      year: doc.year,
+      songs: doc.songs
+    }));
   }
-  async getBillBoardSongsByYear(){
-    //TODO
+  async getBillBoardSongsByYear(year){
+    const result = await instance.collection.aggregate([
+      { $match: { year: year }},
+      { 
+        $group: {
+          _id: '$year',
+          songs: {
+            $push: {
+              artist: '$artist',
+              title: '$title',
+              weeksOnBoard: '$weeksOnBoard',
+              streams: '$streams',
+              genre: '$genre'
+            }
+          }
+        }
+      },
+      { 
+        $addFields: { year: '$_id' }  
+      },
+      {
+        $project: {
+          _id: 0,
+          year: 1,
+          songs: 1
+        }
+      }
+    ]).toArray();
+    return result.map(doc => ({
+      year: doc.year,
+      songs: doc.songs
+    }));
   }
   /**
    * Retrieves the top genres for a specific year, ranked by total streams.
@@ -137,7 +200,7 @@ class DB{
    */
 
   async getTopGenresByYear(year) {
-    return await instance.collection.aggregate([
+    const result = await instance.collection.aggregate([
       { $match: { year: year } },
       {
         $group: {
@@ -178,7 +241,6 @@ class DB{
       {
         $project: {
           _id: 0,
-          year: year,
           list: {
             $map: {
               input: { $range: [0, { $size: '$list' }] }, 
@@ -194,6 +256,7 @@ class DB{
       }
      
     ]).toArray();
+    return result[0].list;
   }
   /**
    * Retrieves a random sample of songs from the collection.
