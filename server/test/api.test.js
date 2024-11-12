@@ -130,8 +130,10 @@ describe('/api/genre/:genre Error Handling', () =>{
     stubDbGetGenreByYear.resolves([]);
   });
 
-  it('Should Return an Empty String Error for Invalid Genre', async () =>{
+  it('Should Return the Error Message after invalid genre input', async () =>{
     const response = await request(app).get('/api/genre/HocusPocus');
+    const body = response.body;
+    expect(body).to.deep.equal({error: 'No data found for the specified genre'})
     return expect(response.statusCode).to.equal(404)
   });
 

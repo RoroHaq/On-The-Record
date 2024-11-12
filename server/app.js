@@ -12,9 +12,8 @@ app.use(express.static('../client/dist'));
 app.use((err, req, res, next) => {
   
   const error = req.app.get('env') === 'development' ? err : {};
-  console.dir(err)
   res.status(err.status || 500);
-  res.json({ error : error})
+  res.json({ error : error.message})
 });
 
 
