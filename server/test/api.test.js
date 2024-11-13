@@ -113,7 +113,7 @@ describe('/api/genre/:genre and ?year=Num Testing', () =>{
   it('Should return all genres if given invalid queryParam', async()=>{
     const response = await request(app).get('/api/genre/country?number=2017');
     const body = response.body;
-    console.log(body)
+
     chai.assert.isObject(body, 'body is an object');
     expect(body.data.length).to.equal(2);
     expect(response.statusCode).to.equal(200);
@@ -206,6 +206,24 @@ describe('/genre/all/:year Testing', ()=> {
   })
 });
 
+describe("/genre/all/:year Error Handling", () => {
+  before(() => {
+    stubDbgetAllGenreByYear.resolves([]);
+  });
+
+  it("Should Return error of empty fields from invalid year", async() =>{
+    const response = await request(app).get('/api/genre/all/1999');
+    const body = response.body;
+
+    expect(body).to.deep.equal({ message: `No data found for 1999` })
+    expect(response.status).to.equal(404)
+  });
+
+  after(() =>{
+    stubDbgetAllGenreByYear.restore();
+  })
+});
+
 /**
  * BillBoard top Object Example with 2015
  * 
@@ -257,10 +275,6 @@ describe('/api/streams/top/:year Tests', () =>{
     expect(body.data[0]).to.have.property('totalStreams', 56000000);
 
     expect(response.statusCode).to.equal(200);
-  });
-
-  after(()=>{
-    stubDbGetTopGenresByYear.restore();
   });
 });
 

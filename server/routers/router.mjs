@@ -163,6 +163,9 @@ router.get('/genre/:genre', async (req, res, next) => {
     }
     res.json({data: genres});
   } catch (error){
+    if(error.status === undefined){
+      error.message = 'Failed to retrieve genres'
+    }
     next(error)
     // res.status(500).json({message: 'Failed to retrieve genres'});
   }
