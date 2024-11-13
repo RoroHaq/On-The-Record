@@ -1,25 +1,25 @@
 import Chart from 'chart.js/auto'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Bar } from 'react-chartjs-2'
 
 export default function WeeksOnboardchart(){
   const [weeklyPlacementData, setweeklyPlacementData] = useState([])
   const [year, setYear] = useState(2010);
-  const [BarChartData, setBarChartData] = useState({
+  
+  let data = {
     labels : weeklyPlacementData.map((data) => data.genre),
     datasets: [
       {
-      label : "Genres with Most Weeks on Board",
-      data : weeklyPlacementData.map((data) => data.TotalWeeklyPlacement)
+      data : weeklyPlacementData.map((data) => data.totalWeeklyPlacement)
     }
     ] 
-  });
+  };
 
   useEffect( () => {    
     async function fetchMostStreamedGenre(year) {
       
       try {
-        const response = await fetch(`/api/genres/all/${year}`);
+        const response = await fetch(`/api/genre/all/${year}`);
         const json = await response.json();
         setweeklyPlacementData(json.data); 
       } catch (error) {
@@ -32,7 +32,18 @@ export default function WeeksOnboardchart(){
 
   return <>
     <div>
-      <Bar data={BarChartData}/>
+      <Bar data={data}
+        options={{
+          plugins: {
+            title: {
+              display: true,
+            },
+            legend: {
+              display: false
+            }
+          }
+        }}
+      />
     </div>
   </>
 }
