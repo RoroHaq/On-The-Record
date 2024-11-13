@@ -55,7 +55,8 @@ function validateGenre(req, res, next){
 
 
 
-router.use('/genre/:genre', validateGenre);
+//router.use('/genre/:genre', validateGenre);
+
 /**
  * Retrieves all genres data and aggregates total streams and weekly placements for a single year.
  * @route GET /api/genre/all/:year
@@ -146,9 +147,30 @@ router.get('/genre/all/:year', async (req, res) => {
  *       500:
  *         description: Error retrieving data
  */
+
+function validateQueryParam(req, res, next){
+  try{
+    if(Object.keys(req.query).length > 0 && !req.query.year){
+      const error = new Error('Invalid Query Param Found')
+      error.status = 404
+      throw error
+    }
+    next();
+  }catch(Error){
+    next(Error)
+  }
+}
+
+router.use('/genre/:genre', validateQueryParam);
+
 router.get('/genre/:genre', async (req, res, next) => {
   try{
     let genre = req.params.genre;
+    if(req.query.length > 0 && !req.query.year){
+      const error = new Error('Invalid Query Param Found')
+      error.status = 404
+      throw error
+    }
     genre = genre.trim().toLowerCase().replace(/_/g, '/');
     const year = parseInt(req.query.year, 10);
     const genres = year 

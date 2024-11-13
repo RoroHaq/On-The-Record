@@ -109,15 +109,6 @@ describe('/api/genre/:genre and ?year=Num Testing', () =>{
 
     expect(response.statusCode).to.equal(200);
   });
-
-  it('Should return all genres if given invalid queryParam', async()=>{
-    const response = await request(app).get('/api/genre/country?number=2017');
-    const body = response.body;
-
-    chai.assert.isObject(body, 'body is an object');
-    expect(body.data.length).to.equal(2);
-    expect(response.statusCode).to.equal(200);
-  });
 });
 
 describe('/api/genre/:genre Error Handling', () =>{
@@ -138,6 +129,14 @@ describe('/api/genre/:genre Error Handling', () =>{
     const body = response.body;
     expect(body).to.deep.equal({error: 'No data found for the specified genre'})
     expect(response.statusCode).to.equal(404)
+  });
+
+  it('Should return all genres if given invalid queryParam name', async()=>{
+    const response = await request(app).get('/api/genre/country?number=2017');
+    const body = response.body;
+
+    chai.assert.isObject(body, 'body is an object');
+    expect(body).to.deep.equal({error: 'Invalid Query Param Found'})
   });
 
   after(()=>{
@@ -275,6 +274,23 @@ describe('/api/streams/top/:year Tests', () =>{
     expect(body.data[0]).to.have.property('totalStreams', 56000000);
 
     expect(response.statusCode).to.equal(200);
+  });
+});
+
+describe("/api/streams/top/:year Tests", ()=>{
+  before(()=>{
+    stubDbGetTopGenresByYear.resolves([]);
+  });
+
+  it('Should return error from invalid input', async () =>{
+    const response = await request(app).get('/api/streams/top/1999');
+    const body = response.body;
+    expect(body).to.deep.equal({ message: 'No data found for this year' });
+    expect(response.statusCode).to.equal(404);
+  });
+
+  after(()=>{
+    stubDbGetTopGenresByYear.restore();
   });
 });
 
