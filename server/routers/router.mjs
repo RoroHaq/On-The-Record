@@ -311,7 +311,7 @@ router.get('/streams/top/:year', async (req, res) => {
       return res.status(404).json({ message: 'No data found for this year' });
     }
     res.json({data : list});
-  } catch( error){
+  } catch(error){
     console.dir(error);
     res.status(500).json({message: `Failed to retrieve genre of ${year}`});
   }

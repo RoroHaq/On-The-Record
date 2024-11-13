@@ -10,6 +10,7 @@ chai.use(chaiAsPromised)
 
 const stubDbGetGenre = sinon.stub(db, 'getGenre');
 const stubDbGetGenreByYear = sinon.stub(db, 'getGenreByYear');
+const stubDbgetAllGenreByYear = sinon.stub(db, 'getAllGenreByYear')
 // const stubDbGetBillBoardSongs = sinon.stub(db, 'getBillBoardSongs');
 // const stubDbGetBillBoardsongsByYear = sinon.stub(db, 'getBillBoardSongsByYear');
 const stubDbGetTopGenresByYear = sinon.stub(db, 'getTopGenresByYear');
@@ -143,6 +144,46 @@ describe('/api/genre/:genre Error Handling', () =>{
     stubDbGetGenre.restore();
     stubDbGetGenreByYear.restore();
   });
+});
+
+describe('/genre/all/:year Testing', ()=> {
+  before(() =>{
+    stubDbgetAllGenreByYear.resolves([
+      {
+        totalStreams : 500000,
+        totalWeeklyPlacement : 1465,
+        genre : "Pop"
+      },
+      {
+        totalStreams : 200000,
+        totalWeeklyPlacement : 1000,
+        genre : "Rock"
+      },
+      {
+        totalStreams : 100000,
+        totalWeeklyPlacement : 600,
+        genre : "Metal"
+      },
+    ])
+  });
+
+  it("Endpoint should return the 3 genres in 2017", async() =>{
+    const response = await request(app).get('/api/genre/all/2017');
+    const body = response.body;
+
+    expect(body.data.length).to.equal(3)
+    expect(response.status).to.equal(200)
+  })
+
+  it("Endpoint should return the 3 genres in 2017 and match the Pop properties/values", async() =>{
+    const response = await request(app).get('/api/genre/all/2017');
+    const body = response.body;
+
+    expect(body.data[0]).to.have.property('totalStreams', 500000);
+    expect(body.data[0]).to.have.property('totalWeeklyPlacement', 1465);
+    expect(body.data[0]).to.have.property('genre', "Pop");
+    expect(response.status).to.equal(200)
+  })
 });
 
 /**
