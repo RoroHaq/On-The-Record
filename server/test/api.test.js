@@ -416,67 +416,24 @@ describe("Test for /api/billboard and /api/billbaord?year=2017", () =>{
   });
 
   after(() =>{
-    stubDbGetBillBoardsongsByYear.restore();
+    stubDbGetBillBoardSongs.restore();
   })
 });
 
-/* 
-FOR PHASE 2
-describe("Test for /api/billboard", () =>{
-  before(() =>{
-    stubDbGetBillBoardSongs.resolves([
-      {
-        year: 2016,
-        songs: [
-          {
-            song: "Perfect",
-            artist: "Ed Sheeran",
-            genre: "Pop"
-          },
-          {
-            song: "Love Yourself",
-            artist: "Justin Bieber",
-            genre: "Pop"
-          },
-        ]
-      }
-    ])
+describe("/api/billboard and /api/billbaord?year=2017 Error Hnadling", ()=>{
+  before(()=>{
+    stubDbGetBillBoardsongsByYear.resolves([]);
   });
 
-  it("Will Match Stub Number 1 song in 2016", async () =>{
-    const response = await request(app).get("/billboard")
+  it("Should return Error from invalid year", async () =>{
+    const response = await request(app).get("/api/billboard?year=1999")
     const body = response.body
-
     chai.assert.isObject(body, "Body is an object")
-
-    expect(body.data[0]).to.have.property("year")
-    expect(body.data[0].year).to.equal(2016)
-    expect(body.data[0]).to.have.property("songs")
-    expect(body.data[0].songs).to.have.property("song", "Perfect");
-    expect(body.data[0].songs).to.have.property("artist", "Ed Sheeran");
-    expect(body.data[0].songs).to.have.property("genre", "Pop");
-
-    expect(response.status).to.equal(200)
+    expect(body).to.deep.equal({ message: 'No data found' })
+    expect(response.status).to.equal(404)
   });
 
-  it("Will Match Stub Number 2 Song in 2016", async()=>{
-    const response = await request(app).get("/billboard")
-    const body = response.body
-
-    chai.assert.isObject(body, "Body is an object")
-
-    expect(body.data[1]).to.have.property("year")
-    expect(body.data[1].year).to.equal(2016)
-    expect(body.data[1]).to.have.property("songs")
-    expect(body.data[1].songs).to.have.property("song", "Love Yourself");
-    expect(body.data[1].songs).to.have.property("artist", "Justin Bieber");
-    expect(body.data[1].songs).to.have.property("genre", "Pop");
-
-    expect(response.status).to.equal(200)
-  })
-  
   after(() =>{
-    stubDbGetBillBoardSongs.restore()
+    stubDbGetBillBoardsongsByYear.restore();
   })
-})
-*/
+});
