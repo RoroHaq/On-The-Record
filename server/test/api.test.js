@@ -387,12 +387,32 @@ describe("Test for /api/billboard and /api/billbaord?year=2017", () =>{
     expect(body.data[0]).to.have.property("year", 2017)
     expect(body.data[0].songs[1]).to.have.property("song", "Despacito");
     expect(body.data[0].songs[1]).to.have.property("artist", "Luis Fonzi");
+    expect(body.data[0].songs[1]).to.have.property("weeksOnBoard", 50);
+    expect(body.data[0].songs[1]).to.have.property("streams", 1000000000);
     expect(body.data[0].songs[1]).to.have.property("genre", "Pop");
-
+    expect(response.status).to.equal(200)
   })
 
   it("Should return songs from both 2017 and 2016", async() =>{
+    const response = await request(app).get("/api/billboard")
+    const body = response.body
 
+    expect(body.data[0]).to.have.property("year", 2017)
+    expect(body.data[1]).to.have.property("year", 2016)
+    expect(response.status).to.equal(200)
+  });
+
+  it("From fetching all, should return the #1 Song Data of 2016", async() =>{
+    const response = await request(app).get("/api/billboard")
+    const body = response.body
+
+    expect(body.data[1]).to.have.property("year", 2016)
+    expect(body.data[1].songs[0]).to.have.property("song", "One Dance");
+    expect(body.data[1].songs[0]).to.have.property("artist", "Drake");
+    expect(body.data[1].songs[0]).to.have.property("weeksOnBoard", 70);
+    expect(body.data[1].songs[0]).to.have.property("streams", 1000000000);
+    expect(body.data[1].songs[0]).to.have.property("genre", "R&B/Soul");
+    expect(response.status).to.equal(200)
   });
 
   after(() =>{
