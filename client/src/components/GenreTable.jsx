@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import WeeksOnboardchart from './WeeksOnBoardChart';
-import GenreStreamsChart from './GenreStreamsChart';
 
 /**
  * GenreTable component fetches and displays the most streamed genres for a specific year.
@@ -67,8 +65,6 @@ export default function GenreTable() {
           </tr>
         </tbody>
       </table>
-
-      <WeeksOnboardchart/>
     </div>
   );
 }
