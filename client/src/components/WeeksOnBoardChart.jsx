@@ -30,6 +30,13 @@ export default function WeeksOnboardchart(){
     fetchMostStreamedGenre(year);
   }, [year]);
 
+  const incrementYear = () => {
+    if (year == 2021){
+      setYear(2010)
+    } else{
+      setYear(year+1)
+    }
+  }
   return <>
     <div>
       <Bar data={data}
@@ -37,6 +44,7 @@ export default function WeeksOnboardchart(){
           plugins: {
             title: {
               display: true,
+              text: `Genres With Most Weekly Placements in ${year}`
             },
             legend: {
               display: false
@@ -44,6 +52,7 @@ export default function WeeksOnboardchart(){
           }
         }}
       />
+      <button onClick={incrementYear} type="button">Next Year!</button>
     </div>
   </>
 }
