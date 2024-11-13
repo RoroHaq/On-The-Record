@@ -4,13 +4,13 @@ import request from 'supertest';
 import app from '../app.js';
 import sinon from 'sinon';
 import { db }  from '../db/db.js';
-import chaiAsPromised from  'chai-as-promised'
+import chaiAsPromised from  'chai-as-promised';
 
-chai.use(chaiAsPromised)
+chai.use(chaiAsPromised);
 
 const stubDbGetGenre = sinon.stub(db, 'getGenre');
 const stubDbGetGenreByYear = sinon.stub(db, 'getGenreByYear');
-const stubDbgetAllGenreByYear = sinon.stub(db, 'getAllGenreByYear')
+const stubDbgetAllGenreByYear = sinon.stub(db, 'getAllGenreByYear');
 const stubDbGetBillBoardSongs = sinon.stub(db, 'getBillBoardSongs');
 const stubDbGetBillBoardsongsByYear = sinon.stub(db, 'getBillBoardSongsByYear');
 const stubDbGetTopGenresByYear = sinon.stub(db, 'getTopGenresByYear');
@@ -120,15 +120,15 @@ describe('/api/genre/:genre Error Handling', () =>{
   it('Should Return the error Message after invalid genre input', async () =>{
     const response = await request(app).get('/api/genre/HocusPocus');
     const body = response.body;
-    expect(body).to.deep.equal({error: 'No data found for the specified genre'})
-    expect(response.statusCode).to.equal(404)
+    expect(body).to.deep.equal({error: 'No data found for the specified genre'});
+    expect(response.statusCode).to.equal(404);
   });
 
   it('Should Return the error Message after invalid query param Input', async () =>{
     const response = await request(app).get('/api/genre/Country?year=1998');
     const body = response.body;
-    expect(body).to.deep.equal({error: 'No data found for the specified genre'})
-    expect(response.statusCode).to.equal(404)
+    expect(body).to.deep.equal({error: 'No data found for the specified genre'});
+    expect(response.statusCode).to.equal(404);
   });
 
   it('Should return all genres if given invalid queryParam name', async()=>{
@@ -136,7 +136,7 @@ describe('/api/genre/:genre Error Handling', () =>{
     const body = response.body;
 
     chai.assert.isObject(body, 'body is an object');
-    expect(body).to.deep.equal({error: 'Invalid Query Param Found'})
+    expect(body).to.deep.equal({error: 'Invalid Query Param Found'});
   });
 
   after(()=>{
@@ -151,76 +151,76 @@ describe('/genre/all/:year Testing', ()=> {
       {
         totalStreams : 500000,
         totalWeeklyPlacement : 1465,
-        genre : "Pop"
+        genre : 'Pop'
       },
       {
         totalStreams : 200000,
         totalWeeklyPlacement : 1000,
-        genre : "Rock"
+        genre : 'Rock'
       },
       {
         totalStreams : 100000,
         totalWeeklyPlacement : 600,
-        genre : "Metal"
+        genre : 'Metal'
       },
-    ])
+    ]);
   });
 
-  it("Endpoint should return the 3 genres in 2017", async() =>{
+  it('Endpoint should return the 3 genres in 2017', async() =>{
     const response = await request(app).get('/api/genre/all/2017');
     const body = response.body;
 
-    expect(body.data.length).to.equal(3)
-    expect(response.status).to.equal(200)
-  })
+    expect(body.data.length).to.equal(3);
+    expect(response.status).to.equal(200);
+  });
 
-  it("Endpoint should return the 3 genres in 2017 and match the Pop properties/values", async() =>{
+  it('Endpoint should return the 3 genres in 2017 and match the Pop properties/values', async() =>{
     const response = await request(app).get('/api/genre/all/2017');
     const body = response.body;
 
     expect(body.data[0]).to.have.property('totalStreams', 500000);
     expect(body.data[0]).to.have.property('totalWeeklyPlacement', 1465);
-    expect(body.data[0]).to.have.property('genre', "Pop");
-    expect(response.status).to.equal(200)
-  })
+    expect(body.data[0]).to.have.property('genre', 'Pop');
+    expect(response.status).to.equal(200);
+  });
 
-  it("Endpoint should return the 3 genres in 2017 and match the Rock properties/values", async() =>{
+  it('Endpoint should return the 3 genres in 2017 and match the Rock properties/values', async() =>{
     const response = await request(app).get('/api/genre/all/2017');
     const body = response.body;
 
     expect(body.data[1]).to.have.property('totalStreams', 200000);
     expect(body.data[1]).to.have.property('totalWeeklyPlacement', 1000);
-    expect(body.data[1]).to.have.property('genre', "Rock");
-    expect(response.status).to.equal(200)
-  })
+    expect(body.data[1]).to.have.property('genre', 'Rock');
+    expect(response.status).to.equal(200);
+  });
 
-  it("Endpoint should return the 3 genres in 2017 and match the Metal properties/values", async() =>{
+  it('Endpoint should return the 3 genres in 2017 and match the Metal values', async() =>{
     const response = await request(app).get('/api/genre/all/2017');
     const body = response.body;
 
     expect(body.data[2]).to.have.property('totalStreams', 100000);
     expect(body.data[2]).to.have.property('totalWeeklyPlacement', 600);
-    expect(body.data[2]).to.have.property('genre', "Metal");
-    expect(response.status).to.equal(200)
-  })
+    expect(body.data[2]).to.have.property('genre', 'Metal');
+    expect(response.status).to.equal(200);
+  });
 });
 
-describe("/genre/all/:year Error Handling", () => {
+describe('/genre/all/:year Error Handling', () => {
   before(() => {
     stubDbgetAllGenreByYear.resolves([]);
   });
 
-  it("Should Return error of empty fields from invalid year", async() =>{
+  it('Should Return error of empty fields from invalid year', async() =>{
     const response = await request(app).get('/api/genre/all/1999');
     const body = response.body;
 
-    expect(body).to.deep.equal({ message: `No data found for 1999` })
-    expect(response.status).to.equal(404)
+    expect(body).to.deep.equal({ message: `No data found for 1999` });
+    expect(response.status).to.equal(404);
   });
 
   after(() =>{
     stubDbgetAllGenreByYear.restore();
-  })
+  });
 });
 
 /**
@@ -240,9 +240,6 @@ describe("/genre/all/:year Error Handling", () => {
  * 
  * NOTE: INDEXES WILL CHANGE LATER ON
  */
-
-
-
 describe('/api/streams/top/:year Tests', () =>{
   before(()=>{
     stubDbGetTopGenresByYear.resolves([
@@ -277,7 +274,7 @@ describe('/api/streams/top/:year Tests', () =>{
   });
 });
 
-describe("/api/streams/top/:year Tests", ()=>{
+describe('/api/streams/top/:year Tests', ()=>{
   before(()=>{
     stubDbGetTopGenresByYear.resolves([]);
   });
@@ -307,47 +304,47 @@ describe("/api/streams/top/:year Tests", ()=>{
  * NOTE: INDEXES WILL CHANGE LATER ON
  */
 
-describe("Test for /api/billboard and /api/billbaord?year=2017", () =>{
+describe('Test for /api/billboard and /api/billbaord?year=2017', () =>{
   before(() =>{
     stubDbGetBillBoardsongsByYear.resolves([
       {
         year: 2017,
         songs: [
           {
-            artist: "Ed Sheeran",
-            song: "Shape of You",
+            artist: 'Ed Sheeran',
+            song: 'Shape of You',
             weeksOnBoard: 30,
             streams: 400000000,
-            genre: "Pop"
+            genre: 'Pop'
           },
           {
-            song: "Despacito",
-            artist: "Luis Fonzi",
+            song: 'Despacito',
+            artist: 'Luis Fonzi',
             weeksOnBoard: 50,
             streams: 1000000000,
-            genre: "Pop"
+            genre: 'Pop'
           },
         ]
       }
-    ])
+    ]);
 
     stubDbGetBillBoardSongs.resolves([
       {
         year: 2017,
         songs: [
           {
-            artist: "Ed Sheeran",
-            song: "Shape of You",
+            artist: 'Ed Sheeran',
+            song: 'Shape of You',
             weeksOnBoard: 30,
             streams: 400000000,
-            genre: "Pop"
+            genre: 'Pop'
           },
           {
-            song: "Despacito",
-            artist: "Luis Fonzi",
+            song: 'Despacito',
+            artist: 'Luis Fonzi',
             weeksOnBoard: 50,
             streams: 1000000000,
-            genre: "Pop"
+            genre: 'Pop'
           },
         ]
       },
@@ -355,85 +352,86 @@ describe("Test for /api/billboard and /api/billbaord?year=2017", () =>{
         year: 2016,
         songs: [
           {
-            song: "One Dance",
-            artist: "Drake",
+            song: 'One Dance',
+            artist: 'Drake',
             weeksOnBoard : 70,
             streams: 1000000000,
-            genre: "R&B/Soul"
+            genre: 'R&B/Soul'
           },
           {
-            song: "Love Yourself",
-            artist: "Justin Bieber",
+            song: 'Love Yourself',
+            artist: 'Justin Bieber',
             weeksOnBoard : 65,
             streams: 900000,
-            genre: "Pop"
+            genre: 'Pop'
           },
         ]
       }
-    ])
+    ]);
   });
 
-  it("Should return only songs of 2017 with query param", async () =>{
-    const response = await request(app).get("/api/billboard?year=2017")
-    const body = response.body
-    chai.assert.isObject(body, "Body is an object")
-    expect(body.data[0].year).to.equal(2017)
-    expect(response.status).to.equal(200)
+  it('Should return only songs of 2017 with query param', async () =>{
+    const response = await request(app).get('/api/billboard?year=2017');
+    const body = response.body;
+    chai.assert.isObject(body, 'Body is an object');
+    expect(body.data[0].year).to.equal(2017);
+    expect(response.status).to.equal(200);
   });
 
-  it("should match the number 2 song in 2017 top 100", async()=>{
-    const response = await request(app).get("/api/billboard?year=2017")
-    const body = response.body
-    expect(body.data[0]).to.have.property("year", 2017)
-    expect(body.data[0].songs[1]).to.have.property("song", "Despacito");
-    expect(body.data[0].songs[1]).to.have.property("artist", "Luis Fonzi");
-    expect(body.data[0].songs[1]).to.have.property("weeksOnBoard", 50);
-    expect(body.data[0].songs[1]).to.have.property("streams", 1000000000);
-    expect(body.data[0].songs[1]).to.have.property("genre", "Pop");
-    expect(response.status).to.equal(200)
-  })
+  it('should match the number 2 song in 2017 top 100', async()=>{
+    const response = await request(app).get('/api/billboard?year=2017');
+    const body = response.body;
 
-  it("Should return songs from both 2017 and 2016", async() =>{
-    const response = await request(app).get("/api/billboard")
-    const body = response.body
-
-    expect(body.data[0]).to.have.property("year", 2017)
-    expect(body.data[1]).to.have.property("year", 2016)
-    expect(response.status).to.equal(200)
+    expect(body.data[0]).to.have.property('year', 2017);
+    expect(body.data[0].songs[1]).to.have.property('song', 'Despacito');
+    expect(body.data[0].songs[1]).to.have.property('artist', 'Luis Fonzi');
+    expect(body.data[0].songs[1]).to.have.property('weeksOnBoard', 50);
+    expect(body.data[0].songs[1]).to.have.property('streams', 1000000000);
+    expect(body.data[0].songs[1]).to.have.property('genre', 'Pop');
+    expect(response.status).to.equal(200);
   });
 
-  it("From fetching all, should return the #1 Song Data of 2016", async() =>{
-    const response = await request(app).get("/api/billboard")
-    const body = response.body
+  it('Should return songs from both 2017 and 2016', async() =>{
+    const response = await request(app).get('/api/billboard');
+    const body = response.body;
 
-    expect(body.data[1]).to.have.property("year", 2016)
-    expect(body.data[1].songs[0]).to.have.property("song", "One Dance");
-    expect(body.data[1].songs[0]).to.have.property("artist", "Drake");
-    expect(body.data[1].songs[0]).to.have.property("weeksOnBoard", 70);
-    expect(body.data[1].songs[0]).to.have.property("streams", 1000000000);
-    expect(body.data[1].songs[0]).to.have.property("genre", "R&B/Soul");
-    expect(response.status).to.equal(200)
+    expect(body.data[0]).to.have.property('year', 2017);
+    expect(body.data[1]).to.have.property('year', 2016);
+    expect(response.status).to.equal(200);
+  });
+
+  it('From fetching all, should return the #1 Song Data of 2016', async() =>{
+    const response = await request(app).get('/api/billboard');
+    const body = response.body;
+
+    expect(body.data[1]).to.have.property('year', 2016);
+    expect(body.data[1].songs[0]).to.have.property('song', 'One Dance');
+    expect(body.data[1].songs[0]).to.have.property('artist', 'Drake');
+    expect(body.data[1].songs[0]).to.have.property('weeksOnBoard', 70);
+    expect(body.data[1].songs[0]).to.have.property('streams', 1000000000);
+    expect(body.data[1].songs[0]).to.have.property('genre', 'R&B/Soul');
+    expect(response.status).to.equal(200);
   });
 
   after(() =>{
     stubDbGetBillBoardSongs.restore();
-  })
+  });
 });
 
-describe("/api/billboard and /api/billbaord?year=2017 Error Hnadling", ()=>{
+describe('/api/billboard and /api/billbaord?year=2017 Error Hnadling', ()=>{
   before(()=>{
     stubDbGetBillBoardsongsByYear.resolves([]);
   });
 
-  it("Should return Error from invalid year", async () =>{
-    const response = await request(app).get("/api/billboard?year=1999")
-    const body = response.body
-    chai.assert.isObject(body, "Body is an object")
-    expect(body).to.deep.equal({ message: 'No data found' })
-    expect(response.status).to.equal(404)
+  it('Should return Error from invalid year', async () =>{
+    const response = await request(app).get('/api/billboard?year=1999');
+    const body = response.body;
+    chai.assert.isObject(body, 'Body is an object');
+    expect(body).to.deep.equal({ message: 'No data found' });
+    expect(response.status).to.equal(404);
   });
 
   after(() =>{
     stubDbGetBillBoardsongsByYear.restore();
-  })
+  });
 });
