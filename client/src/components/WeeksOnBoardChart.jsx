@@ -1,4 +1,3 @@
-import Chart from 'chart.js/auto'
 import { useState, useEffect } from "react";
 import { Bar } from 'react-chartjs-2'
 
@@ -16,7 +15,7 @@ export default function WeeksOnboardchart(){
   };
 
   useEffect( () => {    
-    async function fetchMostStreamedGenre(year) {
+    async function fetchTotalWeeklyPlacementsByYear(year) {
       
       try {
         const response = await fetch(`/api/genre/all/${year}`);
@@ -27,7 +26,7 @@ export default function WeeksOnboardchart(){
       }
     }
 
-    fetchMostStreamedGenre(year);
+    fetchTotalWeeklyPlacementsByYear(year);
   }, [year]);
 
   const incrementYear = () => {
