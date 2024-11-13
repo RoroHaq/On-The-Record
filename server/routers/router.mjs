@@ -137,7 +137,7 @@ router.get('/genre/all/:year', async (req, res) => {
  *         description: Error retrieving data
  */
 
-function validateQueryParam(req, res, next){
+function validateGenreQueryParam(req, res, next){
   try{
     if(Object.keys(req.query).length > 0 && !req.query.year){
       const error = new Error('Invalid Query Param Found')
@@ -150,7 +150,7 @@ function validateQueryParam(req, res, next){
   }
 }
 
-router.use('/genre/:genre', validateQueryParam);
+router.use('/genre/:genre', validateGenreQueryParam);
 
 router.get('/genre/:genre', async (req, res, next) => {
   try{
@@ -181,7 +181,6 @@ router.get('/genre/:genre', async (req, res, next) => {
     // res.status(500).json({message: 'Failed to retrieve genres'});
   }
 });
-
 
 /**
  * Get the top 100 of the billboard for a single year
@@ -222,6 +221,7 @@ router.get('/genre/:genre', async (req, res, next) => {
  *         description: Failed to retrieve songs
  
  */
+
 router.get('/billboard', async (req, res) => {
   const year = parseInt(req.query.year, 10);
   try{

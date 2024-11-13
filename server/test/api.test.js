@@ -11,8 +11,8 @@ chai.use(chaiAsPromised)
 const stubDbGetGenre = sinon.stub(db, 'getGenre');
 const stubDbGetGenreByYear = sinon.stub(db, 'getGenreByYear');
 const stubDbgetAllGenreByYear = sinon.stub(db, 'getAllGenreByYear')
-// const stubDbGetBillBoardSongs = sinon.stub(db, 'getBillBoardSongs');
-// const stubDbGetBillBoardsongsByYear = sinon.stub(db, 'getBillBoardSongsByYear');
+const stubDbGetBillBoardSongs = sinon.stub(db, 'getBillBoardSongs');
+const stubDbGetBillBoardsongsByYear = sinon.stub(db, 'getBillBoardSongsByYear');
 const stubDbGetTopGenresByYear = sinon.stub(db, 'getTopGenresByYear');
 
 const expect = chai.expect;
@@ -307,9 +307,7 @@ describe("/api/streams/top/:year Tests", ()=>{
  * NOTE: INDEXES WILL CHANGE LATER ON
  */
 
-/*
-FOR PHASE 2
-describe("Test for /api/billboard/:year", () =>{
+describe("Test for /api/billboard and /api/billbaord?year=2017", () =>{
   before(() =>{
     stubDbGetBillBoardsongsByYear.resolves([
       {
@@ -332,34 +330,75 @@ describe("Test for /api/billboard/:year", () =>{
         ]
       }
     ])
+
+    stubDbGetBillBoardSongs.resolves([
+      {
+        year: 2017,
+        songs: [
+          {
+            artist: "Ed Sheeran",
+            song: "Shape of You",
+            weeksOnBoard: 30,
+            streams: 400000000,
+            genre: "Pop"
+          },
+          {
+            song: "Despacito",
+            artist: "Luis Fonzi",
+            weeksOnBoard: 50,
+            streams: 1000000000,
+            genre: "Pop"
+          },
+        ]
+      },
+      {
+        year: 2016,
+        songs: [
+          {
+            song: "One Dance",
+            artist: "Drake",
+            weeksOnBoard : 70,
+            streams: 1000000000,
+            genre: "R&B/Soul"
+          },
+          {
+            song: "Love Yourself",
+            artist: "Justin Bieber",
+            weeksOnBoard : 65,
+            streams: 900000,
+            genre: "Pop"
+          },
+        ]
+      }
+    ])
   });
 
-  it("Should return only songs of 2017", async () =>{
-    const response = await request(app).get("/billboard/2017")
+  it("Should return only songs of 2017 with query param", async () =>{
+    const response = await request(app).get("/api/billboard?year=2017")
     const body = response.body
-
     chai.assert.isObject(body, "Body is an object")
     expect(body.data[0].year).to.equal(2017)
     expect(response.status).to.equal(200)
   });
 
   it("should match the number 2 song in 2017 top 100", async()=>{
-    const response = await request(app).get("/billboard/2017")
+    const response = await request(app).get("/api/billboard?year=2017")
     const body = response.body
-
-    chai.assert.isObject(body, "Body is an object")
-
-    expect(body.data[1]).to.have.property("year")
-    expect(body.data[1].year).to.equal(2017)
-    expect(body.data[1]).to.have.property("songs")
-    expect(body.data[1].songs).to.have.property("song", "Despacito");
-    expect(body.data[1].songs).to.have.property("artist", "Luis Fonzi");
-    expect(body.data[1].songs).to.have.property("genre", "Pop");
+    expect(body.data[0]).to.have.property("year", 2017)
+    expect(body.data[0].songs[1]).to.have.property("song", "Despacito");
+    expect(body.data[0].songs[1]).to.have.property("artist", "Luis Fonzi");
+    expect(body.data[0].songs[1]).to.have.property("genre", "Pop");
 
   })
-});
 
-*/
+  it("Should return songs from both 2017 and 2016", async() =>{
+
+  });
+
+  after(() =>{
+    stubDbGetBillBoardsongsByYear.restore();
+  })
+});
 
 /* 
 FOR PHASE 2
