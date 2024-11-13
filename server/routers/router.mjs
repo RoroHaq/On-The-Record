@@ -44,17 +44,6 @@ router.get('/alive', (req, res) => {
   res.json({ alive: true });
 });
 
-function validateGenre(req, res, next){
-  let genre = req.params.genre;
-  if (!genre) {
-    return res.status(400).json({ message: 'Genre is required'});
-  }
-  genre = genre.trim().toLowerCase().replace(/_/g, '/');
-  next();
-}
-
-
-
 //router.use('/genre/:genre', validateGenre);
 
 /**
