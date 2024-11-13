@@ -184,6 +184,26 @@ describe('/genre/all/:year Testing', ()=> {
     expect(body.data[0]).to.have.property('genre', "Pop");
     expect(response.status).to.equal(200)
   })
+
+  it("Endpoint should return the 3 genres in 2017 and match the Rock properties/values", async() =>{
+    const response = await request(app).get('/api/genre/all/2017');
+    const body = response.body;
+
+    expect(body.data[1]).to.have.property('totalStreams', 200000);
+    expect(body.data[1]).to.have.property('totalWeeklyPlacement', 1000);
+    expect(body.data[1]).to.have.property('genre', "Rock");
+    expect(response.status).to.equal(200)
+  })
+
+  it("Endpoint should return the 3 genres in 2017 and match the Metal properties/values", async() =>{
+    const response = await request(app).get('/api/genre/all/2017');
+    const body = response.body;
+
+    expect(body.data[2]).to.have.property('totalStreams', 100000);
+    expect(body.data[2]).to.have.property('totalWeeklyPlacement', 600);
+    expect(body.data[2]).to.have.property('genre', "Metal");
+    expect(response.status).to.equal(200)
+  })
 });
 
 /**
