@@ -112,16 +112,11 @@ describe('/api/genre/:genre and ?year=Num Testing', () =>{
   it('Should return all genres if given invalid queryParam', async()=>{
     const response = await request(app).get('/api/genre/country?number=2017');
     const body = response.body;
-
+    console.log(body)
     chai.assert.isObject(body, 'body is an object');
     expect(body.data.length).to.equal(2);
     expect(response.statusCode).to.equal(200);
   });
- 
-  // after(()=>{
-  //   stubDbGetGenre.restore();
-  //   stubDbGetGenreByYear.restore();
-  // });
 });
 
 describe('/api/genre/:genre Error Handling', () =>{
@@ -130,11 +125,18 @@ describe('/api/genre/:genre Error Handling', () =>{
     stubDbGetGenreByYear.resolves([]);
   });
 
-  it('Should Return the Error Message after invalid genre input', async () =>{
+  it('Should Return the error Message after invalid genre input', async () =>{
     const response = await request(app).get('/api/genre/HocusPocus');
     const body = response.body;
     expect(body).to.deep.equal({error: 'No data found for the specified genre'})
-    return expect(response.statusCode).to.equal(404)
+    expect(response.statusCode).to.equal(404)
+  });
+
+  it('Should Return the error Message after invalid query param Input', async () =>{
+    const response = await request(app).get('/api/genre/Country?year=1998');
+    const body = response.body;
+    expect(body).to.deep.equal({error: 'No data found for the specified genre'})
+    expect(response.statusCode).to.equal(404)
   });
 
   after(()=>{

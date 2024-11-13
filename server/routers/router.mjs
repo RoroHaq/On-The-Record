@@ -156,12 +156,13 @@ router.get('/genre/:genre', async (req, res, next) => {
       : await db.getGenre(genre);
 
     if (genres.length === 0) {
-      throw new Error('No data found for the specified genre')
+      const error = new Error('No data found for the specified genre')
+      error.status = 404
+      throw error
       // return res.status(404).json({ message: 'No data found for the specified genre' });
     }
     res.json({data: genres});
   } catch (error){
-    error.status = 404;
     next(error)
     // res.status(500).json({message: 'Failed to retrieve genres'});
   }
