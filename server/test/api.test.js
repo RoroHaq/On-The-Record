@@ -304,7 +304,7 @@ describe('/api/streams/top/:year Tests', ()=>{
  * NOTE: INDEXES WILL CHANGE LATER ON
  */
 
-describe('Test for /api/billboard and /api/billbaord?year=2017', () =>{
+describe('Test for /api/billboard and /api/billboard?year=2017', () =>{
   before(() =>{
     stubDbGetBillBoardsongsByYear.resolves([
       {
