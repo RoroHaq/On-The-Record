@@ -83,6 +83,8 @@ router.get('/alive', (req, res) => {
  */
 router.get('/genre/all/:year', Genre.getGenresByYear);
 
+
+router.use('/genre/:genre', Genre.validateGenreQueryParam);
 /**
  * Get the data of a specific genre
  * @route GET /api/genre/:genre
@@ -124,12 +126,7 @@ router.get('/genre/all/:year', Genre.getGenresByYear);
  *       500:
  *         description: Error retrieving data
  */
-
-
-
-router.use('/genre/:genre', Genre.validateGenreQueryParam);
-
-router.get('/genre/:genre', );
+router.get('/genre/:genre', Genre.getSpecifiedGenre);
 
 /**
  * Get the top 100 of the billboard for a single year
@@ -171,22 +168,7 @@ router.get('/genre/:genre', );
  
  */
 
-router.get('/billboard', async (req, res) => {
-  const year = parseInt(req.query.year, 10);
-  try{
-    const list = year 
-      ? await db.getBillBoardSongsByYear( year) 
-      : await db.getBillBoardSongs();
-    
-    if (list.length === 0) {
-      return res.status(404).json({ message: 'No data found' });
-    }
-    res.json({data: list});
-  } catch (error){
-    console.dir(error);
-    res.status(500).json({message: 'Failed to retrieve songs'});
-  }
-});
+router.get('/billboard', );
 
 /**
  * Get a list of random songs
