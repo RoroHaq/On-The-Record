@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 
-
 /**
  * GenreTable component fetches and displays the most streamed genres for a specific year.
  * @component
@@ -17,7 +16,7 @@ export default function GenreTable() {
       const json = await genres.json();
       setGenreData(json.data);
     }
-
+    
     fetchMostStreamedGenre(year);
   }, [year]);
 
