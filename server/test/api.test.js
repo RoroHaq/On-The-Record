@@ -311,14 +311,14 @@ describe('Test for /api/billboard and /api/billbaord?year=2017', () =>{
         year: 2017,
         songs: [
           {
+            title: 'Shape of You',
             artist: 'Ed Sheeran',
-            song: 'Shape of You',
             weeksOnBoard: 30,
             streams: 400000000,
             genre: 'Pop'
           },
           {
-            song: 'Despacito',
+            title: 'Despacito',
             artist: 'Luis Fonzi',
             weeksOnBoard: 50,
             streams: 1000000000,
@@ -333,14 +333,14 @@ describe('Test for /api/billboard and /api/billbaord?year=2017', () =>{
         year: 2017,
         songs: [
           {
+            title: 'Shape of You',
             artist: 'Ed Sheeran',
-            song: 'Shape of You',
             weeksOnBoard: 30,
             streams: 400000000,
             genre: 'Pop'
           },
           {
-            song: 'Despacito',
+            title: 'Despacito',
             artist: 'Luis Fonzi',
             weeksOnBoard: 50,
             streams: 1000000000,
@@ -352,14 +352,14 @@ describe('Test for /api/billboard and /api/billbaord?year=2017', () =>{
         year: 2016,
         songs: [
           {
-            song: 'One Dance',
+            title: 'One Dance',
             artist: 'Drake',
             weeksOnBoard : 70,
             streams: 1000000000,
             genre: 'R&B/Soul'
           },
           {
-            song: 'Love Yourself',
+            title: 'Love Yourself',
             artist: 'Justin Bieber',
             weeksOnBoard : 65,
             streams: 900000,
@@ -383,7 +383,7 @@ describe('Test for /api/billboard and /api/billbaord?year=2017', () =>{
     const body = response.body;
 
     expect(body.data[0]).to.have.property('year', 2017);
-    expect(body.data[0].songs[1]).to.have.property('song', 'Despacito');
+    expect(body.data[0].songs[1]).to.have.property('title', 'Despacito');
     expect(body.data[0].songs[1]).to.have.property('artist', 'Luis Fonzi');
     expect(body.data[0].songs[1]).to.have.property('weeksOnBoard', 50);
     expect(body.data[0].songs[1]).to.have.property('streams', 1000000000);
@@ -405,7 +405,7 @@ describe('Test for /api/billboard and /api/billbaord?year=2017', () =>{
     const body = response.body;
 
     expect(body.data[1]).to.have.property('year', 2016);
-    expect(body.data[1].songs[0]).to.have.property('song', 'One Dance');
+    expect(body.data[1].songs[0]).to.have.property('title', 'One Dance');
     expect(body.data[1].songs[0]).to.have.property('artist', 'Drake');
     expect(body.data[1].songs[0]).to.have.property('weeksOnBoard', 70);
     expect(body.data[1].songs[0]).to.have.property('streams', 1000000000);

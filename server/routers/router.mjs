@@ -44,7 +44,6 @@ router.get('/alive', (req, res) => {
   res.json({ alive: true });
 });
 
-//router.use('/genre/:genre', validateGenre);
 
 /**
  * Retrieves all genres data and aggregates total streams and weekly placements for a single year.
