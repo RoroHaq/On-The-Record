@@ -5,11 +5,15 @@ export async function getMostStreamedGenresByYear(req, res, next){
   try {
     const list = await db.getTopGenresByYear(year);
     if (list.length === 0) {
-      return res.status(404).json({ message: 'No data found for this year' });
+      const error = new Error('No data found for this year');
+      error.status = 404;
+      throw error;
     }
     res.json({data : list});
   } catch(error){
-    console.dir(error);
-    res.status(500).json({message: `Failed to retrieve genre of ${year}`});
+    if(error.status === undefined){
+      error.message = `Failed to retrieve genre of ${year}`
+    }
+    next(error);
   }
 }
