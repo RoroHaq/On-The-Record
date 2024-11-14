@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Bar } from 'react-chartjs-2'
+import Chart from "chart.js/auto";
 
 export default function WeeksOnboardchart(){
   const [weeklyPlacementData, setweeklyPlacementData] = useState([])
