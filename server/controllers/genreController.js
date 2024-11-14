@@ -23,7 +23,7 @@ export async function getEveryGenreByYear(req, res, next){
     if(error.status === undefined){
       error.message = 'Failed to retrieve genres';
     }
-    next(error)
+    next(error);
   }
 }
 

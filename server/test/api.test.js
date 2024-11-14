@@ -435,7 +435,7 @@ describe('/api/billboard and /api/billboard?year=2017 Error Handling', ()=>{
     const response = await request(app).get('/api/billboard?numbers=1999');
     const body = response.body;
 
-    expect(body).to.deep.equal({error: 'Invalid Query Param Found'})
+    expect(body).to.deep.equal({error: 'Invalid Query Param Found'});
     expect(response.status).to.equal(404);
   });
 

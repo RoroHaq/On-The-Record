@@ -1,4 +1,4 @@
-import { db } from '../db/db.js'
+import { db } from '../db/db.js';
 
 /**
  * This middlewear is used to validate the Query param given in the endpoint
@@ -40,13 +40,13 @@ export async function getTopBillBoardSongs(req, res, next){
     if (list.length === 0) {
       const error = new Error('No data found');
       error.status = 404;
-      throw error
+      throw error;
     }
     res.json({data: list});
   } catch (error){
     if(error.status === undefined){
-      error.message = 'Failed to retrieve songs'
+      error.message = 'Failed to retrieve songs';
     }
-    next(error)
+    next(error);
   }
 }

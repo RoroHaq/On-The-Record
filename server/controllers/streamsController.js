@@ -1,4 +1,4 @@
-import { db } from '../db/db.js'
+import { db } from '../db/db.js';
 
 /**
  * This middlewear process the user request when putting the 
@@ -21,7 +21,7 @@ export async function getMostStreamedGenresByYear(req, res, next){
     res.json({data : list});
   } catch(error){
     if(error.status === undefined){
-      error.message = `Failed to retrieve genre of ${year}`
+      error.message = `Failed to retrieve genre of ${year}`;
     }
     next(error);
   }

@@ -1,11 +1,9 @@
-/* eslint-disable no-console */
 import express from 'express';
-import { db }   from '../db/db.js';
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi  from 'swagger-ui-express';
-import * as Genre from '../controllers/genreController.js'
-import * as BillBoard from '../controllers/billboardController.js'
-import * as Streams from '../controllers/streamsController.js'
+import * as Genre from '../controllers/genreController.js';
+import * as BillBoard from '../controllers/billboardController.js';
+import * as Streams from '../controllers/streamsController.js';
 
 const router = express.Router();
 const options = {
@@ -131,7 +129,7 @@ router.use('/genre/:genre', Genre.validateGenreQueryParam);
 router.get('/genre/:genre', Genre.getSpecifiedGenre);
 
 
-router.use('/billboard', BillBoard.validateBillboardQueryParam)
+router.use('/billboard', BillBoard.validateBillboardQueryParam);
 /**
  * Get the top 100 of the billboard for a single year
  * 
@@ -212,5 +210,6 @@ router.get('/billboard', BillBoard.getTopBillBoardSongs);
  *         description: Error retrieving stream data
  */
 router.get('/streams/top/:year', Streams.getMostStreamedGenresByYear);
+
 export default router;
 
