@@ -21,7 +21,7 @@ const expect = chai.expect;
  * Genre Fetching Object Example:
  * body = {data: [
  *      {
- *        genre: Country, 
+ *        genre: Pop, 
  *        year: 2017,
  *        totalStreams: 100000
  *        totalBillBoardPlacements: 49
@@ -34,7 +34,7 @@ const expect = chai.expect;
  * 
  * body = {data: [
  *       {
- *        genre: Country, 
+ *        genre: Pop, 
  *        year: 2019,
  *        totalStreams: 100000
  *        totalBillBoardPlacements: 49
@@ -46,13 +46,13 @@ describe('/api/genre/:genre and ?year=Num Testing', () =>{
   before(() =>{
     stubDbGetGenre.resolves([
       {
-        genre: 'Country',
+        genre: 'Pop',
         year: 2010,
         totalStreams : 450000,
         totalWeeklyPlacement : 120
       },
       {
-        genre: 'Country',
+        genre: 'Pop',
         year: 2011,
         totalStreams : 400000,
         totalWeeklyPlacement : 110
@@ -61,7 +61,7 @@ describe('/api/genre/:genre and ?year=Num Testing', () =>{
 
     stubDbGetGenreByYear.resolves([
       {
-        genre: 'Country',
+        genre: 'Pop',
         year: 2017,
         totalStreams : 4500000,
         totalWeeklyPlacement : 150
@@ -70,39 +70,39 @@ describe('/api/genre/:genre and ?year=Num Testing', () =>{
   });
 
   it('Should Return a list of genre info through the years', async () =>{
-    const response = await request(app).get('/api/genre/Country');
+    const response = await request(app).get('/api/genre/Pop');
    
     const body = response.body;
     expect(body.data.length).to.equal(2);
   });
 
-  it('Should Return the list of genres and match the info from Country in 2010', async() =>{
-    const response = await request(app).get('/api/genre/Country');
+  it('Should Return the list of genres and match the info from Pop in 2010', async() =>{
+    const response = await request(app).get('/api/genre/Pop');
     const body = response.body;
 
-    expect(body.data[0]).to.have.property('genre', 'Country');
+    expect(body.data[0]).to.have.property('genre', 'Pop');
     expect(body.data[0]).to.have.property('year', 2010);
     expect(body.data[0]).to.have.property('totalStreams', 450000);
     expect(body.data[0]).to.have.property('totalWeeklyPlacement', 120);
   });
 
-  it('Should Return the list of genres and match the info from Country in 2011', async() =>{
-    const response = await request(app).get('/api/genre/Country');
+  it('Should Return the list of genres and match the info from Pop in 2011', async() =>{
+    const response = await request(app).get('/api/genre/Pop');
     const body = response.body;
 
-    expect(body.data[1]).to.have.property('genre', 'Country');
+    expect(body.data[1]).to.have.property('genre', 'Pop');
     expect(body.data[1]).to.have.property('year', 2011);
     expect(body.data[1]).to.have.property('totalStreams', 400000);
     expect(body.data[1]).to.have.property('totalWeeklyPlacement', 110);
   });
 
-  it('Should return Country Object in 2017', async()=>{
-    const response = await request(app).get('/api/genre/Country?year=2017');
+  it('Should return Pop Object in 2017', async()=>{
+    const response = await request(app).get('/api/genre/Pop?year=2017');
     const body = response.body;
 
     chai.assert.isObject(body, 'body is an object');
 
-    expect(body.data[0]).to.have.property('genre', 'Country');
+    expect(body.data[0]).to.have.property('genre', 'Pop');
     expect(body.data[0]).to.have.property('year', 2017);
     expect(body.data[0]).to.have.property('totalStreams', 4500000);
     expect(body.data[0]).to.have.property('totalWeeklyPlacement', 150);
@@ -125,14 +125,14 @@ describe('/api/genre/:genre Error Handling', () =>{
   });
 
   it('Should Return the error Message after invalid query param Input', async () =>{
-    const response = await request(app).get('/api/genre/Country?year=1998');
+    const response = await request(app).get('/api/genre/Pop?year=1998');
     const body = response.body;
     expect(body).to.deep.equal({error: 'No data found for the specified genre'});
     expect(response.statusCode).to.equal(404);
   });
 
   it('Should return all genres if given invalid queryParam name', async()=>{
-    const response = await request(app).get('/api/genre/country?number=2017');
+    const response = await request(app).get('/api/genre/Pop?number=2017');
     const body = response.body;
 
     chai.assert.isObject(body, 'body is an object');
