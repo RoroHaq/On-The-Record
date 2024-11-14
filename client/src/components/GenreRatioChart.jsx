@@ -21,6 +21,27 @@ export default function GenreRatioChart() {
       const json = await genres.json();
       return await json.data;
     }
+
+    function verticallyAdjustGenreData(data) {
+      const genreList = [... new Set(data.map(d => d.map(d => d.genre)).flat())];
+      // console.log(genreList)
+      // console.log(data)
+      const genreMap = genreList.map(name => {
+        const genrePerYear = data.map( d => d.filter(g => g.genre === name))
+          .map(g => {
+            if (g.length == 0){
+              return {'totalStreams': 0, 'totalWeeklyPlacement': 0, 'genre': name}
+            }
+            else{
+              return g
+            }
+          }).flat();
+        return genrePerYear;
+      })
+
+      console.log(genreMap)
+      return genreMap
+    }
     
     async function fetchGenreDataForAllYears() {
       //TODO: temporary solution
@@ -40,19 +61,13 @@ export default function GenreRatioChart() {
         fetchGenre(2021)
       ]);
 
-      setGenreData(retirevedGenreData)
+      setGenreData(verticallyAdjustGenreData(retirevedGenreData))
     }
 
     fetchGenreDataForAllYears()
   }, []);
 
-  let data = (genreData.length > 0) ? {
-    labels: genreYears,
-    datasets: genreYears.map( (year, index) => 
-      [
-        {
-          data: [genreData[index].map((item) => item.totalStreams)],
-          backgroundColor: [
+  const colourArray =  [
             "#FF6384",
             "#36A2EB",
             "#FFCE56",
@@ -62,15 +77,46 @@ export default function GenreRatioChart() {
             "#C9CBCF",
             "#8AC926",
             "#FF6F59",
-          ],
-          hoverOffset: 4,
-          "id": year,
-          "label": "Purchase amount (USD)",
-          "yAxisID":"left"
-        }
-      ]
-    )
+            "#FF6FFF",
+          ]
+
+  let data = (genreData.length > 0) ? {
+    labels: genreYears,
+    datasets: genreData.map( (genreArray, index) => {
+      return {
+        data: genreArray.map((item) => item.totalStreams / item.totalWeeklyPlacement),
+        backgroundColor: "#000000",
+        borderColor: colourArray[index],
+        hoverOffset: 4,
+        id: genreArray[0].genre,
+        label: genreArray[0].genre,
+      }
+    })
+    // datasets: genreYears.map( (year, index) => 
+    //   [
+    //     {
+    //       data: [genreData[index].map((item) => item.totalStreams)],
+    //       backgroundColor: [
+    //         "#FF6384",
+    //         "#36A2EB",
+    //         "#FFCE56",
+    //         "#4BC0C0",
+    //         "#9966FF",
+    //         "#FF9F40",
+    //         "#C9CBCF",
+    //         "#8AC926",
+    //         "#FF6F59",
+    //       ],
+    //       hoverOffset: 4,
+    //       "id": year,
+    //       "label": "Purchase amount (USD)",
+    //       "yAxisID":"left"
+    //     }
+    //   ]
+    // )
   } : null
+
+  console.log(data)
 
   return (
     <div className="chart-container" id="ha">
@@ -84,10 +130,13 @@ export default function GenreRatioChart() {
             plugins: {
               title: {
                 display: true,
-                text: "2012 Streaming Data"
+                text: "Streaming Data"
               },
               legend: {
-                display: false
+                display: true,
+                labels: {
+                  boxWidth: 20
+                }
               }
             }
           }}
