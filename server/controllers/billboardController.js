@@ -13,7 +13,7 @@ export function validateBillboardQueryParam(req, res, next){
   }
 }
 
-export async function getTopBillBoardSongs(req, res){
+export async function getTopBillBoardSongs(req, res, next){
   const year = parseInt(req.query.year, 10);
   try{
     const list = year 
@@ -21,11 +21,15 @@ export async function getTopBillBoardSongs(req, res){
       : await db.getBillBoardSongs();
     
     if (list.length === 0) {
-      return res.status(404).json({ message: 'No data found' });
+      const error = new Error('No data found');
+      error.status = 404;
+      throw error
     }
     res.json({data: list});
   } catch (error){
-    console.dir(error);
-    res.status(500).json({message: 'Failed to retrieve songs'});
+    if(error.status === undefined){
+      error.message = 'Failed to retrieve songs'
+    }
+    next(error)
   }
 }

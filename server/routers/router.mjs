@@ -4,6 +4,8 @@ import { db }   from '../db/db.js';
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi  from 'swagger-ui-express';
 import * as Genre from '../controllers/genreController.js'
+import * as BillBoard from '../controllers/billboardController.js'
+import * as Streams from '../controllers/streamsController.js'
 
 const router = express.Router();
 const options = {
@@ -128,6 +130,8 @@ router.use('/genre/:genre', Genre.validateGenreQueryParam);
  */
 router.get('/genre/:genre', Genre.getSpecifiedGenre);
 
+
+router.use('/billboard', BillBoard.validateBillboardQueryParam)
 /**
  * Get the top 100 of the billboard for a single year
  * 
@@ -167,8 +171,7 @@ router.get('/genre/:genre', Genre.getSpecifiedGenre);
  *         description: Failed to retrieve songs
  
  */
-
-router.get('/billboard', );
+router.get('/billboard', BillBoard.getTopBillBoardSongs);
 
 /**
  * Get a list of random songs
@@ -248,18 +251,6 @@ router.get('/random/:number', async (req, res) => {
  *       500:
  *         description: Error retrieving stream data
  */
-router.get('/streams/top/:year', async (req, res) => {
-  const year = parseInt(req.params.year);
-  try {
-    const list = await db.getTopGenresByYear(year);
-    if (list.length === 0) {
-      return res.status(404).json({ message: 'No data found for this year' });
-    }
-    res.json({data : list});
-  } catch(error){
-    console.dir(error);
-    res.status(500).json({message: `Failed to retrieve genre of ${year}`});
-  }
-});
+router.get('/streams/top/:year', Streams.getMostStreamedGenresByYear);
 export default router;
 

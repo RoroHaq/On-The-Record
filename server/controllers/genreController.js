@@ -1,17 +1,21 @@
 import { db }   from '../db/db.js';
 
 
-export async function getGenresByYear(req, res){
+export async function getGenresByYear(req, res, next){
   try{
     const year = parseInt(req.params.year, 10);
     const genres = await db.getAllGenreByYear(year);
     if (genres.length === 0) {
-      return res.status(404).json({ message: `No data found for ${year}` });
+      const error = new Error(`No data found for ${year}`);
+      error.status = 404;
+      throw error;
     }
     res.json({data: genres});
   } catch (error){
-    console.dir(error);
-    res.status(500).json({message: 'Failed to retrieve genres'});
+    if(error.status === undefined){
+      error.message = 'Failed to retrieve genres';
+    }
+    next(error)
   }
 }
 
