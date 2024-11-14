@@ -1,5 +1,11 @@
 import { db } from '../db/db.js'
 
+/**
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Function} next 
+ */
 export async function getMostStreamedGenresByYear(req, res, next){
   const year = parseInt(req.params.year);
   try {

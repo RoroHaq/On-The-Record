@@ -174,46 +174,6 @@ router.use('/billboard', BillBoard.validateBillboardQueryParam)
 router.get('/billboard', BillBoard.getTopBillBoardSongs);
 
 /**
- * Get a list of random songs
- * @route GET /api/random/:number
- * @param {number} req.params.number - The number of random songs to retrieve
- * @returns {array} - A list of random songs
- * @swagger
- * /api/random/{number}:
- *   get:
- *     summary: Get a list of random songs
- *     description: Fetch a specified number of random songs.
- *     parameters:
- *       - in: path
- *         name: number
- *         required: true
- *         description: Number of random songs to fetch
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: List of random songs
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *       500:
- *         description: Error retrieving random songs
- */
-router.get('/random/:number', async (req, res) => {
-  const quantity = parseInt(req.params.number);
-  try {
-    const songs = await db.getRandom(quantity);
-    res.json(songs);
-  } catch (error) {
-    console.dir(error);
-    res.status(500).json({ message: 'Failed to retrieve songs' });
-  }
-  res.json;
-});
-/**
  * Get a ranked list genres based on how many streams songs under
  * that genre released in a given year add up to.
  * 
