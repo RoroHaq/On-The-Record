@@ -3,6 +3,7 @@ import express from 'express';
 import { db }   from '../db/db.js';
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi  from 'swagger-ui-express';
+
 const router = express.Router();
 const options = {
   swaggerDefinition:{
@@ -43,18 +44,7 @@ router.get('/alive', (req, res) => {
   res.json({ alive: true });
 });
 
-function validateGenre(req, res, next){
-  let genre = req.params.genre;
-  if (!genre) {
-    return res.status(400).json({ message: 'Genre is required'});
-  }
-  genre = genre.trim().toLowerCase().replace(/_/g, '/');
-  next();
-}
 
-
-
-router.use('/genre/:genre', validateGenre);
 /**
  * Retrieves all genres data and aggregates total streams and weekly placements for a single year.
  * @route GET /api/genre/all/:year
@@ -145,9 +135,30 @@ router.get('/genre/all/:year', async (req, res) => {
  *       500:
  *         description: Error retrieving data
  */
-router.get('/genre/:genre', async (req, res) => {
+
+function validateGenreQueryParam(req, res, next){
+  try{
+    if(Object.keys(req.query).length > 0 && !req.query.year){
+      const error = new Error('Invalid Query Param Found');
+      error.status = 404;
+      throw error;
+    }
+    next();
+  }catch(Error){
+    next(Error);
+  }
+}
+
+router.use('/genre/:genre', validateGenreQueryParam);
+
+router.get('/genre/:genre', async (req, res, next) => {
   try{
     let genre = req.params.genre;
+    if(req.query.length > 0 && !req.query.year){
+      const error = new Error('Invalid Query Param Found');
+      error.status = 404;
+      throw error;
+    }
     genre = genre.trim().toLowerCase().replace(/_/g, '/');
     const year = parseInt(req.query.year, 10);
     const genres = year 
@@ -155,15 +166,20 @@ router.get('/genre/:genre', async (req, res) => {
       : await db.getGenre(genre);
 
     if (genres.length === 0) {
-      return res.status(404).json({ message: 'No data found for the specified genre' });
+      const error = new Error('No data found for the specified genre');
+      error.status = 404;
+      throw error;
+      // return res.status(404).json({ message: 'No data found for the specified genre' });
     }
     res.json({data: genres});
   } catch (error){
-    console.dir(error);
-    res.status(500).json({message: 'Failed to retrieve genres'});
+    if(error.status === undefined){
+      error.message = 'Failed to retrieve genres';
+    }
+    next(error);
+    // res.status(500).json({message: 'Failed to retrieve genres'});
   }
 });
-
 
 /**
  * Get the top 100 of the billboard for a single year
@@ -204,6 +220,7 @@ router.get('/genre/:genre', async (req, res) => {
  *         description: Failed to retrieve songs
  
  */
+
 router.get('/billboard', async (req, res) => {
   const year = parseInt(req.query.year, 10);
   try{
@@ -307,7 +324,7 @@ router.get('/streams/top/:year', async (req, res) => {
       return res.status(404).json({ message: 'No data found for this year' });
     }
     res.json({data : list});
-  } catch( error){
+  } catch(error){
     console.dir(error);
     res.status(500).json({message: `Failed to retrieve genre of ${year}`});
   }
