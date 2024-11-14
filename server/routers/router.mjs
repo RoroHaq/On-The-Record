@@ -83,7 +83,7 @@ router.get('/alive', (req, res) => {
  *       500:
  *         description: Failed to retrieve genres
  */
-router.get('/genre/all/:year', Genre.getGenresByYear);
+router.get('/genre/all/:year', Genre.getEveryGenreByYear);
 
 
 router.use('/genre/:genre', Genre.validateGenreQueryParam);

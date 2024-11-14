@@ -1,7 +1,7 @@
 import { db } from '../db/db.js'
 
 /**
- * This method process the user request when putting the 
+ * This middlewear process the user request when putting the 
  * /api/streams/top/:year as it sends the user an object which includes a list
  * of songs from the specified year. Otherwise it will throw an Error.
  * 

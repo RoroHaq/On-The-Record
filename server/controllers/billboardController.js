@@ -1,7 +1,7 @@
 import { db } from '../db/db.js'
 
 /**
- * This function is used to validate the Query param given in the endpoint
+ * This middlewear is used to validate the Query param given in the endpoint
  * /api/billboard, if its valid or a query param is not given, it will go to the next function 
  * to process it, otherwise it goes to the error handling middlewear to respond with an Error.
  * 
@@ -23,7 +23,7 @@ export function validateBillboardQueryParam(req, res, next){
 }
 
 /**
- * This will go through the request and respond with a json representation
+ * This middlewear will go through the request and respond with a json representation
  * of the data, which is a list of top 100 songs on the billboard of a certain year or all years.
  * 
  * @param {Object} req The User's request (Query Params/Inputs)
