@@ -214,7 +214,7 @@ describe('/genre/all/:year Error Handling', () => {
     const response = await request(app).get('/api/genre/all/1999');
     const body = response.body;
 
-    expect(body).to.deep.equal({ message: `No data found for 1999` });
+    expect(body).to.deep.equal({ error: `No data found for 1999` });
     expect(response.status).to.equal(404);
   });
 
@@ -274,7 +274,7 @@ describe('/api/streams/top/:year Tests', () =>{
   });
 });
 
-describe('/api/streams/top/:year Tests', ()=>{
+describe('/api/streams/top/:year Error Handling', ()=>{
   before(()=>{
     stubDbGetTopGenresByYear.resolves([]);
   });
@@ -282,7 +282,7 @@ describe('/api/streams/top/:year Tests', ()=>{
   it('Should return error from invalid input', async () =>{
     const response = await request(app).get('/api/streams/top/1999');
     const body = response.body;
-    expect(body).to.deep.equal({ message: 'No data found for this year' });
+    expect(body).to.deep.equal({ error: 'No data found for this year' });
     expect(response.statusCode).to.equal(404);
   });
 
@@ -418,7 +418,7 @@ describe('Test for /api/billboard and /api/billboard?year=2017', () =>{
   });
 });
 
-describe('/api/billboard and /api/billbaord?year=2017 Error Hnadling', ()=>{
+describe('/api/billboard and /api/billboard?year=2017 Error Handling', ()=>{
   before(()=>{
     stubDbGetBillBoardsongsByYear.resolves([]);
   });
@@ -427,7 +427,15 @@ describe('/api/billboard and /api/billbaord?year=2017 Error Hnadling', ()=>{
     const response = await request(app).get('/api/billboard?year=1999');
     const body = response.body;
     chai.assert.isObject(body, 'Body is an object');
-    expect(body).to.deep.equal({ message: 'No data found' });
+    expect(body).to.deep.equal({ error: 'No data found' });
+    expect(response.status).to.equal(404);
+  });
+
+  it('Should return Error from invalid query parameter', async () =>{
+    const response = await request(app).get('/api/billboard?numbers=1999');
+    const body = response.body;
+
+    expect(body).to.deep.equal({error: 'Invalid Query Param Found'});
     expect(response.status).to.equal(404);
   });
 
