@@ -125,3 +125,7 @@ body{
     margin: 50px;
     border-radius: 100%;
 }
+
+footer li{
+    list-style: none;
+}

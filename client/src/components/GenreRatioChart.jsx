@@ -79,7 +79,7 @@ export default function GenreRatioChart() {
             "#FF9F40",
             "#C9CBCF",
             "#8AC926",
-            "#FF6F59",
+            "#5F5F79",
             "#FF6FFF",
           ]
 

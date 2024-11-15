@@ -5,17 +5,21 @@ ChartJS.register(Tooltip, Legend, ArcElement);
 export default function GenreStreamsChart(){
   const [year, setYear] = useState( 2010 );
   const [genreData, setGenreData] = useState( [] );
+
+  const textColour = "#FAF9F6"  
   const options = {
+    color: textColour,
     responsive: true,
     plugins: {
       legend: {
         position: 'right',
+        color: textColour, 
         labels: {
-          color: '#fff',  
+          color: textColour,  
           font: {
             size: 14, 
           },
-          boxWidth: 20,  
+          boxWidth: 20,
           generateLabels: (chart) => {
             const data = chart.data;
             return data.labels.map((label, index) => {
@@ -25,6 +29,7 @@ export default function GenreStreamsChart(){
                 fillStyle: data.datasets[0].backgroundColor[index],
                 hidden: false,
                 index: index,
+                fontColor: textColour,
               };
             });
           },
@@ -41,7 +46,7 @@ export default function GenreStreamsChart(){
         },
       },
       title: {
-        color: "#fff",
+        color: textColour,
         font: {
           size: 20
         },
