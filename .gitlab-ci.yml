@@ -66,6 +66,7 @@ test-endpoints:
   script:
     - cd server && npm run test
   allow_failure: false
+  
 check-bundlesize:
   stage: bundlesize
   script:
