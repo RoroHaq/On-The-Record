@@ -38,7 +38,7 @@ export default function WeeksOnboardchart(){
     }
   }
   return <>
-    <div>
+    <div className={["chart-container", "transparent-background"].join(" ")}>
       <Bar data={data}
         options={{
           plugins: {

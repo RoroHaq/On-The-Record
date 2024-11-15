@@ -51,11 +51,14 @@
     src: url("./assets/caang.ttf");
 }
 
+.transparent-background {
+    position: relative;
+    z-index:1;
+    background-color: rgb(0, 0, 0, 0.8);
+    border-radius: 5em;
+}
+
 #title-box {
-   position: relative;
-   z-index:1;
-   background-color: rgb(0, 0, 0, 0.8);
-   border-radius: 5em;
    color:white;
    font-family: 'caang';
    padding: 5%;
@@ -93,4 +96,24 @@
 
 body{
    background-color: #d05353;
+}
+
+#pie-container {
+    flex-direction: row;
+}
+
+.chart-container {
+    position: relative;
+    max-height: 50em;
+    width: 90%;
+    padding: 1em;
+    margin: 4em;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.chart-container button{
+    margin: 50px;
+    border-radius: 100%;
 }

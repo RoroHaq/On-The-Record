@@ -97,8 +97,9 @@ export default function GenreRatioChart() {
     })
   } : null
 
+  const textColour = "#FAF9F6"  
   return (
-    <div className="chart-container">
+    <div className={["chart-container", "transparent-background"].join(" ")}>
       {
         //TODO replace following if statement with suspend component
         //if statement for data
@@ -106,13 +107,21 @@ export default function GenreRatioChart() {
           <Line
             data={data}
             options={{
+              color: textColour,
               scales: {
                 x: {
+                  ticks: {
+                    color:textColour
+                  }
                 },
                 y: {
+                  ticks: {
+                    color:textColour
+                  },
                   title:{
                     display: true,
-                    text: "Streams per Billboard entry"
+                    text: "Streams per Billboard entry",
+                    color:textColour
                   }
                 }
               },
@@ -120,6 +129,11 @@ export default function GenreRatioChart() {
                 title: {
                   display: true,
                   text: "Yearly Streams per Billboard entry",
+                  color:textColour,
+                  fullSize: true,
+                  font: {
+                    size: '30em'
+                  }
                 },
                 legend: {
                   display: true,
