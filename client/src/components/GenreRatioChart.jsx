@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
+// the following import, in spite of being unused explicity in the code, is used implicity by chart.js to fix certain bugs
+// eslint-disable-next-line no-unused-vars
 import { Chart as ChartJS } from 'chart.js/auto'
 
 /**
@@ -8,8 +10,8 @@ import { Chart as ChartJS } from 'chart.js/auto'
 const genreYears = [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021];
 
 /**
- * Fetches genre objects for specific year (2017 for now) and ranks their popularity on a table
- * @returns table ranking how much genres were streamed in 2017.
+ * Fetches genre objects for every and places them on a multi-axis line chart
+ * @returns multi-axis line chart with each genre ranked on the ratio of that genre's streams to its billboard placements
  */
 export default function GenreRatioChart() {
   
@@ -22,10 +24,12 @@ export default function GenreRatioChart() {
       return await json.data;
     }
 
+    /**
+     * Flips the data to, instead of having the data seperated by year, have it seperated by genre
+     * @returns flipped genre data over the given years
+     */
     function verticallyAdjustGenreData(data) {
       const genreList = [... new Set(data.map(d => d.map(d => d.genre)).flat())];
-      // console.log(genreList)
-      // console.log(data)
       const genreMap = genreList.map(name => {
         const genrePerYear = data.map( d => d.filter(g => g.genre === name))
           .map(g => {
@@ -44,9 +48,8 @@ export default function GenreRatioChart() {
     }
     
     async function fetchGenreDataForAllYears() {
-      //TODO: temporary solution
+      //TODO: make code below cleaner and have it iterate of genreYears
       const retirevedGenreData = await Promise.all([
-        // genreYears.map(fetchGenre)
         fetchGenre(2010),
         fetchGenre(2011),
         fetchGenre(2012),
@@ -92,58 +95,43 @@ export default function GenreRatioChart() {
         label: genreArray[0].genre,
       }
     })
-    // datasets: genreYears.map( (year, index) => 
-    //   [
-    //     {
-    //       data: [genreData[index].map((item) => item.totalStreams)],
-    //       backgroundColor: [
-    //         "#FF6384",
-    //         "#36A2EB",
-    //         "#FFCE56",
-    //         "#4BC0C0",
-    //         "#9966FF",
-    //         "#FF9F40",
-    //         "#C9CBCF",
-    //         "#8AC926",
-    //         "#FF6F59",
-    //       ],
-    //       hoverOffset: 4,
-    //       "id": year,
-    //       "label": "Purchase amount (USD)",
-    //       "yAxisID":"left"
-    //     }
-    //   ]
-    // )
   } : null
 
-  console.log(data)
-
   return (
-    <div className="chart-container" id="ha">
-      <h2 id="haha" style={{ textAlign: "center" }}>Bar Chart</h2>
-      
+    <div className="chart-container">
       {
-      data ? 
-        <Line
-          data={data}
-          options={{
-            plugins: {
-              title: {
-                display: true,
-                text: "Streaming Data"
+        //TODO replace following if statement with suspend component
+        //if statement for data
+        data ? 
+          <Line
+            data={data}
+            options={{
+              scales: {
+                x: {
+                },
+                y: {
+                  title:{
+                    display: true,
+                    text: "Streams per Billboard entry"
+                  }
+                }
               },
-              legend: {
-                display: true,
-                labels: {
-                  boxWidth: 20
+              plugins: {
+                title: {
+                  display: true,
+                  text: "Yearly Streams per Billboard entry",
+                },
+                legend: {
+                  display: true,
+                  labels: {
+                    boxWidth: 20
+                  }
                 }
               }
-            }
-          }}
-        />
-      : <p>Loading</p>
+            }}
+          />
+        : <p>Loading</p>
       }
-      
     </div>
   );
 }
