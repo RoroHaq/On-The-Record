@@ -1,7 +1,7 @@
 export default function Credits(){
 
-  return <footer>
-      <h2>Data mixed for you by Nathan Bokobza, Safin Haque, & Minh Phu Ngo</h2>
+  return <footer className="transparent-background">
+      <h2><span className="on-beat">Data mixed</span> for you by Nathan Bokobza, Safin Haque, & Minh Phu Ngo</h2>
       <h3>Credits:</h3>
       <ul>
         <li>Dataset 1: <a href='https://www.kaggle.com/datasets/irynatokarchuk/top-streamed-spotify-songs-by-year-2010-2023' target='_blank'>Top Streamed Spotify Songs by year 2010-2023</a></li>
