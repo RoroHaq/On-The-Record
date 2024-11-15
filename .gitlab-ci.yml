@@ -77,6 +77,4 @@ check-bundlesize:
       - main
       - master
       - staging
-    changes:
-      - client/dist/**/*
   allow_failure: false
