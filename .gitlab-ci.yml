@@ -44,6 +44,7 @@ stages:
   - lint
   - build
   - test
+  - bundlesize
 
 build-frontend:
   stage: build
@@ -64,4 +65,16 @@ test-endpoints:
   stage: test
   script:
     - cd server && npm run test
+  allow_failure: false
+check-bundlesize:
+  stage: bundlesize
+  script:
+    - cd client && npm run bundlesize
+  only:
+    refs:
+      - main
+      - master
+      - staging
+    changes:
+      - client/dist/**
   allow_failure: false
