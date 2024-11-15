@@ -70,5 +70,13 @@ test-endpoints:
 check-bundlesize:
   stage: bundlesize
   script:
-    - cd client && npm run bundlesize
+    - cd client && npm run build
+    - npm run bundlesize
+  only:
+    refs:
+      - main
+      - master
+      - staging
+    changes:
+      - client/dist/**/*
   allow_failure: false
