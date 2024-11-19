@@ -13,7 +13,7 @@ const options = {
       version: '1.0.0'
     }
   },
-  apis: ['./server/routers/router.mjs']
+  apis: ['./routers/router.mjs']
 };
 router.use(express.static('../../client/dist'));
 const swaggerDocs = swaggerJsDoc(options);
