@@ -73,3 +73,24 @@ check-bundlesize:
     - cd client && npm run build
     - npm run bundlesize
   allow_failure: false
+
+build-app-archive:
+  stage: release
+  variables:
+    RELEASE_FILE: release-$CI_PROJECT_NAME-$CI_COMMIT_TAG-$CI_COMMIT_SHORT_SHA.tar.gz
+  dependency:
+    - build-frontend
+  rules:
+    - if: $CI_COMMIT_TAG
+  script: 
+    - tar -czf $RELEASE_FILE \
+          server/ \
+          server/node_modules/ \
+          client/build/ \
+          --exclude=server/.npm \
+          --exclude=client/node_modules \
+          --exclude=raw_data
+  artifacts:
+    paths:
+      - $RELEASE_FILE
+    expire_in: 1 days
