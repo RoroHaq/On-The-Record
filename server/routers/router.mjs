@@ -134,12 +134,13 @@ router.use('/billboard', BillBoard.validateBillboardQueryParam);
  * Get the top 100 of the billboard for a single year
  * 
  * @route GET /api/billboard
- * @param {string} [req.query.year] - Optional query parameter to filter out the year 
+ * @param {string} req.query.year - Optional query parameter to filter out the year 
  * @returns {object} - return a JSON Object list of songs and their
  * genres that were on the billboard top 100 for each year.
  *  or an error message if not found.
+ * @returns {string} - A JSON message with the status of the server
  * @swagger
- * /api/billboard
+ * /api/billboard:
  *   get:
  *     summary: Get Billboard top 100 songs
  *     description: Fetches top 100 songs from the Billboard chart for a specific year or all time.
