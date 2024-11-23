@@ -17,7 +17,7 @@ const options = {
 };
 router.use(express.static('../../client/dist'));
 const swaggerDocs = swaggerJsDoc(options);
-router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+router.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 /**
  * Test to see if the server is online and receiving request
@@ -145,13 +145,12 @@ router.use('/billboard', BillBoard.validateBillboardQueryParam);
  *     summary: Get Billboard top 100 songs
  *     description: Fetches top 100 songs from the Billboard chart for a specific year or all time.
  *     parameters:
- *       - in: path
+ *       - in: query
  *         name: year
  *         required: false
- *         description: Year to filter
+ *         description: Year to filter results by
  *         schema:
  *           type: string
- *       - in: query
  *     responses:
  *       200:
  *         description: List of songs on the billboard chart
