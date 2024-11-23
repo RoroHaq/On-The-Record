@@ -7,9 +7,7 @@ const port = process.env.PORT || 3000;
 
 (async () => {
   try {
-	  console.log("hi!");
     await db.connect('OnTheRecordDB', 'songs');
-	  console.log("bye!");
   } catch (e) {
     console.error('could not connect');
     // eslint-disable-next-line no-console
