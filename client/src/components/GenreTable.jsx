@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 
 /**
- * Fetches genre objects for specific year (2017 for now) and ranks their popularity on a table
- * @returns table ranking how much genres were streamed in 2017.
+ * GenreTable component fetches and displays the most streamed genres for a specific year.
+ * @component
+ * @returns {JSX.Element} Table showing ranked genres and their streaming totals.
  */
 export default function GenreTable() {
 
@@ -15,7 +16,7 @@ export default function GenreTable() {
       const json = await genres.json();
       setGenreData(json.data);
     }
-
+    
     fetchMostStreamedGenre(year);
   }, [year]);
 
@@ -28,7 +29,9 @@ export default function GenreTable() {
   }
 
   return (
-    <>
+    <div style={{
+      position:'relative',
+      zIndex:1}}>
       <h1>
         Most streamed genres in {year}
       </h1>
@@ -62,6 +65,6 @@ export default function GenreTable() {
           </tr>
         </tbody>
       </table>
-    </>
+    </div>
   );
 }
