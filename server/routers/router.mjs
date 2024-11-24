@@ -17,7 +17,7 @@ const options = {
 };
 router.use(express.static('../../client/dist'));
 const swaggerDocs = swaggerJsDoc(options);
-router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+router.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 /**
  * Test to see if the server is online and receiving request
@@ -134,23 +134,23 @@ router.use('/billboard', BillBoard.validateBillboardQueryParam);
  * Get the top 100 of the billboard for a single year
  * 
  * @route GET /api/billboard
- * @param {string} [req.query.year] - Optional query parameter to filter out the year 
+ * @param {string} req.query.year - Optional query parameter to filter out the year 
  * @returns {object} - return a JSON Object list of songs and their
  * genres that were on the billboard top 100 for each year.
  *  or an error message if not found.
+ * @returns {string} - A JSON message with the status of the server
  * @swagger
- * /api/billboard
+ * /api/billboard:
  *   get:
  *     summary: Get Billboard top 100 songs
  *     description: Fetches top 100 songs from the Billboard chart for a specific year or all time.
  *     parameters:
- *       - in: path
+ *       - in: query
  *         name: year
  *         required: false
- *         description: Year to filter
+ *         description: Year to filter results by
  *         schema:
  *           type: string
- *       - in: query
  *     responses:
  *       200:
  *         description: List of songs on the billboard chart
