@@ -86,16 +86,7 @@ build-app-archive:
   before_script:
     - cd server && npm ci --omit=dev
   script:
-    - test -d server || echo "Missing server directory"
-    - test -d server/node_modules || echo "Missing server/node_modules directory"
-    - test -d client/build || echo "Missing client/build directory"
-    - tar -czf $RELEASE_FILE \
-          server/ \
-          server/node_modules/ \
-          client/dist/ \
-          --exclude=server/.npm \
-          --exclude=client/node_modules \
-          --exclude=raw_data
+    - tar -czf $RELEASE_FILE client/dist/
   artifacts:
     paths:
       - $RELEASE_FILE
