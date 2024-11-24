@@ -46,12 +46,12 @@ export default function GenreStreamsChart(){
         },
       },
       title: {
+        display: true,
+        text: `Most streamed genres in ${year}`,
         color: textColour,
         font: {
           size: 20
-        },
-        display: true,
-        text: `Most streamed genres in ${year}`
+        }
       }
     },
   };
@@ -99,9 +99,12 @@ export default function GenreStreamsChart(){
     }
   }
   return (
-    <div id="pie-container" className={["chart-container", "transparent-background"].join(" ")}>
-      <Pie options={options} data={data} width={800} height={800} />
-      <button onClick={incrementYear} type="button">Next Year!</button>
+    <>
+    
+    <div className={["chart-container", "transparent-background"].join(" ")}>
+      <Pie options={options} data={data} width={600} height={400} />
     </div>
-  )
+      <button onClick={incrementYear} className="chart-button" type="button">Next Year!</button>
+    </>
+  );
 } 
