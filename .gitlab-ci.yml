@@ -86,7 +86,7 @@ build-app-archive:
   before_script:
     - cd server && npm ci --omit=dev
   script:
-    - tar -czf $RELEASE_FILE client/dist/
+    - tar -czf $RELEASE_FILE /client/dist/ /server /server/node_module
   artifacts:
     paths:
       - $RELEASE_FILE
