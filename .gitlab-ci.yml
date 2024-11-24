@@ -50,7 +50,7 @@ stages:
 build-frontend:
   stage: build
   script:
-    - cd client && npm run build
+    - cd client && mkdir build && npm run build 
   # only:
   #   refs:
   #     - main
@@ -60,7 +60,7 @@ build-frontend:
     expire_in: 1 days
     when: on_success
     paths:
-      - client/build
+      - client/dist
 
 test-endpoints:
   stage: test
@@ -92,7 +92,7 @@ build-app-archive:
     - tar -czf $RELEASE_FILE \
           server/ \
           server/node_modules/ \
-          client/build/ \
+          client/dist/ \
           --exclude=server/.npm \
           --exclude=client/node_modules \
           --exclude=raw_data
