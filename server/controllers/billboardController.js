@@ -41,7 +41,8 @@ export async function getTopBillBoardSongs(req, res, next){
       const error = new Error('No data found');
       error.status = 404;
       throw error;
-    }
+    }    
+    res.set('Cache-Control', 'public, max-age=31536000'); 
     res.json({data: list});
   } catch (error){
     if(error.status === undefined){
