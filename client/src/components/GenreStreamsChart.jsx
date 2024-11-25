@@ -7,6 +7,19 @@ export default function GenreStreamsChart(){
   const [genreData, setGenreData] = useState( [] );
 
   const textColour = "#FAF9F6"  
+  const genreColors = {
+    "Pop": "#36A2EB",
+    "Hip-Hop/Rap": "#9966FF", 
+    "Rock": "#FF6384",
+    "R&B/Soul": "#5F5F79",
+    "World/Traditional": "#FF9F40",
+    "Electronic/Dance": "#8AC926",
+    "Indie/Alternative": "#FF6F59",
+    "Metal": "#FFCE56",
+    "Classical/Orchestral": "#4BC0C0",
+    "Other": "#C9CBCF",
+  };
+
   const options = {
     color: textColour,
     responsive: true,
@@ -46,12 +59,12 @@ export default function GenreStreamsChart(){
         },
       },
       title: {
+        display: true,
+        text: `Most streamed genres in ${year}`,
         color: textColour,
         font: {
           size: 20
-        },
-        display: true,
-        text: `Most streamed genres in ${year}`
+        }
       }
     },
   };
@@ -75,17 +88,7 @@ export default function GenreStreamsChart(){
     datasets: [
       {
         data: genreData.map((item) => item.totalStreams),
-        backgroundColor: [
-          "#FF6384",
-          "#36A2EB",
-          "#FFCE56",
-          "#4BC0C0",
-          "#9966FF",
-          "#FF9F40",
-          "#C9CBCF",
-          "#8AC926",
-          "#FF6F59",
-        ],
+        backgroundColor: genreData.map((item) => genreColors[item.genre] || "#000000"),
         hoverOffset: 4,
       },
     ]
@@ -99,9 +102,11 @@ export default function GenreStreamsChart(){
     }
   }
   return (
-    <div id="pie-container" className={["chart-container", "transparent-background"].join(" ")}>
-      <Pie options={options} data={data} width={800} height={800} />
-      <button onClick={incrementYear} type="button">Next Year!</button>
+    <>
+    <div className={["chart-container", "transparent-background"].join(" ")}>
+      <Pie options={options} data={data} width={600} height={400} />
+      <button onClick={incrementYear} className="chart-button" type="button">Next Year!</button>
     </div>
-  )
+    </>
+  );
 } 

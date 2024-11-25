@@ -52,41 +52,37 @@ export default function WeeksOnboardchart(){
     }
   }
 
-  const textColour = "#FAF9F6"  
-  return <>
+  const textColour = "#FAF9F6";
+  return (
+    <>
     <div className={["chart-container", "transparent-background"].join(" ")}>
-      <Bar data={data}
+      <Bar
+       
+        data={data}
+        height={500} 
+          width={600} 
         options={{
-          color: textColour,
+          responsive: true,
+          maintainAspectRatio: false,
           scales: {
-            x: {
-              ticks: {
-                color:textColour
-              }
-            },
-            y: {
-              ticks: {
-                color:textColour
-              },
-            }
+            x: { ticks: { color: textColour } },
+            y: { ticks: { color: textColour } },
           },
           plugins: {
             title: {
               display: true,
               text: `Genres With Most Weekly Placements in ${year}`,
               color: textColour,
-              fullSize: true,
-              font: {
-                size: '30em'
-              }
+              font: { size:20 },
             },
             legend: {
-              display: false
-            }
-          }
+              display: false,
+            },
+          },
         }}
       />
-      <button onClick={incrementYear} type="button">Next Year!</button>
+      <button onClick={incrementYear} className="chart-button" type="button">Next Year!</button>
     </div>
-  </>
+    </>
+  );
 }

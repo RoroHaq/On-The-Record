@@ -13,6 +13,7 @@ const genreYears = [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 
  * Fetches genre objects for every and places them on a multi-axis line chart
  * @returns multi-axis line chart with each genre ranked on the ratio of that genre's streams to its billboard placements
  */
+
 export default function GenreRatioChart() {
   
   const [genreData, setGenreData] = useState([]);
@@ -46,106 +47,100 @@ export default function GenreRatioChart() {
       console.log(genreMap)
       return genreMap
     }
-    
-    async function fetchGenreDataForAllYears() {
-      //TODO: make code below cleaner and have it iterate of genreYears
-      const retirevedGenreData = await Promise.all([
-        fetchGenre(2010),
-        fetchGenre(2011),
-        fetchGenre(2012),
-        fetchGenre(2013),
-        fetchGenre(2014),
-        fetchGenre(2015),
-        fetchGenre(2016),
-        fetchGenre(2017),
-        fetchGenre(2018),
-        fetchGenre(2019),
-        fetchGenre(2020),
-        fetchGenre(2021)
-      ]);
 
-      setGenreData(verticallyAdjustGenreData(retirevedGenreData))
+    async function fetchGenreDataForAllYears() {
+      const retrievedGenreData = await Promise.all(
+        genreYears.map((year) => fetchGenre(year))
+      );
+      setGenreData(verticallyAdjustGenreData(retrievedGenreData));
     }
 
-    fetchGenreDataForAllYears()
+    fetchGenreDataForAllYears();
   }, []);
 
-  const colourArray =  [
-            "#FF6384",
-            "#36A2EB",
-            "#FFCE56",
-            "#4BC0C0",
-            "#9966FF",
-            "#FF9F40",
-            "#C9CBCF",
-            "#8AC926",
-            "#5F5F79",
-            "#FF6FFF",
-          ]
+  const colourArray = [
+    "#FF6384",
+    "#36A2EB",
+    "#FFCE56",
+    "#4BC0C0",
+    "#9966FF",
+    "#FF9F40",
+    "#C9CBCF",
+    "#8AC926",
+    "#5F5F79",
+    "#FF6FFF",
+    "#61DAFB",
+    "#D2691E",
+  ];
 
-  let data = (genreData.length > 0) ? {
-    labels: genreYears,
-    datasets: genreData.map( (genreArray, index) => {
-      return {
-        data: genreArray.map((item) => item.totalStreams / item.totalWeeklyPlacement),
-        backgroundColor: "#000000",
-        borderColor: colourArray[index],
-        hoverOffset: 4,
-        id: genreArray[0].genre,
-        label: genreArray[0].genre,
-      }
-    })
-  } : null
+  let data =
+    genreData.length > 0
+      ? {
+          labels: genreYears,
+          datasets: genreData.map((genreArray, index) => ({
+            data: genreArray.map(
+              (item) => item.totalStreams / item.totalWeeklyPlacement
+            ),
+            backgroundColor: "#000000",
+            borderColor: colourArray[index],
+            borderWidth: 2,
+            hoverBorderWidth: 3,
+            hoverBorderColor: colourArray[index % colourArray.length],
+            label: genreArray[0].genre,
+          })),
+        }
+      : null;
 
-  const textColour = "#FAF9F6"  
+  const textColour = "#FAF9F6";
   return (
     <div className={["chart-container", "transparent-background"].join(" ")}>
-      {
-        //TODO replace following if statement with suspend component
-        //if statement for data
-        data ? 
-          <Line
-            data={data}
-            options={{
-              color: textColour,
-              scales: {
-                x: {
-                  ticks: {
-                    color:textColour
-                  }
+      {data ? (
+        <Line
+          data={data}
+          height={700} 
+          width={800} 
+          options={{
+            color: textColour,
+            maintainAspectRatio: false, 
+            scales: {
+              x: {
+                ticks: {
+                  color: textColour,
                 },
-                y: {
-                  ticks: {
-                    color:textColour
-                  },
-                  title:{
-                    display: true,
-                    text: "Streams per Billboard entry",
-                    color:textColour
-                  }
-                }
               },
-              plugins: {
+              y: {
+                ticks: {
+                  color: textColour,
+                },
                 title: {
                   display: true,
-                  text: "Yearly Streams per Billboard entry",
-                  color:textColour,
-                  fullSize: true,
-                  font: {
-                    size: '30em'
-                  }
+                  text: "Streams per Billboard Entry",
+                  color: textColour,
                 },
-                legend: {
-                  display: true,
-                  labels: {
-                    boxWidth: 20
-                  }
-                }
-              }
-            }}
-          />
-        : <p>Loading</p>
-      }
+              },
+            },
+            plugins: {
+              title: {
+                display: true,
+                text: "Yearly Streams per Billboard Entry",
+                color: textColour,
+                font: {
+                  size: 20,
+                },
+              },
+              legend: {
+                display: true,
+                labels: {
+                  boxWidth: 20,
+                  color: textColour,
+                },
+              },
+            },
+          }}
+        />
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 }
