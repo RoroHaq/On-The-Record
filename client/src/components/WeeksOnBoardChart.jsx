@@ -81,8 +81,8 @@ export default function WeeksOnboardchart(){
           },
         }}
       />
+      <button onClick={incrementYear} className="chart-button" type="button">Next Year!</button>
     </div>
-          <button onClick={incrementYear} className="chart-button" type="button">Next Year!</button>
     </>
   );
 }
