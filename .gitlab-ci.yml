@@ -44,12 +44,13 @@ stages:
   - lint
   - build
   - test
+  - release
   - bundlesize
 
 build-frontend:
   stage: build
   script:
-    - cd client && npm run build
+    - cd client && npm run build 
   only:
     refs:
       - main
@@ -59,7 +60,7 @@ build-frontend:
     expire_in: 1 days
     when: on_success
     paths:
-      - client/build
+      - client/dist
 
 test-endpoints:
   stage: test
@@ -73,3 +74,20 @@ check-bundlesize:
     - cd client && npm run build
     - npm run bundlesize
   allow_failure: false
+
+build-app-archive:
+  stage: release
+  variables:
+    RELEASE_FILE: release-$CI_PROJECT_NAME-$CI_COMMIT_TAG-$CI_COMMIT_SHORT_SHA.tar.gz
+  dependencies:
+    - build-frontend
+  rules:
+    - if: $CI_COMMIT_TAG
+  before_script:
+    - cd server && npm ci --omit=dev
+  script:
+    - cd ../ && tar -czf $RELEASE_FILE client/dist/ --exclude=server/.npm server/ 
+  artifacts:
+    paths:
+      - $RELEASE_FILE
+    expire_in: 1 days
