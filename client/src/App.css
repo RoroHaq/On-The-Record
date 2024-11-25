@@ -63,6 +63,7 @@
 @font-face {
 	font-family: "caang";
     src: url("./assets/caang.ttf");
+    font-display: swap;
 }
 
 .transparent-background {
