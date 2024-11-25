@@ -103,11 +103,10 @@ export default function GenreStreamsChart(){
   }
   return (
     <>
-    
     <div className={["chart-container", "transparent-background"].join(" ")}>
       <Pie options={options} data={data} width={600} height={400} />
-    </div>
       <button onClick={incrementYear} className="chart-button" type="button">Next Year!</button>
+    </div>
     </>
   );
 } 

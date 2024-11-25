@@ -65,6 +65,12 @@
     border-radius: 5em;
 }
 
+p{
+    color:white;
+    font-family: 'caang';
+    font-size: 3em;
+}
+
 #title-box {
    color:white;
    font-family: 'caang';
@@ -110,7 +116,9 @@ body{
   max-height: 35em;
   width: 90%;
   padding: 1em;
+  padding-bottom: 3em;
   margin-top: 4em;
+  margin-bottom: 4em;
   display: flex;
   flex-direction: column;
   align-items: center; 
