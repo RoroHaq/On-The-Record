@@ -42,13 +42,15 @@ export default function BackgroundDisk() {
   const pageHeight = document.body.scrollHeight;
 
   const diskClickScroll = (e) => {
-    let ratio = e.clientY/window.innerHeight
-    //Rounds to bottom or top of page if close enough
-    if (ratio < 0.1) { ratio = 0}
-    if (ratio > 0.9) { ratio = 1}
-    const deriveScrollToPos = ratio * pageHeight
-
-    window.scrollTo({ top: deriveScrollToPos, behavior: "smooth" });
+    if (!window.matchMedia("(pointer: coarse)").matches){
+      let ratio = e.clientY/window.innerHeight
+      //Rounds to bottom or top of page if close enough
+      if (ratio < 0.1) { ratio = 0}
+      if (ratio > 0.9) { ratio = 1}
+      const deriveScrollToPos = ratio * pageHeight
+  
+      window.scrollTo({ top: deriveScrollToPos, behavior: "smooth" });
+    }
   }
 
   //TODO mobile scroll disable
