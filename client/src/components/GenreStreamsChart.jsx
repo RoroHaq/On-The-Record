@@ -115,10 +115,9 @@ export default function GenreStreamsChart(){
     
     <div className="transparent-background">
       <p>
-        Pop is dominating the early 2010s with big name like Katy Perry, Rihanna, Bruno Mars, etc. consistenly having big hits.
-        From 2016 onward Hip Hop starts to gain popularity and briefly overtook Pop in 2018 for the most number of streams and since then stayed comfortably second on the chart until the current year.
-        2020 adn 21 are the least diverse years of all with only 6-7 genres dominating the billboard.
-
+        Pop is dominating the early 2010s with big names like Katy Perry, Rihanna, Bruno Mars, etc. consistenly having big hits.
+        From 2016 onward, Hip Hop starts to gain popularity and briefly overtook Pop in 2018 for the most number of streams and since then stayed comfortably second on the chart until the current year.
+        2020 and 21 are the least diverse years of all with only 6-7 genres dominating the billboard.
       </p>
     </div>
     </>
