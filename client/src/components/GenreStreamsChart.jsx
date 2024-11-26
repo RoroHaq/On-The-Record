@@ -24,6 +24,20 @@ export default function GenreStreamsChart(){
     "Classical/Orchestral": "#FF6FFF",
     "Other": "#5F5F79",
   };
+  const stories = {
+    "2010": "2010 are dominated by pop heavy hitter such as Katy Perry, Bruno Mars and Rihanna with more than 8 billions view between them with song like: Firework by Katy Perry, Grenade by Bruno Mars, Only girl by Rihanna and more ",
+    "2011": "#36A2EB", 
+    "2012": "#FFCE56",
+    "2013": "#C9CBCF",
+    "2014": "#4BC0C0",
+    "2015": "#FF9F40",
+    "2016": "#8AC926",
+    "2017": "#9966FF",
+    "2018": "#FF6FFF",
+    "2019": "#5F5F79",
+    "2020": "",
+    "2021": ""
+  };
 
   const options = {
     color: textColour,
@@ -111,6 +125,7 @@ export default function GenreStreamsChart(){
     <div className={["chart-container", "transparent-background"].join(" ")}>
       <Pie options={options} data={data} width={600} height={400} />
       <button onClick={incrementYear} className="chart-button" type="button">Next Year!</button>
+      <p style={{ marginTop: '2em', minHeight: '3em' }}>{stories[year]}</p>
     </div>
     </>
   );
