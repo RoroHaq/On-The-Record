@@ -46,7 +46,10 @@ As this will overwrite the client and server folders
 
 - afterwards restart express with `forever restart <bin/www id>`
 
-Check your lighthouse and you'll see the updates shown.
+Note: The bin/ww id can be found using the command `forever list`
+![alt text](./images/wwwId.png)
+
+Finally check your lighthouse and you'll see the updates shown.
 
 ## API
 - `/api/genre/all/:year` This returns all the genre objects from a given year.
