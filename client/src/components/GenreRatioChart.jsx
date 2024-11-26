@@ -69,8 +69,6 @@ export default function GenreRatioChart() {
     "#8AC926",
     "#5F5F79",
     "#FF6FFF",
-    "#61DAFB",
-    "#D2691E",
   ];
 
   let data =
