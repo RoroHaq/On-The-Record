@@ -5,59 +5,54 @@ import "chart.js/auto";
 export default function WeeksOnboardchart(){
   const [weeklyPlacementData, setweeklyPlacementData] = useState([])
   const [year, setYear] = useState(2010);
-  
-  const colourArray =  [
-    "#FF6384",
-    "#36A2EB",
-    "#FFCE56",
-    "#4BC0C0",
-    "#9966FF",
-    "#FF9F40",
-    "#C9CBCF",
-    "#8AC926",
-    "#FF6F59",
-    "#FF6FFF",
-  ]
-
+  const textColour = "#FAF9F6";
+  const genreColors = {
+    "Pop": "#FF6384",
+    "Hip-Hop/Rap": "#36A2EB", 
+    "Rock": "#FFCE56",
+    "R&B/Soul": "#C9CBCF",
+    "World/Traditional": "#4BC0C0",
+    "Electronic/Dance": "#FF9F40",
+    "Indie/Alternative": "#8AC926",
+    "Metal": "#9966FF",
+    "Classical/Orchestral": "#FF6FFF",
+    "Other": "#5F5F79",
+  };
   let data = {
     labels : weeklyPlacementData.map((data) => data.genre),
     datasets: [
       {
         data : weeklyPlacementData.map((data) => data.totalWeeklyPlacement),
-        backgroundColor: colourArray
+        backgroundColor: weeklyPlacementData.map((item) => genreColors[item.genre] || "#000000")
       }
     ] 
   };
 
-  useEffect( () => {    
-    async function fetchTotalWeeklyPlacementsByYear(year) {
-      
-      try {
-        const response = await fetch(`/api/genre/all/${year}`);
-        const json = await response.json();
-        setweeklyPlacementData(json.data); 
-      } catch (error) {
-        console.error("Error fetching genre data:", error);
-      }
+  async function setWeeklyPlacementsOfYear(year){
+    try {
+      const response = await fetch(`/api/genre/all/${year}`);
+      const json = await response.json();
+      setweeklyPlacementData(json.data);
+      setYear(year);
+    } catch (error) {
+      console.error("Error fetching genre data:", error);
     }
+  };
 
-    fetchTotalWeeklyPlacementsByYear(year);
-  }, [year]);
+  useEffect(() =>{
+    setWeeklyPlacementsOfYear(year);
+  }, []);
 
-  const incrementYear = () => {
-    if (year == 2021){
-      setYear(2010)
-    } else{
-      setYear(year+1)
-    }
-  }
+  const incrementYear = async () => {
+    const updateyear = year == 2021 ? 2010 : year + 1;
+    setWeeklyPlacementsOfYear(updateyear);
+  };
 
-  const textColour = "#FAF9F6";
+  
   return (
     <>
     <div className={["chart-container", "transparent-background"].join(" ")}>
-      <Bar
-       
+      <Bar    
         data={data}
         height={500} 
           width={600} 

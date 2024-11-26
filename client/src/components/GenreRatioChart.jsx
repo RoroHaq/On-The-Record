@@ -43,17 +43,15 @@ export default function GenreRatioChart() {
           }).flat();
         return genrePerYear;
       })
-
-      console.log(genreMap)
-      return genreMap
-    }
+      return genreMap;
+    };
 
     async function fetchGenreDataForAllYears() {
       const retrievedGenreData = await Promise.all(
         genreYears.map((year) => fetchGenre(year))
       );
       setGenreData(verticallyAdjustGenreData(retrievedGenreData));
-    }
+    };
 
     fetchGenreDataForAllYears();
   }, []);
@@ -69,8 +67,6 @@ export default function GenreRatioChart() {
     "#8AC926",
     "#5F5F79",
     "#FF6FFF",
-    "#61DAFB",
-    "#D2691E",
   ];
 
   let data =

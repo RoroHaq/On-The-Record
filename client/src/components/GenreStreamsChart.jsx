@@ -5,19 +5,18 @@ ChartJS.register(Tooltip, Legend, ArcElement);
 export default function GenreStreamsChart(){
   const [year, setYear] = useState( 2010 );
   const [genreData, setGenreData] = useState( [] );
-
   const textColour = "#FAF9F6"  
   const genreColors = {
-    "Pop": "#36A2EB",
-    "Hip-Hop/Rap": "#9966FF", 
-    "Rock": "#FF6384",
-    "R&B/Soul": "#5F5F79",
-    "World/Traditional": "#FF9F40",
-    "Electronic/Dance": "#8AC926",
-    "Indie/Alternative": "#FF6F59",
-    "Metal": "#FFCE56",
-    "Classical/Orchestral": "#4BC0C0",
-    "Other": "#C9CBCF",
+    "Pop": "#FF6384",
+    "Hip-Hop/Rap": "#36A2EB", 
+    "Rock": "#FFCE56",
+    "R&B/Soul": "#C9CBCF",
+    "World/Traditional": "#4BC0C0",
+    "Electronic/Dance": "#FF9F40",
+    "Indie/Alternative": "#8AC926",
+    "Metal": "#9966FF",
+    "Classical/Orchestral": "#FF6FFF",
+    "Other": "#5F5F79",
   };
 
   const options = {
@@ -68,21 +67,24 @@ export default function GenreStreamsChart(){
       }
     },
   };
-  
-  useEffect( () => {    
-    async function fetchMostStreamedGenre(year) {
-      
-      try {
-        const response = await fetch(`/api/streams/top/${year}`);
-        const json = await response.json();
-        setGenreData(json.data); 
-      } catch (error) {
-        console.error("Error fetching genre data:", error);
-      }
-    }
 
+  async function fetchMostStreamedGenre(year) {     
+    try {
+      console.log(year)
+      const response = await fetch(`/api/streams/top/${year}`);
+      const json = await response.json();
+      setGenreData(json.data);
+      setYear(year)
+    } catch (error) {
+      console.error("Error fetching genre data:", error);
+    }
+  };
+  
+
+  useEffect(() => {    
     fetchMostStreamedGenre(year);
-  }, [year]);
+  }, []);
+
   let data ={
     labels: genreData.map((item) => item.genre),
     datasets: [
@@ -92,15 +94,13 @@ export default function GenreStreamsChart(){
         hoverOffset: 4,
       },
     ]
-  }
+  };
   
-  const incrementYear = () => {
-    if (year == 2021){
-      setYear(2010)
-    } else{
-      setYear(year+1)
-    }
-  }
+  const incrementYear = async () => {
+    const updateyear = year == 2021 ? 2010 : year + 1;
+    fetchMostStreamedGenre(updateyear);
+  };
+
   return (
     <>
     <div className={["chart-container", "transparent-background"].join(" ")}>
