@@ -17,8 +17,36 @@ To begin server
 ``` bash
 cd ./server/; node bin/www.js
 ```
-
 Then simply access localhost:3000/ with your browser of choice where the website is being held
+
+## Deployment
+Guide to Deploying:
+- In the Code Tab, go to Tags
+![alt text](./images/tagLocation.png)
+
+- Then go to the right side and press "New Tag"
+![alt text](./images/newTag.png)
+
+- Afterwards Customize the tag name and create it from Staging to get the latest file info
+![alt text](./images/NewTagCreate.png) 
+
+- When created, it will run the pipeline, go to the build-release job and receive the tar.gz file
+
+- Afterwards with the private key you have, you can run the command:
+```
+scp -r -i <private Key> <tar file> bitnami@<aws instance ip>:~
+```
+To send the tar file to AWS lighthouse.
+
+- Inside your instance CL, move the tar file to your project and extract.
+```
+tar -xvf <tar file>
+```
+As this will overwrite the client and server folders
+
+- afterwards restart express with `forever restart <bin/www id>`
+
+Check your lighthouse and you'll see the updates shown.
 
 ## API
 - `/api/genre/all/:year` This returns all the genre objects from a given year.
