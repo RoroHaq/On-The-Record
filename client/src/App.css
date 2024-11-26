@@ -27,14 +27,12 @@
 
 .disk {
     height: 50em;
-    /* padding: 1.5em; */
     will-change: filter;
     transition: filter 300ms;
     position: fixed;
     top: 0px; right: -25em;
     z-index:0;
     border-radius: 90%;
-    
     /* pointer-events: none; */
     user-select: none;
 }
@@ -63,6 +61,7 @@
 @font-face {
 	font-family: "caang";
     src: url("./assets/caang.ttf");
+    font-display: swap;
 }
 
 .transparent-background {

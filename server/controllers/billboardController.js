@@ -42,6 +42,7 @@ export async function getTopBillBoardSongs(req, res, next){
       error.status = 404;
       throw error;
     }
+    res.set('Cache-Control', 'public, max-age=604800');
     res.json({data: list});
   } catch (error){
     if(error.status === undefined){

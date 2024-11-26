@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { useScroll, useSpring, animated } from '@react-spring/web'
-import diskImage from '../assets/DiskFullRes.webp'
+import diskImageSmallest from '../assets/Disk320Res.webp'
+import diskImageSmall from '../assets/Disk640Res.webp'
+import diskImageMedium from '../assets/Disk1280Res.webp'
+import diskImageFullRes from '../assets/DiskFullRes.webp'
 
 /**
  * Displays background disk and allows it's scrolling implementation.
@@ -71,7 +74,11 @@ export default function BackgroundDisk() {
   
   return (
     <animated.div >
-      <animated.img src={diskImage} className="disk" alt="Record" style={diskStyle}
+      <animated.img src={diskImageSmallest} className="disk" alt="Record" style={diskStyle}
+        srcSet={`${diskImageSmallest} 320w,
+                 ${diskImageSmall} 640w,
+                 ${diskImageMedium} 1280w,
+                 ${diskImageFullRes} 1920w`}
         onClick={diskClickScroll} onMouseMove={diskDragScroll}/>
     </animated.div>
   )
