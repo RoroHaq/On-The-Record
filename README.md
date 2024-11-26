@@ -4,10 +4,28 @@
 
 On the record is a single website with a simplistic design with the goal of bringing data about streaming and the billboard top 100 into a readable form to provide our users with new knowledge about music genre shifts between 2010 and 2021. It's a data-driven story about the music industry and landscape which can be experienced before you finish your favourite EP.
 
+On the Record is currently (26-11-2024) deployed at these URLs:
+
+AWS: http://99.79.54.246/
+
+Render: https://five20-project-safin-nathan-minh.onrender.com/
+
 ![On the record title screen](images/titlescreen.png)
 ![On the record chart screen](images/chartscreen.png)
 
 ## Setup
+### Development commands
+To run app in develop mode
+``` bash
+cd ./client/; npm run dev
+```
+
+To test server
+``` bash
+cd ./server/; npm run test
+```
+
+### Production Mode commands
 To build app
 ``` bash
 cd ./client/; npm run build
