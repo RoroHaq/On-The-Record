@@ -68,21 +68,29 @@ export default function GenreStreamsChart(){
       }
     },
   };
-  
-  useEffect( () => {    
-    async function fetchMostStreamedGenre(year) {
-      
-      try {
-        const response = await fetch(`/api/streams/top/${year}`);
-        const json = await response.json();
-        setGenreData(json.data); 
-      } catch (error) {
-        console.error("Error fetching genre data:", error);
-      }
-    }
 
+  /**
+   * This function is used to return the music data from a certain year for use in
+   * the Pi Chart
+   * @param {Number} year the current year we are fetching data from 
+   */
+  async function fetchMostStreamedGenre(year) {     
+    try {
+      console.log(year)
+      const response = await fetch(`/api/streams/top/${year}`);
+      const json = await response.json();
+      setGenreData(json.data);
+      setYear(year)
+    } catch (error) {
+      console.error("Error fetching genre data:", error);
+    }
+  }
+  
+
+  useEffect(() => {    
     fetchMostStreamedGenre(year);
-  }, [year]);
+  }, []);
+
   let data ={
     labels: genreData.map((item) => item.genre),
     datasets: [
@@ -94,13 +102,11 @@ export default function GenreStreamsChart(){
     ]
   }
   
-  const incrementYear = () => {
-    if (year == 2021){
-      setYear(2010)
-    } else{
-      setYear(year+1)
-    }
+  const incrementYear = async () => {
+    const updateyear = year == 2021 ? 2010 : year + 1;
+    fetchMostStreamedGenre(updateyear);
   }
+
   return (
     <>
     <div className={["chart-container", "transparent-background"].join(" ")}>

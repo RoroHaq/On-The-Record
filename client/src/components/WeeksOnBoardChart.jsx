@@ -51,7 +51,7 @@ export default function WeeksOnboardchart(){
     }else{
       setYear((prevYear) =>{
         return prevYear + 1;
-      })
+      });
     }
   }
 
