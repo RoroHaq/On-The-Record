@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { Bar } from 'react-chartjs-2';
 import "chart.js/auto";
 
+/**
+ * Fetch WeeklyPlacements total of every genre of each year using a click event
+ * @returns a Bar Chart representing the Billboard Weekly Placements Total of Each genre
+ */
 export default function WeeksOnboardchart(){
   const [weeklyPlacementData, setweeklyPlacementData] = useState([])
   const [year, setYear] = useState(2010);
@@ -28,6 +32,11 @@ export default function WeeksOnboardchart(){
     ] 
   };
 
+  /**
+   * This function handles with fetching the year and also setting the new year so that it uses
+   * the latest state
+   * @param {Number} year The Year to fetch data from
+   */
   async function setWeeklyPlacementsOfYear(year){
     try {
       const response = await fetch(`/api/genre/all/${year}`);
