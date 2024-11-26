@@ -7,16 +7,16 @@ export default function WeeksOnboardchart(){
   const [year, setYear] = useState(2010);
 
   const genreColors = {
-    "Pop": "#36A2EB",
-    "Hip-Hop/Rap": "#9966FF", 
-    "Rock": "#FF6384",
-    "R&B/Soul": "#5F5F79",
-    "World/Traditional": "#FF9F40",
-    "Electronic/Dance": "#8AC926",
-    "Indie/Alternative": "#FF6F59",
-    "Metal": "#FFCE56",
-    "Classical/Orchestral": "#4BC0C0",
-    "Other": "#C9CBCF",
+    "Pop": "#FF6384",
+    "Hip-Hop/Rap": "#36A2EB", 
+    "Rock": "#FFCE56",
+    "R&B/Soul": "#C9CBCF",
+    "World/Traditional": "#4BC0C0",
+    "Electronic/Dance": "#FF9F40",
+    "Indie/Alternative": "#8AC926",
+    "Metal": "#9966FF",
+    "Classical/Orchestral": "#FF6FFF",
+    "Other": "#5F5F79",
   };
 
   let data = {
