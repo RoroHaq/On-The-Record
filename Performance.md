@@ -42,7 +42,7 @@ Finally, to minimize the time for the client from sending a request for data to 
 ```js
 res.set('Cache-Control', 'public, max-age=604800');
 ```
-The server now will cache the data for 1 week, and when another request comes in, it will just send back a 304 if the cache hasn't expired, which will reduce the size of the payload
+The browser will now cache this data for a week and will not make a request to the server on subsequent GET /
 ![img](images/networkrequest.png)
 
 ## Summary of changes
