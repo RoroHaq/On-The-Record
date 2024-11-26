@@ -5,7 +5,7 @@ import "chart.js/auto";
 export default function WeeksOnboardchart(){
   const [weeklyPlacementData, setweeklyPlacementData] = useState([])
   const [year, setYear] = useState(2010);
-
+  const textColour = "#FAF9F6";
   const genreColors = {
     "Pop": "#36A2EB",
     "Hip-Hop/Rap": "#9966FF", 
@@ -18,7 +18,6 @@ export default function WeeksOnboardchart(){
     "Classical/Orchestral": "#4BC0C0",
     "Other": "#C9CBCF",
   };
-
   let data = {
     labels : weeklyPlacementData.map((data) => data.genre),
     datasets: [
@@ -29,38 +28,32 @@ export default function WeeksOnboardchart(){
     ] 
   };
 
-  
+  async function setWeeklyPlacementsOfYear(year){
+    try {
+      console.log(year)
+      const response = await fetch(`/api/genre/all/${year}`);
+      const json = await response.json();
+      setweeklyPlacementData(json.data);
+      setYear(year)
+    } catch (error) {
+      console.error("Error fetching genre data:", error);
+    }
+  };
 
   useEffect(() =>{
-    async function setWeeklyPlacementsOfYear(year){
-      try {
-        console.log(year)
-        const response = await fetch(`/api/genre/all/${year}`);
-        const json = await response.json();
-        setweeklyPlacementData(json.data); 
-      } catch (error) {
-        console.error("Error fetching genre data:", error);
-      }
-    }
     setWeeklyPlacementsOfYear(year)
-  }, [year])
+  }, []);
 
   const incrementYear = async () => {
-    if (year == 2021){
-      setYear(2010)
-    }else{
-      setYear((prevYear) =>{
-        return prevYear + 1;
-      });
-    }
-  }
+    const updateyear = year == 2021 ? 2010 : year + 1;
+    setWeeklyPlacementsOfYear(updateyear);
+  };
 
-  const textColour = "#FAF9F6";
+  
   return (
     <>
     <div className={["chart-container", "transparent-background"].join(" ")}>
-      <Bar
-       
+      <Bar    
         data={data}
         height={500} 
           width={600} 

@@ -69,11 +69,6 @@ export default function GenreStreamsChart(){
     },
   };
 
-  /**
-   * This function is used to return the music data from a certain year for use in
-   * the Pi Chart
-   * @param {Number} year the current year we are fetching data from 
-   */
   async function fetchMostStreamedGenre(year) {     
     try {
       console.log(year)
