@@ -5,7 +5,6 @@ ChartJS.register(Tooltip, Legend, ArcElement);
 export default function GenreStreamsChart(){
   const [year, setYear] = useState( 2010 );
   const [genreData, setGenreData] = useState( [] );
-
   const textColour = "#FAF9F6"  
   const genreColors = {
     "Pop": "#FF6384",
@@ -68,21 +67,24 @@ export default function GenreStreamsChart(){
       }
     },
   };
-  
-  useEffect( () => {    
-    async function fetchMostStreamedGenre(year) {
-      
-      try {
-        const response = await fetch(`/api/streams/top/${year}`);
-        const json = await response.json();
-        setGenreData(json.data); 
-      } catch (error) {
-        console.error("Error fetching genre data:", error);
-      }
-    }
 
+  async function fetchMostStreamedGenre(year) {     
+    try {
+      console.log(year)
+      const response = await fetch(`/api/streams/top/${year}`);
+      const json = await response.json();
+      setGenreData(json.data);
+      setYear(year)
+    } catch (error) {
+      console.error("Error fetching genre data:", error);
+    }
+  };
+  
+
+  useEffect(() => {    
     fetchMostStreamedGenre(year);
-  }, [year]);
+  }, []);
+
   let data ={
     labels: genreData.map((item) => item.genre),
     datasets: [
@@ -92,15 +94,13 @@ export default function GenreStreamsChart(){
         hoverOffset: 4,
       },
     ]
-  }
+  };
   
-  const incrementYear = () => {
-    if (year == 2021){
-      setYear(2010)
-    } else{
-      setYear(year+1)
-    }
-  }
+  const incrementYear = async () => {
+    const updateyear = year == 2021 ? 2010 : year + 1;
+    fetchMostStreamedGenre(updateyear);
+  };
+
   return (
     <>
     <div className={["chart-container", "transparent-background"].join(" ")}>
