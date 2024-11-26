@@ -36,3 +36,13 @@ const app = express();
 app.use(compress());
 ```
 This was also a very large improvement for the Lighthouse report. Lighthouse went from 71-82 after this change alone. This makes sense, as the app requests a somewhat large amount of data from the server, so compressing it would pay off in dividends.
+
+### Caching
+Finally, to minimize the time for the client from sending a request for data to the server and receiving it and display it, caching plays an important role. By simply including this piece of code before send back the json from the server
+```js
+res.set('Cache-Control', 'public, max-age=604800');
+```
+The server now will cache the data for 1 week, and when another request comes in, it will just send back a 304 if the cache hasn't expired, which will reduce the size of the payload
+![img](images/networkrequest.png)
+
+By having a clear idea of how nodes are being render on a web page and how datas are being send and receive, we can make some minimal but important changes to our website that has massive performance improvement.
