@@ -8,6 +8,10 @@ The following was our first Lighthouse run during Milestone 2, netting a score o
 
 ![Initial report](images/initalReport.png)
 
+Here's also our first summary of the website's weight and price.
+
+![Website Analysis Before Optimization](images/webPageTestReport1.png)
+
 Let's look into how we fixed some of these issues.
 
 ## Summary of changes
@@ -48,3 +52,7 @@ The browser will now cache this data for a week and will not make a request to t
 ## Summary of changes
 
 By having a clear idea of how nodes are being render on a web page and how datas are being send and receive, we can make some minimal but important changes to our website that has massive performance improvement.
+
+In addition, we were able to see that our performance changes did make a difference for the website's price and weight. With the both fields being a third of what they were initially.
+
+![Website Analysis After Optimization](images/webPageTestReport2.png)
