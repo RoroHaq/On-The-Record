@@ -22,3 +22,13 @@ font-display: swap;
 
 ![alt text](images/fontImportFix.png) 
 
+## Text Compression
+From there, the next stepw as to enable text compression on the server side. This was also a relatively simple change. After reading some documentation, the fix was found to be as follows:
+```js
+import compress from 'compression';
+
+const app = express(); 
+ 
+app.use(compress());
+```
+This was also a very large improvement for the lighthouse report. Lighthouse went from 71-82 after this change alone.
