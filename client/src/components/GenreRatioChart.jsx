@@ -88,7 +88,7 @@ export default function GenreRatioChart() {
       : null;
 
   const textColour = "#FAF9F6";
-  return (
+  return <>
     <div className={["chart-container", "transparent-background"].join(" ")}>
       {data ? (
         <Line
@@ -138,5 +138,11 @@ export default function GenreRatioChart() {
         <p>Loading...</p>
       )}
     </div>
-  );
+    
+    <div className="transparent-background">
+      <p>
+        This chart displays the amount of streams on average that each genre would get for every time one of it&apos;s songs places on the billbosrd hot 100. This chart was especially prone to anomalies among less popular genre, best exemplified by indie&apos;s colossal spike in 2012. Many of the spikes follow a pattern of a song being very popular on spotify but not spending so much time on the billboard. This can also allow us raise questions as to what the billboard top 100 should be. Should it be a direct reflection of current popularity and what the people or listening to, or should it be judging songs soley for artistic quality in spite of popularity? Both approaches have their merits, but try to draw your own conclusions of what their current method is by filtering through the chart&apos;s results!
+      </p>
+    </div>
+  </>;
 }

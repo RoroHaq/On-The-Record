@@ -78,6 +78,12 @@ export default function WeeksOnboardchart(){
       />
       <button onClick={incrementYear} className="chart-button" type="button">Next Year!</button>
     </div>
+    
+    <div className="transparent-background">
+      <p>
+        The billboard results also say something interesting about genres. Even though pop is often considered not as artistically utilized a genre, it still rakes in the top positions on the billboard for most of the years of its existence. Interestingly, almost to rebel against pop&apos;s dominance from 2011-2015, hip-hop actually gives pop a close run for its money in 2017 and then even manages to surpass it in 2018, 2019, and 2020. Another quirk of the data is the place of RnB.  From not hitting the top five genres for the majority of it&apos;s time on the billboard, this changes after 2015 and recent years show an RnB renessance where it consistently manages to land 4th place in recent years. One final piece of trivia is that classical as a genre only hit the billboard twice in the past decade. Both times are the result of the same song, &quot;The Hanging Tree&quot; from the Hunger Games OST, which was considered a classical song.
+      </p>
+    </div>
     </>
   );
 }

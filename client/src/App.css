@@ -73,8 +73,9 @@
 
 p{
     color:white;
-    font-family: 'caang';
-    font-size: 3em;
+    font-family: "roboto" ;
+    font-size: 1.5em;
+    margin: 3%;
 }
 
 #title-box {
@@ -147,6 +148,7 @@ footer li{
 }
 
 footer{
+    margin-top: 2em;
     position: relative;
     z-index:0;
     color:white;

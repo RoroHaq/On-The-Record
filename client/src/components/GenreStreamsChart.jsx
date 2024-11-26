@@ -2,6 +2,11 @@ import { useState, useEffect } from 'react';
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, Tooltip, Legend, ArcElement} from "chart.js/auto";
 ChartJS.register(Tooltip, Legend, ArcElement);
+/**
+ * Fetches streams for each genre for every year and places them in a pie chart
+ * @returns a pie chart with each genre ranked based on that genre's number of streams 
+ */
+
 export default function GenreStreamsChart(){
   const [year, setYear] = useState( 2010 );
   const [genreData, setGenreData] = useState( [] );
@@ -106,6 +111,14 @@ export default function GenreStreamsChart(){
     <div className={["chart-container", "transparent-background"].join(" ")}>
       <Pie options={options} data={data} width={600} height={400} />
       <button onClick={incrementYear} className="chart-button" type="button">Next Year!</button>
+    </div>
+    
+    <div className="transparent-background">
+      <p>
+        Pop is dominating the early 2010s with big names like Katy Perry, Rihanna, Bruno Mars, etc. consistenly having big hits.
+        From 2016 onward, Hip Hop starts to gain popularity and briefly overtook Pop in 2018 for the most number of streams and since then stayed comfortably second on the chart until the current year.
+        2020 and 21 are the least diverse years of all with only 6-7 genres dominating the billboard.
+      </p>
     </div>
     </>
   );
