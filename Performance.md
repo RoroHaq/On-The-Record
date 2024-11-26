@@ -45,4 +45,6 @@ res.set('Cache-Control', 'public, max-age=604800');
 The server now will cache the data for 1 week, and when another request comes in, it will just send back a 304 if the cache hasn't expired, which will reduce the size of the payload
 ![img](images/networkrequest.png)
 
+## Summary of changes
+
 By having a clear idea of how nodes are being render on a web page and how datas are being send and receive, we can make some minimal but important changes to our website that has massive performance improvement.
