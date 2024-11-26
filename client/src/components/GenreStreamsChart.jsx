@@ -2,6 +2,11 @@ import { useState, useEffect } from 'react';
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, Tooltip, Legend, ArcElement} from "chart.js/auto";
 ChartJS.register(Tooltip, Legend, ArcElement);
+/**
+ * Fetches streams for each genre for every year and places them in a pie chart
+ * @returns a pie chart with each genre ranked based on that genre's number of streams 
+ */
+
 export default function GenreStreamsChart(){
   const [year, setYear] = useState( 2010 );
   const [genreData, setGenreData] = useState( [] );
