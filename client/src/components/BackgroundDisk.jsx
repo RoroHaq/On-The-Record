@@ -78,7 +78,7 @@ export default function BackgroundDisk() {
         srcSet={`${diskImageSmallest} 320w,
                  ${diskImageSmall} 640w,
                  ${diskImageMedium} 1280w,
-                 ${diskImageFullRes} 1920`}
+                 ${diskImageFullRes} 1920w`}
         onClick={diskClickScroll} onMouseMove={diskDragScroll}/>
     </animated.div>
   )
