@@ -24,20 +24,6 @@ export default function GenreStreamsChart(){
     "Classical/Orchestral": "#FF6FFF",
     "Other": "#5F5F79",
   };
-  const stories = {
-    "2010": "2010 are dominated by pop heavy hitter such as Katy Perry, Bruno Mars and Rihanna with more than 8 billions view between them with song like: Firework by Katy Perry, Grenade by Bruno Mars, Only girl by Rihanna and more ",
-    "2011": "#36A2EB", 
-    "2012": "#FFCE56",
-    "2013": "#C9CBCF",
-    "2014": "#4BC0C0",
-    "2015": "#FF9F40",
-    "2016": "#8AC926",
-    "2017": "#9966FF",
-    "2018": "#FF6FFF",
-    "2019": "#5F5F79",
-    "2020": "",
-    "2021": ""
-  };
 
   const options = {
     color: textColour,
@@ -129,7 +115,10 @@ export default function GenreStreamsChart(){
     
     <div className="transparent-background">
       <p>
-        {stories[year]}
+        Pop is dominating the early 2010s with big name like Katy Perry, Rihanna, Bruno Mars, etc. consistenly having big hits.
+        From 2016 onward Hip Hop starts to gain popularity and briefly overtook Pop in 2018 for the most number of streams and since then stayed comfortably second on the chart until the current year.
+        2020 adn 21 are the least diverse years of all with only 6-7 genres dominating the billboard.
+
       </p>
     </div>
     </>
