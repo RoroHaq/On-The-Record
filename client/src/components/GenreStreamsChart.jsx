@@ -5,7 +5,6 @@ ChartJS.register(Tooltip, Legend, ArcElement);
 export default function GenreStreamsChart(){
   const [year, setYear] = useState( 2010 );
   const [genreData, setGenreData] = useState( [] );
-
   const textColour = "#FAF9F6"  
   const genreColors = {
     "Pop": "#36A2EB",
@@ -79,7 +78,7 @@ export default function GenreStreamsChart(){
     } catch (error) {
       console.error("Error fetching genre data:", error);
     }
-  }
+  };
   
 
   useEffect(() => {    
@@ -95,12 +94,12 @@ export default function GenreStreamsChart(){
         hoverOffset: 4,
       },
     ]
-  }
+  };
   
   const incrementYear = async () => {
     const updateyear = year == 2021 ? 2010 : year + 1;
     fetchMostStreamedGenre(updateyear);
-  }
+  };
 
   return (
     <>

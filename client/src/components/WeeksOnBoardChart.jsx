@@ -30,18 +30,17 @@ export default function WeeksOnboardchart(){
 
   async function setWeeklyPlacementsOfYear(year){
     try {
-      console.log(year)
       const response = await fetch(`/api/genre/all/${year}`);
       const json = await response.json();
       setweeklyPlacementData(json.data);
-      setYear(year)
+      setYear(year);
     } catch (error) {
       console.error("Error fetching genre data:", error);
     }
   };
 
   useEffect(() =>{
-    setWeeklyPlacementsOfYear(year)
+    setWeeklyPlacementsOfYear(year);
   }, []);
 
   const incrementYear = async () => {
