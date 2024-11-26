@@ -5,34 +5,36 @@ import "chart.js/auto";
 export default function WeeksOnboardchart(){
   const [weeklyPlacementData, setweeklyPlacementData] = useState([])
   const [year, setYear] = useState(2010);
-  
-  const colourArray =  [
-    "#FF6384",
-    "#36A2EB",
-    "#FFCE56",
-    "#4BC0C0",
-    "#9966FF",
-    "#FF9F40",
-    "#C9CBCF",
-    "#8AC926",
-    "#FF6F59",
-    "#FF6FFF",
-  ]
+
+  const genreColors = {
+    "Pop": "#36A2EB",
+    "Hip-Hop/Rap": "#9966FF", 
+    "Rock": "#FF6384",
+    "R&B/Soul": "#5F5F79",
+    "World/Traditional": "#FF9F40",
+    "Electronic/Dance": "#8AC926",
+    "Indie/Alternative": "#FF6F59",
+    "Metal": "#FFCE56",
+    "Classical/Orchestral": "#4BC0C0",
+    "Other": "#C9CBCF",
+  };
 
   let data = {
     labels : weeklyPlacementData.map((data) => data.genre),
     datasets: [
       {
         data : weeklyPlacementData.map((data) => data.totalWeeklyPlacement),
-        backgroundColor: colourArray
+        backgroundColor: weeklyPlacementData.map((item) => genreColors[item.genre] || "#000000")
       }
     ] 
   };
 
-  useEffect( () => {    
-    async function fetchTotalWeeklyPlacementsByYear(year) {
-      
+  
+
+  useEffect(() =>{
+    async function setWeeklyPlacementsOfYear(year){
       try {
+        console.log(year)
         const response = await fetch(`/api/genre/all/${year}`);
         const json = await response.json();
         setweeklyPlacementData(json.data); 
@@ -40,15 +42,16 @@ export default function WeeksOnboardchart(){
         console.error("Error fetching genre data:", error);
       }
     }
+    setWeeklyPlacementsOfYear(year)
+  }, [year])
 
-    fetchTotalWeeklyPlacementsByYear(year);
-  }, [year]);
-
-  const incrementYear = () => {
+  const incrementYear = async () => {
     if (year == 2021){
       setYear(2010)
-    } else{
-      setYear(year+1)
+    }else{
+      setYear((prevYear) =>{
+        return prevYear + 1;
+      })
     }
   }
 
