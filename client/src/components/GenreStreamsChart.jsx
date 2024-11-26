@@ -125,7 +125,12 @@ export default function GenreStreamsChart(){
     <div className={["chart-container", "transparent-background"].join(" ")}>
       <Pie options={options} data={data} width={600} height={400} />
       <button onClick={incrementYear} className="chart-button" type="button">Next Year!</button>
-      <p style={{ marginTop: '2em', minHeight: '3em' }}>{stories[year]}</p>
+    </div>
+    
+    <div className="transparent-background">
+      <p>
+        {stories[year]}
+      </p>
     </div>
     </>
   );
