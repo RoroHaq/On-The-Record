@@ -13,14 +13,13 @@
   "devDependencies": {
     "chai": "^5.1.1",
     "chai-as-promised": "^8.0.0",
-    "eslint": "^9.13.0",
     "mocha": "^10.7.3",
     "neat-csv": "^7.0.0",
     "sinon": "^19.0.2",
+    "eslint": "^9.13.0",
     "supertest": "^7.0.0"
   },
   "dependencies": {
-    "compression": "^1.7.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "mongodb": "^6.10.0",
