@@ -118,7 +118,7 @@ export default function GenreRatioChart() {
             plugins: {
               title: {
                 display: true,
-                text: "Yearly Streams per Billboard Entry",
+                text: "Average Spotify Streams per Billboard Hot 100 Placement by Genre",
                 color: textColour,
                 font: {
                   size: 20,

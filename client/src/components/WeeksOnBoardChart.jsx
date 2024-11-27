@@ -75,7 +75,7 @@ export default function WeeksOnboardchart(){
           plugins: {
             title: {
               display: true,
-              text: `Genres With Most Weekly Placements in ${year}`,
+              text: `Genres With Most Weekly Billboard Hot 100 Placements in ${year}`,
               color: textColour,
               font: { size:20 },
             },

@@ -64,7 +64,7 @@ export default function GenreStreamsChart(){
       },
       title: {
         display: true,
-        text: `Most streamed genres in ${year}`,
+        text: `Most Streamed Genres on Spotify in ${year}`,
         color: textColour,
         font: {
           size: 20
@@ -75,7 +75,6 @@ export default function GenreStreamsChart(){
 
   async function fetchMostStreamedGenre(year) {     
     try {
-      console.log(year)
       const response = await fetch(`/api/streams/top/${year}`);
       const json = await response.json();
       setGenreData(json.data);
