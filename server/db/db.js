@@ -8,7 +8,7 @@ class DB{
     //instance is the singleton, defined in outer scope
       if (!instance){
         instance = this;
-        this.mongoClient = new MongoClient("mongodb+srv://safinhaque:sPEMN366ihXoi8q9@cluster520web2024.i1ejb.mongodb.net/?retryWrites=true&w=majority", {
+        this.mongoClient = new MongoClient(dbUrl, {
           serverApi: {
             version: ServerApiVersion.v1,
             strict: true,
