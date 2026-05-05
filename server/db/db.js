@@ -6,11 +6,18 @@ let instance = null;
 class DB{
   constructor(){
     //instance is the singleton, defined in outer scope
-    if (!instance){
-      instance = this;
-      this.db = null;
-      this.collection = null;
-    }
+      if (!instance){
+        instance = this;
+        this.mongoClient = new MongoClient(dbUrl, {
+          serverApi: {
+            version: ServerApiVersion.v1,
+            strict: true,
+            deprecationErrors: true,
+          }
+        })
+        this.db = null;
+        this.collection = null;
+      }
     return instance;
   }
   /**
